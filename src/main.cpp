@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:53:43 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/06 10:35:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/06 11:43:57 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,24 @@
 
 ft_irc	*globalInstance = NULL;
 
-// static void	signalHandler(int sig)
-// {
-// 	if (globalInstance)
-// 		globalInstance->shutDown();
-// 	exit (sig);
-// }
-
-int main(/*int argc, char **argv*/)
+static void	signalHandler(int sig)
 {
-    // if (argc == 2)
-	// {
-        ServerConfig	serverConfig;
-	
-        // if (!parseConfig(argv[1], serverConfig))
-        //     return (EXIT_FAILURE);
+	if (globalInstance)
+		globalInstance->shutDown();
+	exit (sig);
+}
+
+int main(int argc, char **argv)
+{
+    if (argc == 3)
+	{
         try
 		{
-            globalInstance = new ft_irc(serverConfig.port);
-            // signal(SIGINT, signalHandler);
+			int	port = atoi(argv[1]);
+			std::string	pass = std::string(argv[2]);
 
+            globalInstance = new ft_irc(port, pass);
+            signal(SIGINT, signalHandler);
             globalInstance->start();
             globalInstance->firstConnection();
         }
@@ -44,11 +42,11 @@ int main(/*int argc, char **argv*/)
         }
         delete (globalInstance);
         return (EXIT_SUCCESS);
-    // }
-	// else
-	// {
-    //     std::cout << RED << "Error : [Bad arguments] './ft_irc + configFile'" << RESET << std::endl;
-    //     return (EXIT_FAILURE);
-    // }
-    // return (EXIT_FAILURE);
+    }
+	else
+	{
+        std::cout << RED << "Error : [Bad arguments] './ircserv <port> <password>'" << RESET << std::endl;
+        return (EXIT_FAILURE);
+    }
+    return (EXIT_FAILURE);
 }

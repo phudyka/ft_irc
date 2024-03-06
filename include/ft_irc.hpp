@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/06 10:31:41 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/06 11:43:08 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 // GLOBAL BINDS
 # define FD_MAX		1024
-# define PORT		30000
+# define PORT		6667
 # define MAX_EVENT	10
 
 #include <string>
@@ -60,15 +60,16 @@ class	ft_irc
 {
 
 public:
-    ft_irc(int port);
+    ft_irc(int port, std::string pass);
     ~ft_irc();
-    void    start(void);
+    void    start();
 	void	shutDown(void);
     void    firstConnection(void);
 
 private:
     int         _socketServer;
     int         _port;
+	std::string	_pass;
     std::string	_rootDirectory;
     bool		_isRunning;
     struct sockaddr_in _serverAddr;
@@ -89,7 +90,5 @@ private:
 	void	logConnection(const std::string& msg, const std::string id);
 	void	broadcastShutdown(void);
 };
-
-int	parseConfig(const std::string& configFile, ServerConfig& serverConfig);
 
 #endif

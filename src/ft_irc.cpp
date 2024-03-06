@@ -6,15 +6,16 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/06 10:33:27 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/06 11:43:42 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_irc.hpp"
 
-ft_irc::ft_irc(int port)
+ft_irc::ft_irc(int port, std::string pass)
 {
     this->_port = port;
+	this->_pass = pass;
     this->_rootDirectory = ".";
     this->_isRunning = false;
 }
