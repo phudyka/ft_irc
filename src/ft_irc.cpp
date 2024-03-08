@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/08 11:52:03 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/08 14:44:23 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void ft_irc::clientData(size_t index)
     else
     {
         buff[len] = '\0';
-        std::cout << "Message du client : " << buff << std::endl;
+        std::cout << YELLOW << "client: " << buff << RESET << std::endl;
         int UserSocket = _pollfds[index].fd;
         std::string message = buff;
 
@@ -122,24 +122,17 @@ void ft_irc::clientData(size_t index)
             if (_clients[i]->getSocket() == UserSocket)
             {
                 std::cout << message << std::endl;
-                if (message.find("USER kali 8 * :Admin") == 0)
-                {
-                    send(UserSocket, "CAP * LS :multi-prefix sasl\r\n", 30, 0);
-                    //send(UserSocket, "001 freiko :Welcome to the Internet Relay Network freiko\r\n", 59, 0);  
-                }
+
+                if (message.find("USER") == 0)
+                    send(UserSocket, "CAP * LS :multi-prefix sasl\r\n", strlen("CAP * LS :multi-prefix sasl\r\n"), 0);
                 if (message.find("CAP REQ :multi-prefix") == 0)
-                {
-                    write(UserSocket, "CAP * ACK multi-prefix\r\n", 25);
-                }
+                    send(UserSocket, "CAP * ACK multi-prefix\r\n", strlen("CAP * ACK multi-prefix\r\n"), 0);
                 if (message.find("CAP END") == 0)
-                {
-                    char response[] = "CAP * ACK :multi-prefix\r\n";
-                    send(UserSocket, response, strlen(response), 0);
-                }
-                }
+                    send(UserSocket, "CAP * ACK :multi-prefix\r\n", strlen("CAP * ACK :multi-prefix\r\n"), 0);
             }
         }
     }
+}
 
 
 void ft_irc::removeClient(size_t index)
