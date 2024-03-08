@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 10:11:51 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 10:23:47 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/channel.hpp"
 
-Channel::Channel() {}
+Channel::Channel(const std::string &name)
+{
+    this->_name = name;
+}
 
 Channel::Channel(const Channel&) {}
 
@@ -88,10 +91,10 @@ void Channel::removeUser(const std::string& username)
 void Channel::sendMessage(const std::string& message)
 {
    _messageHistory.push_back(message);
-    std::cout << "Message sent to channel '" << name << "': " << message << std::endl;
+    std::cout << "Message sent to channel '" << _name << "': " << message << std::endl;
 }
 
 void Channel::archiveMessages()
 {
-    std::cout << "Archiving messages for channel '" << name << "'" << std::endl;
+    std::cout << "Archiving messages for channel '" << _name << "'" << std::endl;
 }

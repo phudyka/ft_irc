@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 10:11:41 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 10:28:12 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/user.hpp"
 
-User::User() : socket(0), marked(false), prefix(), nickname(), joinedChannels(0), _umode(NULL) {}
+User::User(int socket, const std::string &nick) : _socket(socket), _marked(false), _prefix(), _nickname(nick), _joinedChannels(0), _umode(NULL) {}
 
 User::User(const User&) {}
 
@@ -26,32 +26,32 @@ User& User::operator=(const User& other)
 
 const std::string& User::getNickname() const
 {
-    return (nickname);
+    return (_nickname);
 }
 
 const std::string& User::getPrefix() const
 {
-    return (prefix);
+    return (_prefix);
 }
 
 size_t User::getJoinedChannels() const
 {
-    return (joinedChannels);
+    return (_joinedChannels);
 }
 
 int User::getSocket() const
 {
-    return (socket);
+    return (_socket);
 }
 
 void User::mark()
 {
-    marked = true;
+    _marked = true;
 }
 
 bool User::isMarked() const
 {
-    return (marked);
+    return (_marked);
 }
 
 UserMode& User::umode()

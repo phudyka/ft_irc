@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/07 15:21:47 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 10:27:05 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ class User
 {
 private:
 
-    int		socket;
-    bool	marked;
-    std::string	prefix;
-    std::string	nickname;
-    size_t		joinedChannels;
+    int		    _socket;
+    bool	    _marked;
+    std::string	_prefix;
+    std::string	_nickname;
+    size_t		_joinedChannels;
     UserMode*	_umode;
 
 public:
 
-    User();
+    User(int socket, const std::string &nick);
     User(const User& other);
     ~User();
     User& operator=(const User& other);

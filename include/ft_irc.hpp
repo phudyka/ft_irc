@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/07 10:36:05 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 10:32:39 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include "user.hpp"
+#include "channel.hpp"
+#include "userMode.hpp"
 
 #define RED		"\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -45,7 +48,8 @@
 #define ORANGE  "\x1b[38;5;208m"
 #define RESET   "\x1b[0m"
 
-class	Client;
+class   Channel;
+class   User;
 
 struct	ServerConfig
 {
@@ -65,7 +69,7 @@ public:
     ~ft_irc();
     void    start();
 	void	shutDown(void);
-    void    firstConnection(void);
+    void    handleConnection(void);
 
 private:
     int         _socketServer;
@@ -82,7 +86,8 @@ private:
 	};
 
 	std::vector<struct pollfd>	_pollfds;
-	std::vector<Client*> _clients;
+	std::vector<User*>          _clients;
+    std::vector<Channel*>       _channels;
 
 	void 	newConnection(void);
     void	closeClientData(int clientSocket);

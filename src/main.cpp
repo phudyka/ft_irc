@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:53:43 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/06 11:43:57 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 10:31:44 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int main(int argc, char **argv)
             globalInstance = new ft_irc(port, pass);
             signal(SIGINT, signalHandler);
             globalInstance->start();
-            globalInstance->firstConnection();
         }
 		catch (const std::exception& e)
 		{

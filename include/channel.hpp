@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 09:59:37 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 10:23:19 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class	Channel
 {
 private:
 
-    std::string	name;
+    std::string	                _name;
 	std::vector<User>			_users;
     std::set<std::string>		_invitations;
     std::set<std::string>		_masks[3];
@@ -37,7 +37,7 @@ public:
         INVITATION_SET
     };
 
-    Channel();
+    Channel(const std::string &name);
     Channel(const Channel&);
     ~Channel();
     Channel& operator=(const Channel& other);

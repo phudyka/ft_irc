@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/06 11:43:42 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 11:52:03 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,7 @@ ft_irc::ft_irc(int port, std::string pass)
 {
     this->_port = port;
 	this->_pass = pass;
-    this->_rootDirectory = ".";
     this->_isRunning = false;
-}
-
-ft_irc::~ft_irc() {}
-
-void ft_irc::start()
-{
     _socketServer = socket(AF_INET, SOCK_STREAM, 0);
     if (_socketServer == -1)
         throw std::runtime_error(RED "Error: [Fail to create a socket server]" RESET);
@@ -50,15 +43,22 @@ void ft_irc::start()
     _pollfds.back().fd = _socketServer;
     _pollfds.back().events = POLLIN;
     _pollfds.back().revents = 0;
-
-    _isRunning = true;
 }
 
-void ft_irc::firstConnection(void)
+ft_irc::~ft_irc() {}
+
+void ft_irc::start()
 {
 	std::cout << YELLOW << "[Welcome to ft_irc]" << RESET << std::endl << std::endl;
 	std::cout << PURPLE << "Waiting for connection..." << RESET << std::endl << std::endl;
-	
+    Channel *newChannel = new Channel("Default");
+    this->_channels.push_back(newChannel);
+    _isRunning = true;
+    handleConnection();
+}
+
+void ft_irc::handleConnection(void)
+{
 	while (_isRunning)
 	{
         int	readyCount = poll(&_pollfds[0], static_cast<nfds_t>(_pollfds.size()), -1);
@@ -72,68 +72,84 @@ void ft_irc::firstConnection(void)
         }
         if (_pollfds[0].revents & POLLIN)
             newConnection();
-        // for (size_t i = 1; i < _pollfds.size(); ++i)
-        // {
-        //     if (_pollfds[i].revents & POLLIN)
-        //         clientData(i);
-        // }
+        for (size_t i = 1; i < _pollfds.size(); ++i)
+        {
+            if (_pollfds[i].revents & POLLIN)
+                clientData(i);
+        }
     }
 }
 
 void ft_irc::newConnection(void)
 {
-    struct sockaddr_in 	clientAddr;
-    socklen_t			clientLen = sizeof(clientAddr);
-    int					clientSocket = accept(_socketServer, (struct sockaddr*)&clientAddr, &clientLen);
+    struct sockaddr_in 	UserAddr;
+    socklen_t			UserLen = sizeof(UserAddr);
+    int					UserSocket = accept(_socketServer, (struct sockaddr*)&UserAddr, &UserLen);
 
-    if (clientSocket == -1)
+    if (UserSocket == -1)
     {
         std::cerr << RED << "Error: [Fail to accept a new connection]" << RESET << std::endl;
         return ;
     }
 
     struct pollfd newPollfd;
-    newPollfd.fd = clientSocket;
+    newPollfd.fd = UserSocket;
     newPollfd.events = POLLIN;
     newPollfd.revents = 0;
 	
 	_pollfds.push_back(newPollfd);
-	// Client* newClient = new Client(clientSocket, inet_ntoa(clientAddr.sin_addr));
-	// _clients.push_back(newClient);
-	// logConnection("Connection from client: ", inet_ntoa(clientAddr.sin_addr));
+	User* newUser = new User(UserSocket, "caca");
+	_clients.push_back(newUser);
+	// logConnection("Connection from User: ", inet_ntoa(UserAddr.sin_addr));
 }
 
-// void ft_irc::clientData(size_t index)
-// {
-//     char buff[2048];
-//     int len = recv(_pollfds[index].fd, buff, sizeof(buff), 0);
+void ft_irc::clientData(size_t index)
+{
+    char buff[2048];
+    int len = recv(_pollfds[index].fd, buff, sizeof(buff), 0);
 
-//     if (len <= 0)
-//         removeClient(index);
-//     else
-//     {
-//         buff[len] = '\0';
-//         int clientSocket = _pollfds[index].fd;
+    if (len <= 0)
+        removeClient(index);
+    else
+    {
+        buff[len] = '\0';
+        std::cout << "Message du client : " << buff << std::endl;
+        int UserSocket = _pollfds[index].fd;
+        std::string message = buff;
 
-//         for (size_t i = 0; i < _clients.size(); i++)
-//         {
-//             if (_clients[i]->getSocket() == clientSocket)
-//             {
-//                 Request request(clientSocket, _clients[i]->getAdIP(), std::string(buff));
-//                 request.handleRequest();
-//             }
-//         }
-//     }
-// }
+        for (size_t i = 0; i < _clients.size(); i++)
+        {
+            if (_clients[i]->getSocket() == UserSocket)
+            {
+                std::cout << message << std::endl;
+                if (message.find("USER kali 8 * :Admin") == 0)
+                {
+                    send(UserSocket, "CAP * LS :multi-prefix sasl\r\n", 30, 0);
+                    //send(UserSocket, "001 freiko :Welcome to the Internet Relay Network freiko\r\n", 59, 0);  
+                }
+                if (message.find("CAP REQ :multi-prefix") == 0)
+                {
+                    write(UserSocket, "CAP * ACK multi-prefix\r\n", 25);
+                }
+                if (message.find("CAP END") == 0)
+                {
+                    char response[] = "CAP * ACK :multi-prefix\r\n";
+                    send(UserSocket, response, strlen(response), 0);
+                }
+                }
+            }
+        }
+    }
 
-// void ft_irc::removeClient(size_t index)
-// {
-//     close(_pollfds[index].fd);
-//     _pollfds.erase(_pollfds.begin() + index);
-//     index--;
-//     delete (_clients[index]);
-//     _clients.erase(_clients.begin() + index);
-// 	std::cout << CYAN << "[Client [" << index << "] has been succesfully removed]" << RESET << std::endl;
-//     std::cout << GREEN << "Connection closed." << RESET << std::endl;
-// }
+
+void ft_irc::removeClient(size_t index)
+{
+    close(_pollfds[index].fd);
+    _pollfds.erase(_pollfds.begin() + index);
+    index--;
+    delete (_clients[index]);
+    _clients.erase(_clients.begin() + index);
+	std::cout << CYAN << "[User [" << index << "] has been succesfully removed]" << RESET << std::endl;
+    std::cout << GREEN << "Connection closed." << RESET << std::endl;
+}
 
