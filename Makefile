@@ -6,7 +6,7 @@
 #    By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 15:51:03 by phudyka           #+#    #+#              #
-#    Updated: 2024/03/06 11:36:31 by phudyka          ###   ########.fr        #
+#    Updated: 2024/03/07 10:27:59 by phudyka          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CXX = c++
 
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRCS = src/main.cpp src/ft_irc.cpp src/utils.cpp \
+SRCS = src/main.cpp src/ft_irc.cpp src/channel.cpp src/user.cpp src/userMode.cpp src/utils.cpp \
 
 OBJS = $(SRCS:.cpp=.o)
 

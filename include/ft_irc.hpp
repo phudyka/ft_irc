@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/06 11:43:08 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/07 10:36:05 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define PORT		6667
 # define MAX_EVENT	10
 
+#include <set>
 #include <string>
 #include <poll.h>
 #include <vector>
