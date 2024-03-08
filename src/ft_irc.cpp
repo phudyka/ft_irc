@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/08 15:15:40 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 15:17:13 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,10 +134,10 @@ void ft_irc::clientData(size_t index)
                 }
 				if (message.find("PING") == 0)
 				{
-    				std::string pingParam = message.substr(5);
+    				std::string	ping = message.substr(5);
     
-    				std::string pongMessage = "PONG " + pingParam + "\r\n";
-    				send(UserSocket, pongMessage.c_str(), pongMessage.size(), 0);
+    				std::string pong = "PONG " + ping + "\r\n";
+    				send(UserSocket, pong.c_str(), pong.size(), 0);
 				}
             }
         }
