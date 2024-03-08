@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/08 14:44:23 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 14:49:22 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,11 @@ void ft_irc::clientData(size_t index)
                 if (message.find("CAP REQ :multi-prefix") == 0)
                     send(UserSocket, "CAP * ACK multi-prefix\r\n", strlen("CAP * ACK multi-prefix\r\n"), 0);
                 if (message.find("CAP END") == 0)
-                    send(UserSocket, "CAP * ACK :multi-prefix\r\n", strlen("CAP * ACK :multi-prefix\r\n"), 0);
+                    send(UserSocket, "001 USER :Welcome to the Internet Relay Network\r\n", strlen("001 USER :Welcome to the Internet Relay Network\r\n"), 0);
             }
         }
     }
 }
-
 
 void ft_irc::removeClient(size_t index)
 {
