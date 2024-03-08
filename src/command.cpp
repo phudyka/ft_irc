@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 15:59:38 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 16:40:48 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,18 @@ Command& Command::operator=(const Command& other)
     return (*this);
 }
 
-void Command::masterCommand(int userSocket, const std::string& command)
+void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel)
 {
     if (command.find("USER ") == 0)
-        processUser(userSocket);
+        processUser(user->getSocket());
     else if (command.find("CAP REQ :multi-prefix") == 0)
-        processCapReq(userSocket);
+        processCapReq(user->getSocket());
     else if (command.find("CAP END") == 0)
-        processCapEnd(userSocket);
+        processCapEnd(user->getSocket());
     else if (command.find("PING") == 0)
-        processPing(userSocket, command);
+        processPing(user->getSocket(), command);
+    else if (command.find("JOIN") == 0)
+        joinChannel(user, command, channel);
     else
         std::cout << "Commande inconnue : " << command << std::endl;
 }
@@ -59,4 +61,22 @@ void Command::processPing(int userSocket, const std::string& pingCommand)
     std::string pingParam = pingCommand.substr(5);
     std::string pong = "PONG " + pingParam + "\r\n";
     send(userSocket, pong.c_str(), pong.size(), 0);
+}
+
+void Command::joinChannel(User *user, const std::string &command, std::vector<Channel*> &channels)
+{
+    size_t begin;
+    begin = command.find('#') + 1;
+    std::string name = command.substr(begin, command.size());
+    std::cout << "test : " << name << std::endl;
+    std::vector<Channel*>::iterator it = channels.begin();
+    for (; it != channels.end(); it++)
+    {
+        if ((*it)->getName() == name)
+        {
+            (*it)->addUser(user);
+            break;
+        }
+    }
+    std::cout << user->getNickname() << " Join the channel : " << name << std::endl;
 }

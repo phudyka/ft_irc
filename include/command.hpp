@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 15:56:45 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 16:13:58 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "ft_irc.hpp"
 
 class User;
+class Channel;
 
 class Command
 {
@@ -24,13 +25,14 @@ public:
 	Command(const Command& other);
     ~Command();
     Command& operator=(const Command& other);
-    void masterCommand(int userSocket, const std::string& command);
+    void masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel);
 
 private:
     void processUser(int userSocket);
     void processCapReq(int userSocket);
     void processCapEnd(int userSocket);
     void processPing(int userSocket, const std::string& pingCommand);
+    void joinChannel(User *user, const std::string &command, std::vector<Channel*> &channel);
 
 };
 
