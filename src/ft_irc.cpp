@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/08 14:58:26 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 15:15:40 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,13 @@ void ft_irc::clientData(size_t index)
                     std::string welcome = "001 " + _clients[i]->getNickname() + " :Welcome to the Internet Relay Network, " + _clients[i]->getNickname() + "!\r\n";
                     send(UserSocket, welcome.c_str(), welcome.size(), 0);
                 }
+				if (message.find("PING") == 0)
+				{
+    				std::string pingParam = message.substr(5);
+    
+    				std::string pongMessage = "PONG " + pingParam + "\r\n";
+    				send(UserSocket, pongMessage.c_str(), pongMessage.size(), 0);
+				}
             }
         }
     }
