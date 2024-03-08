@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/08 15:17:13 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 15:59:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void ft_irc::clientData(size_t index)
 {
     char buff[2048];
     int len = recv(_pollfds[index].fd, buff, sizeof(buff), 0);
+	Command	commandHandler;
 
     if (len <= 0)
         removeClient(index);
@@ -120,26 +121,7 @@ void ft_irc::clientData(size_t index)
         for (size_t i = 0; i < _clients.size(); i++)
         {
             if (_clients[i]->getSocket() == UserSocket)
-            {
-                std::cout << message << std::endl;
-
-                if (message.find("USER") == 0)
-                    send(UserSocket, "CAP * LS :multi-prefix sasl\r\n", strlen("CAP * LS :multi-prefix sasl\r\n"), 0);
-                if (message.find("CAP REQ :multi-prefix") == 0)
-                    send(UserSocket, "CAP * ACK multi-prefix\r\n", strlen("CAP * ACK multi-prefix\r\n"), 0);
-                if (message.find("CAP END") == 0)
-                {
-                    std::string welcome = "001 " + _clients[i]->getNickname() + " :Welcome to the Internet Relay Network, " + _clients[i]->getNickname() + "!\r\n";
-                    send(UserSocket, welcome.c_str(), welcome.size(), 0);
-                }
-				if (message.find("PING") == 0)
-				{
-    				std::string	ping = message.substr(5);
-    
-    				std::string pong = "PONG " + ping + "\r\n";
-    				send(UserSocket, pong.c_str(), pong.size(), 0);
-				}
-            }
+                commandHandler.masterCommand(UserSocket, message);
         }
     }
 }

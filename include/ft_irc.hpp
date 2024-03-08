@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 10:32:39 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/08 15:46:21 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 #include "user.hpp"
 #include "channel.hpp"
 #include "userMode.hpp"
+#include "command.hpp"
 
 #define RED		"\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -48,8 +49,9 @@
 #define ORANGE  "\x1b[38;5;208m"
 #define RESET   "\x1b[0m"
 
-class   Channel;
 class   User;
+class   Channel;
+class 	Command;
 
 struct	ServerConfig
 {
@@ -63,7 +65,6 @@ struct	ServerConfig
 
 class	ft_irc	
 {
-
 public:
     ft_irc(int port, std::string pass);
     ~ft_irc();
