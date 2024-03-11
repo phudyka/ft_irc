@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 16:45:28 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/11 13:23:03 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ public:
     const std::string&	getPrefix() const;
 	const std::string&	getHost() const;
     const std::string&	getIP() const;
+    void    setNickname(const std::string &nickname);
     size_t	getJoinedChannels() const;
 	void	setHost(const std::string& host);
     void	setIP(const std::string& ip);

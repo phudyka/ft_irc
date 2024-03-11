@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/11 09:29:53 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/11 13:21:46 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ private:
     void processHost(int userSocket);
     void processPing(int userSocket, const std::string& pingCommand);
     void joinChannel(User *user, const std::string &command, std::vector<Channel*> &channel);
+    void processNick(User *user, const std::string &command);
+    std::string extractParameter(const std::string& command, const std::string& prefix);
 };
 
 #endif // COMMAND_HPP

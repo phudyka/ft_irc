@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/11 09:29:13 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/11 13:28:59 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Command& Command::operator=(const Command& other)
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel)
 {
-    if (command.find("USER ") == 0)
+    if (command.find("CAP LS 302") == 0)
         processUser(user->getSocket());
     else if (command.find("CAP REQ :multi-prefix") == 0)
         processCapReq(user->getSocket());
@@ -38,6 +38,8 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     //     processHost(userSocket);
     else if (command.find("JOIN") == 0)
         joinChannel(user, command, channel);
+    else if (command.find("NICK") == 0)
+        processNick(user, command);
     // else
     //     std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
 }
@@ -78,11 +80,10 @@ void	Command::processPing(int userSocket, const std::string& pingCommand)
 
 void Command::joinChannel(User *user, const std::string &command, std::vector<Channel*> &channels)
 {
-    size_t begin;
-    begin = command.find('#') + 1;
-    std::string name = command.substr(begin, command.size());
-    std::cout << "test : " << name << std::endl;
+    std::string name = extractParameter(command, "#");
     std::vector<Channel*>::iterator it = channels.begin();
+    if (name.empty())
+        name = "Default";
     for (; it != channels.end(); it++)
     {
         if ((*it)->getName() == name)
@@ -92,4 +93,18 @@ void Command::joinChannel(User *user, const std::string &command, std::vector<Ch
         }
     }
     std::cout << user->getNickname() << " Join the channel : " << name << std::endl;
+}
+
+void Command::processNick(User *user, const std::string &command)
+{
+    std::string nickname = extractParameter(command, "NICK");
+    user->setNickname(nickname);
+}
+
+std::string Command::extractParameter(const std::string& command, const std::string& prefix)
+{
+    size_t begin = command.find(prefix) + prefix.length();
+    if (begin == 0)
+        return "";
+    return command.substr(begin);
 }
