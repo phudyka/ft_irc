@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/08 15:59:26 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 16:46:42 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void ft_irc::newConnection(void)
     struct sockaddr_in 	UserAddr;
     socklen_t			UserLen = sizeof(UserAddr);
     int					UserSocket = accept(_socketServer, (struct sockaddr*)&UserAddr, &UserLen);
+	char				*UserIP = inet_ntoa(UserAddr.sin_addr);
 
     if (UserSocket == -1)
     {
@@ -98,9 +99,22 @@ void ft_irc::newConnection(void)
     newPollfd.revents = 0;
 	
 	_pollfds.push_back(newPollfd);
-	User* newUser = new User(UserSocket, "caca");
-	_clients.push_back(newUser);
-	logConnection("Connection from User: ", inet_ntoa(UserAddr.sin_addr));
+	struct hostent*	hostInfo = gethostbyaddr((const char*)&UserAddr.sin_addr, sizeof(UserAddr.sin_addr), AF_INET);
+
+ 	if (hostInfo && hostInfo->h_name)
+    {
+        User* newUser = new User(UserSocket, "caca", hostInfo->h_name, UserIP);
+        newUser->setHost(hostInfo->h_name);
+        newUser->setIP(UserIP);
+
+        _clients.push_back(newUser);
+        logConnection("Connection from User: ", UserIP);
+    }
+    else
+    {
+        std::cerr << RED << "Error: [Fail to get host name]" << RESET << std::endl;
+        close(UserSocket);
+    }
 }
 
 void ft_irc::clientData(size_t index)
@@ -114,7 +128,7 @@ void ft_irc::clientData(size_t index)
     else
     {
         buff[len] = '\0';
-        std::cout << YELLOW << "client: " << buff << RESET << std::endl;
+        std::cout << BLUE << "client: " << YELLOW << buff << RESET << std::endl;
         int UserSocket = _pollfds[index].fd;
         std::string message = buff;
 

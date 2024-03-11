@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 10:28:12 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/08 16:45:07 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/user.hpp"
 
-User::User(int socket, const std::string &nick) : _socket(socket), _marked(false), _prefix(), _nickname(nick), _joinedChannels(0), _umode(NULL) {}
+User::User(int socket, const std::string &nick, const std::string &host, const std::string &ip)
+    : _socket(socket), _marked(false), _ip(ip), _host(host), _prefix(), _nickname(nick), _joinedChannels(0), _umode(NULL) {}
+
 
 User::User(const User&) {}
 
@@ -32,6 +34,26 @@ const std::string& User::getNickname() const
 const std::string& User::getPrefix() const
 {
     return (_prefix);
+}
+
+const std::string& User::getHost() const
+{
+    return (_host);
+}
+
+const std::string& User::getIP() const
+{
+    return (_ip);
+}
+
+void User::setHost(const std::string& host)
+{
+    _host = host;
+}
+
+void User::setIP(const std::string& ip)
+{
+    _ip = ip;
 }
 
 size_t User::getJoinedChannels() const

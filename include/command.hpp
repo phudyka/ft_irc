@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 15:56:45 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/08 17:02:11 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ private:
     void processUser(int userSocket);
     void processCapReq(int userSocket);
     void processCapEnd(int userSocket);
+    void processHost(int userSocket);
     void processPing(int userSocket, const std::string& pingCommand);
-
 };
 
 #endif // COMMAND_HPP
