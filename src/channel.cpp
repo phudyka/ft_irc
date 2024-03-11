@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 10:23:47 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/08 16:31:08 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,9 @@ void Channel::sendMessage(const std::string& message)
 void Channel::archiveMessages()
 {
     std::cout << "Archiving messages for channel '" << _name << "'" << std::endl;
+}
+
+std::string Channel::getName()
+{
+    return this->_name;
 }

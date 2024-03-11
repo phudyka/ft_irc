@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 17:02:11 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/11 09:29:53 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "ft_irc.hpp"
 
 class User;
+class Channel;
 
 class Command
 {
@@ -24,7 +25,7 @@ public:
 	Command(const Command& other);
     ~Command();
     Command& operator=(const Command& other);
-    void masterCommand(int userSocket, const std::string& command);
+    void masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel);
 
 private:
     void processUser(int userSocket);
@@ -32,6 +33,7 @@ private:
     void processCapEnd(int userSocket);
     void processHost(int userSocket);
     void processPing(int userSocket, const std::string& pingCommand);
+    void joinChannel(User *user, const std::string &command, std::vector<Channel*> &channel);
 };
 
 #endif // COMMAND_HPP

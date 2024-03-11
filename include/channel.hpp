@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 10:23:19 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/08 16:35:03 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ class	User;
 class	Channel
 {
 private:
+    enum	MaskSetType
+    {
+        BAN_SET,
+        EXCEPTION_SET,
+        INVITATION_SET
+    };
 
     std::string	                _name;
 	std::vector<User>			_users;
@@ -30,18 +36,11 @@ private:
 
 public:
 
-    enum	MaskSetType
-    {
-        BAN_SET,
-        EXCEPTION_SET,
-        INVITATION_SET
-    };
 
     Channel(const std::string &name);
     Channel(const Channel&);
     ~Channel();
     Channel& operator=(const Channel& other);
-
 	void markAllMembers();
     void addUser(User* user);
     void addMask(MaskSetType type, const std::string& mask);
@@ -54,6 +53,8 @@ public:
     void archiveMessages();
     size_t count() const;
     size_t nbUserVisible() const;
+    std::string getName();
+
 };
 
 #endif // CHANNEL_HPP

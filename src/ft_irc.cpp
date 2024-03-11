@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/08 16:46:42 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/11 09:30:09 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void ft_irc::clientData(size_t index)
         for (size_t i = 0; i < _clients.size(); i++)
         {
             if (_clients[i]->getSocket() == UserSocket)
-                commandHandler.masterCommand(UserSocket, message);
+                commandHandler.masterCommand(_clients[i], message, _channels);
         }
     }
 }
