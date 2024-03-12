@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/11 09:30:09 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/12 12:15:33 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,31 @@ void ft_irc::handleConnection(void)
     }
 }
 
+static void getPassword(int UserSocket, std::string correctPassword)
+{
+    while (true)
+    {
+        send(UserSocket, YELLOW "Enter Password: " RESET, strlen(YELLOW) + 17 + strlen(RESET), 0);
+        char receivedPass[256];
+        int passLen = recv(UserSocket, receivedPass, sizeof(receivedPass) - 1, 0);
+        receivedPass[passLen] = '\0';
+
+        size_t len = strlen(receivedPass);
+        while (len > 0 && (receivedPass[len - 1] == '\r' || receivedPass[len - 1] == '\n'))
+            receivedPass[--len] = '\0';
+
+        if (correctPassword == std::string(receivedPass))
+        {
+            send(UserSocket, YELLOW "[Welcome to ft_irc]\r\n" RESET, strlen(YELLOW) + 22 + strlen(RESET), 0);
+            break ;
+        }
+        else
+            send(UserSocket, RED "Error: [Invalid Password]\r\n" RESET, strlen(RED) + 28 + strlen(RESET), 0);
+    }
+}
+
+
+
 void ft_irc::newConnection(void)
 {
     struct sockaddr_in 	UserAddr;
@@ -93,6 +118,7 @@ void ft_irc::newConnection(void)
         return ;
     }
 
+	getPassword(UserSocket, _pass);
     struct pollfd newPollfd;
     newPollfd.fd = UserSocket;
     newPollfd.events = POLLIN;
