@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/12 12:15:33 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/13 17:04:09 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_irc.hpp"
+
+std::vector<std::string> split(std::string s, std::string delimiter)
+{
+    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    std::string token;
+    std::vector<std::string> res;
+
+    while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos)
+    {
+        token = s.substr (pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+        res.push_back (token);
+    }
+
+    res.push_back (s.substr (pos_start));
+    return res;
+}
 
 ft_irc::ft_irc(int port, std::string pass)
 {
@@ -80,30 +97,52 @@ void ft_irc::handleConnection(void)
     }
 }
 
-static void getPassword(int UserSocket, std::string correctPassword)
+/*static void getPassword(int UserSocket, std::string correctPassword)
 {
     while (true)
     {
-        send(UserSocket, YELLOW "Enter Password: " RESET, strlen(YELLOW) + 17 + strlen(RESET), 0);
         char receivedPass[256];
         int passLen = recv(UserSocket, receivedPass, sizeof(receivedPass) - 1, 0);
         receivedPass[passLen] = '\0';
+        std::string cmd = receivedPass;
+        std::cout << cmd << std::endl;
 
-        size_t len = strlen(receivedPass);
-        while (len > 0 && (receivedPass[len - 1] == '\r' || receivedPass[len - 1] == '\n'))
-            receivedPass[--len] = '\0';
-
-        if (correctPassword == std::string(receivedPass))
+        size_t passIndex = cmd.find("PASS");
+        if (passIndex != std::string::npos)
         {
-            send(UserSocket, YELLOW "[Welcome to ft_irc]\r\n" RESET, strlen(YELLOW) + 22 + strlen(RESET), 0);
-            break ;
+            std::string password = cmd.substr(passIndex + 5);
+            password.erase(std::remove(password.begin(), password.end(), '\r'), password.end());
+            password.erase(std::remove(password.begin(), password.end(), '\n'), password.end());
+            std::cout << password << std::endl;
+            
+            if (correctPassword == password)
+            {
+                send(UserSocket, "[Welcome to ft_irc]\r\n", 22, 0);
+                break;
+            }
+            else
+                send(UserSocket, RED "Error: [Invalid Password]\r\n" RESET, strlen(RED) + 28 + strlen(RESET), 0);
         }
-        else
-            send(UserSocket, RED "Error: [Invalid Password]\r\n" RESET, strlen(RED) + 28 + strlen(RESET), 0);
     }
+}*/
+
+void    ft_irc::connectClient(int socket, User *user)
+{
+    size_t len;
+    char client[256];
+    len = recv(socket, client, sizeof(client), 0);
+    client[len] = '\0';
+    std::cout << client << std::endl;
+    std::vector<std::string> infoClient = split(client, "\r\n");
+    std::vector<std::string>::iterator it = infoClient.begin();
+    //int tour = 0;
+    for (; it != infoClient.end(); it++)
+    {
+            Command commandHandler;
+            commandHandler.masterCommand(user, *it, _channels);
+    }
+    //std::cout << "tour dans la boucle : " << tour << std::endl;
 }
-
-
 
 void ft_irc::newConnection(void)
 {
@@ -118,7 +157,7 @@ void ft_irc::newConnection(void)
         return ;
     }
 
-	getPassword(UserSocket, _pass);
+	//getPassword(UserSocket, _pass);
     struct pollfd newPollfd;
     newPollfd.fd = UserSocket;
     newPollfd.events = POLLIN;
@@ -135,6 +174,7 @@ void ft_irc::newConnection(void)
 
         _clients.push_back(newUser);
         logConnection("Connection from User: ", UserIP);
+        connectClient(UserSocket, newUser);
     }
     else
     {

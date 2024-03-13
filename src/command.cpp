@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/11 13:28:59 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/13 17:06:40 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,25 @@ Command& Command::operator=(const Command& other)
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel)
 {
-    if (command.find("CAP LS 302") == 0)
+    if (command.find("CAP LS") == 0)
         processUser(user->getSocket());
-    else if (command.find("CAP REQ :multi-prefix") == 0)
-        processCapReq(user->getSocket());
+    else if (command.find("NICK") == 0)
+        processNick(user, command);
+	// else if (command.find("USERHOST ") == 0)
+    //     processHost(userSocket);
     else if (command.find("CAP END") == 0)
         processCapEnd(user->getSocket());
     else if (command.find("PING ") == 0)
         processPing(user->getSocket(), command);
-	// else if (command.find("USERHOST ") == 0)
-    //     processHost(userSocket);
     else if (command.find("JOIN") == 0)
         joinChannel(user, command, channel);
-    else if (command.find("NICK") == 0)
-        processNick(user, command);
     // else
     //     std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
 }
 
 void	Command::processUser(int userSocket)
 {
-    send(userSocket, "CAP * LS :multi-prefix sasl\r\n", strlen("CAP * LS :multi-prefix sasl\r\n"), 0);
+    send(userSocket, "CAP * LS :none\r\n", strlen("CAP * LS :none\r\n"), 0);
 }
 
 void	Command::processCapReq(int userSocket)

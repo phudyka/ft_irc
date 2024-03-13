@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/12 11:28:49 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/13 17:03:49 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <algorithm>
 #include "user.hpp"
 #include "channel.hpp"
 #include "userMode.hpp"
@@ -96,6 +97,7 @@ private:
 	void	clientData(size_t index);
 	void	logConnection(const std::string& msg, const std::string id);
 	void	broadcastShutdown(void);
+    void    connectClient(int socket, User *user);
 };
 
 #endif
