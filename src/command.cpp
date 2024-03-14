@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/13 17:06:40 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/14 11:32:33 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,47 +26,94 @@ Command& Command::operator=(const Command& other)
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel)
 {
+	int	userSocket = user->getSocket();
+
     if (command.find("CAP LS") == 0)
-        processUser(user->getSocket());
+        processCap(userSocket);
+	// else if (command.find("PASS") == 0)
+	// 	processPass(userSocket, command);		
     else if (command.find("NICK") == 0)
         processNick(user, command);
-	// else if (command.find("USERHOST ") == 0)
-    //     processHost(userSocket);
+	else if (command.find("USER ") == 0)
+		processUser(user, command);
     else if (command.find("CAP END") == 0)
-        processCapEnd(user->getSocket());
+        processCapEnd(user);
+	// else if (command.find("MODE ") == 0)
+	// 	processMode(user, command);
+	// else if (command.find("WHOIS ") == 0)
+	// 	processWhoIs(user, command);
     else if (command.find("PING ") == 0)
-        processPing(user->getSocket(), command);
+        processPing(userSocket, command);
     else if (command.find("JOIN") == 0)
         joinChannel(user, command, channel);
-    // else
-    //     std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
+    else
+        std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
 }
 
-void	Command::processUser(int userSocket)
+void	Command::processCap(int userSocket)
 {
     send(userSocket, "CAP * LS :none\r\n", strlen("CAP * LS :none\r\n"), 0);
 }
 
-void	Command::processCapReq(int userSocket)
+void	Command::processPass(int userSocket, std::string correctPassword)
 {
-    send(userSocket, "CAP * ACK multi-prefix\r\n", strlen("CAP * ACK multi-prefix\r\n"), 0);
+	char receivedPass[256];
+	int passLen = recv(userSocket, receivedPass, sizeof(receivedPass) - 1, 0);
+	receivedPass[passLen] = '\0';
+    std::string cmd = receivedPass;
+    std::cout << cmd << std::endl;
+
+    size_t passIndex = cmd.find("PASS");
+    if (passIndex != std::string::npos) {
+        std::string password = cmd.substr(passIndex + 5);
+        password.erase(std::remove(password.begin(), password.end(), '\r'), password.end());
+        password.erase(std::remove(password.begin(), password.end(), '\n'), password.end());
+        std::cout << password << std::endl;
+
+        if (correctPassword == password)
+            send(userSocket, YELLOW "[Welcome to ft_irc]\r\n RESET", strlen(YELLOW) + 22 + strlen(RESET), 0);
+		else
+		{
+            send(userSocket, RED "Error: [Invalid Password]\r\n" RESET, strlen(RED) + 28 + strlen(RESET), 0);
+            close(userSocket);
+        }
+    }
 }
 
-void	Command::processCapEnd(int userSocket)
+void	Command::processNick(User *user, const std::string &command)
 {
-    std::string welcome = "001 USER :Welcome to the Internet Relay Network\r\n";
-    send(userSocket, welcome.c_str(), welcome.size(), 0);
+    std::string nickname = extractParameter(command, "NICK");
+    user->setNickname(nickname);
 }
 
-// void	Command::processHost(int userSocket)
+void	Command::processUser(User *user, const std::string &command)
+{
+	size_t usernameStart = command.find("USER");
+	if (usernameStart != std::string::npos)
+	{
+		size_t usernameEnd = command.find(' ', usernameStart + 5);
+		if (usernameEnd != std::string::npos)
+		{
+            std::string username = command.substr(usernameStart + 5, usernameEnd - usernameStart - 5);
+            user->setUserName(username);
+        }
+    }
+}
+
+void	Command::processCapEnd(User *user)
+{
+    std::string welcome = "001 " + user->getUser() + ":Welcome to the Internet Relay Network\r\n";
+    send(user->getSocket(), welcome.c_str(), welcome.size(), 0);
+}
+
+// void	Command::processMode(User *user, const std::string &command)
 // {
-// 	User*	targetUser = getSocket(userSocket); //
+	
+// }
 
-//     if (targetUser)
-//     {
-//         std::string response = "USERHOST " + targetUser->getNickname() + " :" + targetUser->getHost() + " " + targetUser->getIP() + "\r\n";
-//         send(userSocket, response.c_str(), response.size(), 0);
-//     }
+// void	Command::processWhoIs(User *user, const std::string &command)
+// {
+	
 // }
 
 void	Command::processPing(int userSocket, const std::string& pingCommand)
@@ -76,7 +123,7 @@ void	Command::processPing(int userSocket, const std::string& pingCommand)
     send(userSocket, pong.c_str(), pong.size(), 0);
 }
 
-void Command::joinChannel(User *user, const std::string &command, std::vector<Channel*> &channels)
+void	Command::joinChannel(User *user, const std::string &command, std::vector<Channel*> &channels)
 {
     std::string name = extractParameter(command, "#");
     std::vector<Channel*>::iterator it = channels.begin();
@@ -87,22 +134,17 @@ void Command::joinChannel(User *user, const std::string &command, std::vector<Ch
         if ((*it)->getName() == name)
         {
             (*it)->addUser(user);
-            break;
+            break ;
         }
     }
     std::cout << user->getNickname() << " Join the channel : " << name << std::endl;
 }
 
-void Command::processNick(User *user, const std::string &command)
-{
-    std::string nickname = extractParameter(command, "NICK");
-    user->setNickname(nickname);
-}
 
 std::string Command::extractParameter(const std::string& command, const std::string& prefix)
 {
     size_t begin = command.find(prefix) + prefix.length();
     if (begin == 0)
-        return "";
-    return command.substr(begin);
+        return ("");
+    return (command.substr(begin));
 }

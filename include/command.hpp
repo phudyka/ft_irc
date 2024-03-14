@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/11 13:21:46 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/14 11:31:27 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,27 @@
 
 class User;
 class Channel;
-
 class Command
 {
 public:
+
     Command();
-	Command(const Command& other);
+    Command(const Command& other);
     ~Command();
     Command& operator=(const Command& other);
     void masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel);
 
 private:
-    void processUser(int userSocket);
-    void processCapReq(int userSocket);
-    void processCapEnd(int userSocket);
-    void processHost(int userSocket);
-    void processPing(int userSocket, const std::string& pingCommand);
-    void joinChannel(User *user, const std::string &command, std::vector<Channel*> &channel);
-    void processNick(User *user, const std::string &command);
-    std::string extractParameter(const std::string& command, const std::string& prefix);
-};
 
+    void		processCap(int userSocket);
+    void		processPass(int UserSocket, std::string correctPassword);
+    void		processNick(User *user, const std::string &command);
+    void		processUser(User *user, const std::string &command);
+    void		processCapEnd(User *user);
+	void		processMode(User *user, const std::string &command);
+	void		processWhoIs(User *user, const std::string &command);
+    void		processPing(int userSocket, const std::string& pingCommand);
+    void		joinChannel(User *user, const std::string &command, std::vector<Channel*> &channel);
+    std::string	extractParameter(const std::string& command, const std::string& prefix);
+};
 #endif // COMMAND_HPP

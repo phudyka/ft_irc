@@ -6,14 +6,14 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/12 11:28:34 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/14 10:16:55 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/user.hpp"
 
-User::User(int socket, const std::string &nick, const std::string &host, const std::string &ip)
-    : _socket(socket), _marked(false), _ip(ip), _host(host), _prefix(), _nickname(nick), _joinedChannels(0), _umode(NULL) {}
+User::User(int socket, const std::string &nick, const std::string &user, const std::string &ip)
+    : _socket(socket), _marked(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(NULL) {}
 
 
 User::User(const User&) {}
@@ -36,9 +36,9 @@ const std::string& User::getPrefix() const
     return (_prefix);
 }
 
-const std::string& User::getHost() const
+const std::string& User::getUser() const
 {
-    return (_host);
+    return (_user);
 }
 
 const std::string& User::getIP() const
@@ -46,9 +46,9 @@ const std::string& User::getIP() const
     return (_ip);
 }
 
-void User::setHost(const std::string& host)
+void User::setUserName(const std::string& user)
 {
-    _host = host;
+    _user = user;
 }
 
 void User::setIP(const std::string& ip)

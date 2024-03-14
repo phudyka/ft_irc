@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:32:49 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 14:52:34 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/14 11:20:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_irc::shutDown(void)
 {
 	close(_socketServer);
 	std::cout << CYAN << "[Server socket has been succesfully closed]" << RESET << std::endl;
-	std::cout << YELLOW << "[Webserv has been shutdown succesfully]" << RESET << std::endl;
+	std::cout << YELLOW << "[ft_irc has been shutdown succesfully]" << RESET << std::endl;
 }
 
 void	ft_irc::logConnection(const std::string& msg, const std::string id)
