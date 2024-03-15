@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/12 11:28:34 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/15 10:10:55 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,35 @@ const std::string& User::getHost() const
 const std::string& User::getIP() const
 {
     return (_ip);
+}
+
+const std::string User::getUsername() const
+{
+    return this->_username;
+}
+
+const std::string User::getRealname() const
+{
+    return this->_realname;
+}
+
+const std::string User::getHostname() const
+{
+    return this->_hostname;
+}
+
+void    User::setUsername(const std::string &username)
+{
+    this->_username = username;
+}
+
+void    User::setRealname(const std::string &realname)
+{
+    this->_realname = realname;
+}
+void    User::setHostname(const std::string &hostname)
+{
+    this->_hostname = hostname;
 }
 
 void User::setHost(const std::string& host)
@@ -85,3 +114,12 @@ void    User::setNickname(const std::string &nickname)
 {
     this->_nickname = nickname;
 }
+
+void User::sendMessage(const std::string& message) const
+{
+    if (send(_socket, message.c_str(), message.length(), 0) == -1)
+    {
+        std::cerr << "Error sending message to user " << _nickname << std::endl;
+    }
+}
+

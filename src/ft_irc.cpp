@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/13 17:04:09 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 08:42:43 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,27 @@
 
 std::vector<std::string> split(std::string s, std::string delimiter)
 {
-    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
-    std::string token;
+    size_t pos_start = 0, pos_end;
     std::vector<std::string> res;
 
     while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos)
     {
-        token = s.substr (pos_start, pos_end - pos_start);
-        pos_start = pos_end + delim_len;
-        res.push_back (token);
+        std::string token = s.substr(pos_start, pos_end - pos_start);
+        res.push_back(token + delimiter);
+        pos_start = pos_end + delimiter.length();
+    }
+    if (pos_start < s.length())
+    {
+        std::string lastToken = s.substr(pos_start);
+        res.push_back(lastToken);
     }
 
-    res.push_back (s.substr (pos_start));
     return res;
 }
 
 ft_irc::ft_irc(int port, std::string pass)
 {
+    this->hostname = "ft_irc";
     this->_port = port;
 	this->_pass = pass;
     this->_isRunning = false;
@@ -132,16 +136,13 @@ void    ft_irc::connectClient(int socket, User *user)
     char client[256];
     len = recv(socket, client, sizeof(client), 0);
     client[len] = '\0';
-    std::cout << client << std::endl;
     std::vector<std::string> infoClient = split(client, "\r\n");
     std::vector<std::string>::iterator it = infoClient.begin();
-    //int tour = 0;
     for (; it != infoClient.end(); it++)
     {
             Command commandHandler;
             commandHandler.masterCommand(user, *it, _channels);
     }
-    //std::cout << "tour dans la boucle : " << tour << std::endl;
 }
 
 void ft_irc::newConnection(void)
@@ -168,7 +169,7 @@ void ft_irc::newConnection(void)
 
  	if (hostInfo && hostInfo->h_name)
     {
-        User* newUser = new User(UserSocket, "caca", hostInfo->h_name, UserIP);
+        User* newUser = new User(UserSocket, "USER", hostInfo->h_name, UserIP);
         newUser->setHost(hostInfo->h_name);
         newUser->setIP(UserIP);
 

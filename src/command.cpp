@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/13 17:06:40 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 10:52:25 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,61 +24,103 @@ Command& Command::operator=(const Command& other)
     return (*this);
 }
 
+void Command::parseIRCMessage(const std::string& command)
+{
+    commandName = "";
+    parameters.clear();
+    trailing = "";
+    std::string message = command;
+    size_t commandEnd = message.find(' ');
+    commandName = message.substr(0, commandEnd);
+
+    size_t paramsStart = message.find(' ', commandEnd + 1);
+    std::stringstream iss(message.substr(commandEnd + 1, paramsStart - commandEnd - 1));
+    std::string param;
+    while (std::getline(iss, param, ' '))
+        parameters.push_back(param);
+
+    if (paramsStart != std::string::npos)
+    {
+        trailing = message.substr(paramsStart + 1);
+        if (!trailing.empty() && trailing[0] == ':')
+            trailing = trailing.substr(1);
+    }
+}
+
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel)
 {
-    if (command.find("CAP LS") == 0)
-        processUser(user->getSocket());
-    else if (command.find("NICK") == 0)
-        processNick(user, command);
-	// else if (command.find("USERHOST ") == 0)
-    //     processHost(userSocket);
-    else if (command.find("CAP END") == 0)
-        processCapEnd(user->getSocket());
-    else if (command.find("PING ") == 0)
-        processPing(user->getSocket(), command);
-    else if (command.find("JOIN") == 0)
-        joinChannel(user, command, channel);
+    parseIRCMessage(command);
+    std::cout << "Commande parser : " << std::endl;
+    std::cout << "command name :" << commandName << std::endl;
+    std::vector<std::string>:: iterator it = parameters.begin();
+    for (; it < parameters.end(); it++)
+    {
+        std::cout << "parametre :" << *it << std::endl;
+    }
+    std::cout << "trailing :" << trailing << std::endl;
+    std::cout << "fin du parsing" << std::endl;
+    
+    if (commandName.find("CAP") != std::string::npos)
+        processCap(user->getSocket());
+    else if (commandName.find("NICK") != std::string::npos)
+        processNick(user);
+	/*else if (commandName.find("USER") != std::string::npos)
+        processUser(user->getSocket());*/
+    else if (commandName.find("PING") != std::string::npos)
+        processPing(user->getSocket());
+    else if (commandName.find("JOIN") != std::string::npos)
+        joinChannel(user, channel);
+    else if (commandName.find("PRIVMSG") != std::string::npos)
+        sendMess(user, channel);
     // else
     //     std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
 }
 
-void	Command::processUser(int userSocket)
+void Command::processCap(int userSocket)
 {
-    send(userSocket, "CAP * LS :none\r\n", strlen("CAP * LS :none\r\n"), 0);
+    if (parameters[0].find("LS") != std::string::npos)
+    {
+        send(userSocket, "CAP * LS :none\r\n", strlen("CAP * LS :none\r\n"), 0);
+    }
+    else if (parameters[0].find("END") != std::string::npos)
+    {
+        std::string welcome = "001 USER :Welcome to the Internet Relay Network\r\n";
+        send(userSocket, welcome.c_str(), welcome.size(), 0);
+    }
 }
 
-void	Command::processCapReq(int userSocket)
+void Command::processNick(User *user)
 {
-    send(userSocket, "CAP * ACK multi-prefix\r\n", strlen("CAP * ACK multi-prefix\r\n"), 0);
+    std::string newNickname = parameters[0].substr(0, parameters[0].length() - 2);
+    if (newNickname.empty())
+    {
+        std::cerr << "Error: Enter a valid nickname" << std::endl;
+        return;
+    }
+
+    std::string oldNickname = user->getNickname();
+    user->setNickname(newNickname);
+
+    std::string response = ":" + oldNickname + " NICK " + newNickname + "\r\n";
+    send(user->getSocket(), response.c_str(), response.size(), 0);
 }
 
-void	Command::processCapEnd(int userSocket)
+/*void	Command::processUser(int userSocket)
 {
-    std::string welcome = "001 USER :Welcome to the Internet Relay Network\r\n";
-    send(userSocket, welcome.c_str(), welcome.size(), 0);
-}
+    
+}*/
 
-// void	Command::processHost(int userSocket)
-// {
-// 	User*	targetUser = getSocket(userSocket); //
-
-//     if (targetUser)
-//     {
-//         std::string response = "USERHOST " + targetUser->getNickname() + " :" + targetUser->getHost() + " " + targetUser->getIP() + "\r\n";
-//         send(userSocket, response.c_str(), response.size(), 0);
-//     }
-// }
-
-void	Command::processPing(int userSocket, const std::string& pingCommand)
+void	Command::processPing(int userSocket)
 {
-    std::string pingParam = pingCommand.substr(5);
+    std::string pingParam = parameters[0];
     std::string pong = "PONG " + pingParam + "\r\n";
     send(userSocket, pong.c_str(), pong.size(), 0);
 }
 
-void Command::joinChannel(User *user, const std::string &command, std::vector<Channel*> &channels)
+void Command::joinChannel(User *user, std::vector<Channel*> &channels)
 {
-    std::string name = extractParameter(command, "#");
+    std::string name = parameters[0];
+    name = extractParameter(name, "#");
     std::vector<Channel*>::iterator it = channels.begin();
     if (name.empty())
         name = "Default";
@@ -87,22 +129,46 @@ void Command::joinChannel(User *user, const std::string &command, std::vector<Ch
         if ((*it)->getName() == name)
         {
             (*it)->addUser(user);
+             std::string welcomeMessage = "332 " + user->getNickname() + " " + name + " :" "Welcome to the channel " + name + "\r\n";
+            user->sendMessage(welcomeMessage);
             break;
         }
     }
-    std::cout << user->getNickname() << " Join the channel : " << name << std::endl;
 }
 
-void Command::processNick(User *user, const std::string &command)
+void Command::sendMess(User *user, std::vector<Channel*> &channels)
 {
-    std::string nickname = extractParameter(command, "NICK");
-    user->setNickname(nickname);
+    std::string chanName = parameters[0].substr(1);
+    std::string message = trailing;
+
+    for (size_t i = 0; i < channels.size(); ++i)
+    {
+        if (channels[i]->getName() == chanName)
+        {
+            std::vector<User*> users = channels[i]->getUsers();
+            for (size_t j = 0; j < users.size(); ++j)
+            {
+                if (users[j] != user)
+                {
+                    std::cout << "Envoi du message au client" << std::endl;
+                    users[j]->sendMessage(message);
+                }
+            }
+            break;
+        }
+    }
 }
+
 
 std::string Command::extractParameter(const std::string& command, const std::string& prefix)
 {
     size_t begin = command.find(prefix) + prefix.length();
-    if (begin == 0)
+    size_t end = command.find("\r\n");
+    if (begin == std::string::npos || end == std::string::npos)
         return "";
-    return command.substr(begin);
+    std::string parameter = command.substr(begin, end - begin);
+    parameter.erase(std::remove(parameter.begin(), parameter.end(), '\r'), parameter.end());
+    parameter.erase(std::remove(parameter.begin(), parameter.end(), '\n'), parameter.end());
+    return parameter;
 }
+

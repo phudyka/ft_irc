@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 16:31:08 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/14 16:03:49 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ Channel& Channel::operator=(const Channel& other)
 
 void	Channel::addUser(User* user)
 {
-    _users.push_back(*user);
+    _users.push_back(user);
 }
 
 void Channel::addMask(MaskSetType type, const std::string& mask)
@@ -78,9 +78,9 @@ size_t	Channel::count() const
 
 void Channel::removeUser(const std::string& username)
 {
-    for (std::vector<User>::iterator it = _users.begin(); it != _users.end(); ++it)
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
     {
-        if (it->getNickname() == username)
+        if ((*it)->getNickname() == username)
         {
             _users.erase(it);
             break;
@@ -102,4 +102,9 @@ void Channel::archiveMessages()
 std::string Channel::getName()
 {
     return this->_name;
+}
+
+std::vector<User*> Channel::getUsers()
+{
+    return _users;
 }

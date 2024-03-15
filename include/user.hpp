@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/12 11:28:39 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/15 08:51:26 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ private:
     size_t		_joinedChannels;
     UserMode*	_umode;
 
+    std::string _username;
+    std::string _realname;
+    std::string _hostname;
+
 public:
 
     User(int socket, const std::string &nick, const std::string &host, const std::string &ip);
@@ -45,10 +49,17 @@ public:
     const std::string&	getPrefix() const;
 	const std::string&	getHost() const;
     const std::string&	getIP() const;
+    const std::string getUsername() const;
+    const std::string getRealname() const;
+    const std::string getHostname() const;
+    void    setUsername(const std::string &username);
+    void    setRealname(const std::string &realname);
+    void    setHostname(const std::string &hostname);
     void    setNickname(const std::string &nickname);
     size_t	getJoinedChannels() const;
 	void	setHost(const std::string& host);
     void	setIP(const std::string& ip);
+    void    sendMessage(const std::string& message) const;
     UserMode&	umode();
 };
 

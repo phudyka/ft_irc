@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/13 17:03:49 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 08:41:35 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ public:
     void    handleConnection(void);
 
 private:
+    std::string  hostname;
     int         _socketServer;
     int         _port;
 	std::string	_pass;

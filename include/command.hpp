@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/11 13:21:46 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 08:44:27 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,18 @@ public:
     void masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel);
 
 private:
-    void processUser(int userSocket);
+    std::string commandName;
+    std::vector<std::string> parameters;
+    std::string trailing;
+    void parseIRCMessage(const std::string& command);
+    void processCap(int userSocket);
     void processCapReq(int userSocket);
     void processCapEnd(int userSocket);
-    void processHost(int userSocket);
-    void processPing(int userSocket, const std::string& pingCommand);
-    void joinChannel(User *user, const std::string &command, std::vector<Channel*> &channel);
-    void processNick(User *user, const std::string &command);
+    void processUser(int userSocket);
+    void processPing(int userSocket);
+    void joinChannel(User *user, std::vector<Channel*> &channel);
+    void processNick(User *user);
+    void sendMess(User *user, std::vector<Channel*> &channel);
     std::string extractParameter(const std::string& command, const std::string& prefix);
 };
 

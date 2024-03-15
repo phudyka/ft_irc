@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/08 16:35:03 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/14 16:02:56 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ private:
     };
 
     std::string	                _name;
-	std::vector<User>			_users;
+	std::vector<User*>			_users;
     std::set<std::string>		_invitations;
     std::set<std::string>		_masks[3];
     std::vector<std::string>	_messageHistory;
@@ -51,6 +51,7 @@ public:
     void removeUser(const std::string& username);
     void sendMessage(const std::string& message);
     void archiveMessages();
+    std::vector<User*> getUsers();
     size_t count() const;
     size_t nbUserVisible() const;
     std::string getName();
