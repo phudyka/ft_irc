@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/15 11:17:09 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 12:04:25 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,42 @@ void Command::parseIRCMessage(const std::string& command)
     commandName = "";
     parameters.clear();
     trailing = "";
-    std::string message = command;
-    size_t commandEnd = message.find(' ');
-    commandName = message.substr(0, commandEnd);
-
-    size_t paramsStart = message.find(' ', commandEnd + 1);
-    std::stringstream iss(message.substr(commandEnd + 1, paramsStart - commandEnd - 1));
-    std::string param;
-    while (std::getline(iss, param, ' '))
-        parameters.push_back(param);
-
-    if (paramsStart != std::string::npos)
+    size_t commandEnd = command.find(' ');
+    if (commandEnd != std::string::npos)
     {
-        trailing = message.substr(paramsStart + 1);
-        if (!trailing.empty() && trailing[0] == ':')
-            trailing = trailing.substr(1);
+        commandName = command.substr(0, commandEnd);
+
+        size_t paramsStart = command.find(' ', commandEnd + 1);
+
+        if (command[commandEnd + 1] == ':')
+            trailing = command.substr(commandEnd + 2);
+        else
+        {
+            std::string paramsString = command.substr(commandEnd + 1);
+            std::stringstream iss(paramsString);
+            std::string param;
+            while (std::getline(iss, param, ' '))
+            {
+                if (param.find(':') != std::string::npos)
+                    break;
+                parameters.push_back(param);
+            }
+            paramsStart = command.find(':');
+            if (paramsStart != std::string::npos)
+            {
+                trailing = command.substr(paramsStart + 1);
+                if (!trailing.empty() && trailing[0] == ':') {
+                    trailing = trailing.substr(1);
+                }
+            }
+        }
+    }
+    else
+    {
+        commandName = command;
     }
 }
+
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel)
 {
