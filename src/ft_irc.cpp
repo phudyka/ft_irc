@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/15 08:42:43 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 11:12:45 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,35 +101,6 @@ void ft_irc::handleConnection(void)
     }
 }
 
-/*static void getPassword(int UserSocket, std::string correctPassword)
-{
-    while (true)
-    {
-        char receivedPass[256];
-        int passLen = recv(UserSocket, receivedPass, sizeof(receivedPass) - 1, 0);
-        receivedPass[passLen] = '\0';
-        std::string cmd = receivedPass;
-        std::cout << cmd << std::endl;
-
-        size_t passIndex = cmd.find("PASS");
-        if (passIndex != std::string::npos)
-        {
-            std::string password = cmd.substr(passIndex + 5);
-            password.erase(std::remove(password.begin(), password.end(), '\r'), password.end());
-            password.erase(std::remove(password.begin(), password.end(), '\n'), password.end());
-            std::cout << password << std::endl;
-            
-            if (correctPassword == password)
-            {
-                send(UserSocket, "[Welcome to ft_irc]\r\n", 22, 0);
-                break;
-            }
-            else
-                send(UserSocket, RED "Error: [Invalid Password]\r\n" RESET, strlen(RED) + 28 + strlen(RESET), 0);
-        }
-    }
-}*/
-
 void    ft_irc::connectClient(int socket, User *user)
 {
     size_t len;
@@ -158,28 +129,26 @@ void ft_irc::newConnection(void)
         return ;
     }
 
-	//getPassword(UserSocket, _pass);
     struct pollfd newPollfd;
     newPollfd.fd = UserSocket;
     newPollfd.events = POLLIN;
     newPollfd.revents = 0;
 	
 	_pollfds.push_back(newPollfd);
-	struct hostent*	hostInfo = gethostbyaddr((const char*)&UserAddr.sin_addr, sizeof(UserAddr.sin_addr), AF_INET);
+	struct hostent*	UserInfo = gethostbyaddr((const char*)&UserAddr.sin_addr, sizeof(UserAddr.sin_addr), AF_INET);
 
- 	if (hostInfo && hostInfo->h_name)
+ 	if (UserInfo && UserInfo->h_name)
     {
-        User* newUser = new User(UserSocket, "USER", hostInfo->h_name, UserIP);
-        newUser->setHost(hostInfo->h_name);
+        User* newUser = new User(UserSocket, "USER", UserInfo->h_name, UserIP);
+        newUser->setHostname(UserInfo->h_name);
         newUser->setIP(UserIP);
-
         _clients.push_back(newUser);
         logConnection("Connection from User: ", UserIP);
         connectClient(UserSocket, newUser);
     }
     else
     {
-        std::cerr << RED << "Error: [Fail to get host name]" << RESET << std::endl;
+        std::cerr << RED << "Error: [Fail to get username]" << RESET << std::endl;
         close(UserSocket);
     }
 }

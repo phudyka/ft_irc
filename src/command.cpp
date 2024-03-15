@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/15 10:52:25 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 11:17:09 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,22 @@ void Command::processNick(User *user)
 {
     
 }*/
+
+/*void	Command::processUser(int userSocket)
+{
+
+}*/
+
+
+// void	Command::processMode(User *user, const std::string &command)
+// {
+	
+// }
+
+// void	Command::processWhoIs(User *user, const std::string &command)
+// {
+	
+// }
 
 void	Command::processPing(int userSocket)
 {
