@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/15 11:12:45 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 11:46:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void    ft_irc::connectClient(int socket, User *user)
     for (; it != infoClient.end(); it++)
     {
             Command commandHandler;
-            commandHandler.masterCommand(user, *it, _channels);
+            commandHandler.masterCommand(user, *it, _channels, _pass);
     }
 }
 
@@ -171,7 +171,7 @@ void ft_irc::clientData(size_t index)
         for (size_t i = 0; i < _clients.size(); i++)
         {
             if (_clients[i]->getSocket() == UserSocket)
-                commandHandler.masterCommand(_clients[i], message, _channels);
+                commandHandler.masterCommand(_clients[i], message, _channels, _pass);
         }
     }
 }
