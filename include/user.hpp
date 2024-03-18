@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/03/15 16:07:55 by dtassel          ###   ########.fr       */
-=======
-/*   Updated: 2024/03/15 11:31:16 by phudyka          ###   ########.fr       */
->>>>>>> 6832a67cfd9c2bdbd3612ba0759c5adc97c17e7b
+/*   Updated: 2024/03/18 11:59:05 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +59,8 @@ public:
     void    setRealname(const std::string &realname);
     void    setHostname(const std::string &hostname);
     void    setNickname(const std::string &nickname);
-<<<<<<< HEAD
     void	setJoinedChannels(Channel *channel);
-=======
     void    setPassword(const std::string &nickname);
->>>>>>> 6832a67cfd9c2bdbd3612ba0759c5adc97c17e7b
     size_t	getJoinedChannels() const;
 	void	setUserName(const std::string& user);
     void	setIP(const std::string& ip);

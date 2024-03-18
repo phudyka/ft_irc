@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/03/18 11:48:12 by dtassel          ###   ########.fr       */
-=======
-/*   Updated: 2024/03/15 14:42:24 by phudyka          ###   ########.fr       */
->>>>>>> 6832a67cfd9c2bdbd3612ba0759c5adc97c17e7b
+/*   Updated: 2024/03/18 11:56:53 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +79,12 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     std::cout << "trailing :" << trailing << std::endl;
     std::cout << "fin du parsing" << std::endl;
     
-<<<<<<< HEAD
-    if (commandName.find("NICK") != std::string::npos)
-        processNick(user);
-	else if (commandName.find("USER") != std::string::npos)
-        processUser(user);
-=======
-    if (commandName.find("CAP") != std::string::npos)
-        processCap(userSocket);
-	else if (commandName.find("PASS") != std::string::npos)
+	if (commandName.find("PASS") != std::string::npos)
 		processPass(user, serverPass);
     else if (commandName.find("NICK") != std::string::npos)
         processNick(user);
-	/*else if (commandName.find("USER") != std::string::npos)
-        processUser(userSocket);*/
->>>>>>> 6832a67cfd9c2bdbd3612ba0759c5adc97c17e7b
+	else if (commandName.find("USER") != std::string::npos)
+        processUser(user);
     else if (commandName.find("PING") != std::string::npos)
         processPing(userSocket);
     else if (commandName.find("JOIN") != std::string::npos)
@@ -106,21 +93,6 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         sendMess(user, channel);
     // else
     //     std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
-}
-
-<<<<<<< HEAD
-=======
-void Command::processCap(int userSocket)
-{
-    if (parameters[0].find("LS") != std::string::npos)
-    {
-        send(userSocket, "CAP * LS :none\r\n", strlen("CAP * LS :none\r\n"), 0);
-    }
-    else if (parameters[0].find("END") != std::string::npos)
-    {
-        std::string welcome = "001 USER :Welcome to the Internet Relay Network\r\n";
-        send(userSocket, welcome.c_str(), welcome.size(), 0);
-    }
 }
 
 void	Command::processPass(User *user, const std::string& serverPass)
@@ -136,7 +108,6 @@ void	Command::processPass(User *user, const std::string& serverPass)
 	}
 }
 
->>>>>>> 6832a67cfd9c2bdbd3612ba0759c5adc97c17e7b
 void Command::processNick(User *user)
 {
     std::string newNickname = parameters[0].substr(0, parameters[0].length() - 2);
@@ -155,7 +126,6 @@ void Command::processNick(User *user)
 
 void	Command::processUser(User *user)
 {
-<<<<<<< HEAD
     user->setUsername(parameters[0]);
     user->setRealname(parameters[1]);
     user->setHostname(parameters[2]);
@@ -164,10 +134,6 @@ void	Command::processUser(User *user)
     send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
 }
 
-=======
-    
-}*/
->>>>>>> 6832a67cfd9c2bdbd3612ba0759c5adc97c17e7b
 
 // void	Command::processMode(User *user, const std::string &command)
 // {
