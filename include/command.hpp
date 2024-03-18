@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 11:57:02 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/18 13:24:34 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ private:
     void	processNick(User *user);
 	void	processMode(User *user, const std::string &command);
 	void	processWhoIs(User *user, const std::string &command);
+    void    processList(User *user, std::vector<Channel*> &channel);
     void	sendMess(User *user, std::vector<Channel*> &channel);
     std::string extractParameter(const std::string& command, const std::string& prefix);
 };

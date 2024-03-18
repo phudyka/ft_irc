@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 11:56:53 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/18 13:38:59 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         joinChannel(user, channel);
     else if (commandName.find("PRIVMSG") != std::string::npos)
         sendMess(user, channel);
+    else if (commandName.find("LIST") != std::string::npos)
+        processList(user, channel);
     // else
     //     std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
 }
@@ -196,6 +198,25 @@ void Command::sendMess(User *user, std::vector<Channel*> &channels)
             break;
         }
     }
+}
+
+void    Command::processList(User *user, std::vector<Channel*> &channel)
+{
+    std::vector<Channel*>::iterator it = channel.begin();
+    std::vector<std::string> list;
+    for (; it != channel.end(); it++)
+    {
+        list.push_back((*it)->getName());
+    }
+    std::string response = "LIST ";
+    std::vector<std::string>::iterator its = list.begin();
+    for (; its != list.end(); its++)
+    {
+        response += "#" + *its;
+    }
+    response += "\r\n";
+    send(user->getSocket(), response.c_str(), response.size(), 0);
+    std::cout << response << std::endl;
 }
 
 std::string Command::extractParameter(const std::string& command, const std::string& prefix)
