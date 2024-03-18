@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/15 11:13:55 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 16:07:47 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,11 @@ UserMode& User::umode()
 void    User::setNickname(const std::string &nickname)
 {
     this->_nickname = nickname;
+}
+
+void	User::setJoinedChannels(Channel *channel)
+{
+    this->_listChannel.push_back(channel);
 }
 
 void User::sendMessage(const std::string& message) const

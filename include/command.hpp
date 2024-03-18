@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/15 11:10:06 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 14:32:27 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ private:
     void processCap(int userSocket);
     void processCapReq(int userSocket);
     void processCapEnd(int userSocket);
-    void processUser(int userSocket);
+    void processUser(User *user);
     void processPing(int userSocket);
     void joinChannel(User *user, std::vector<Channel*> &channel);
     void processNick(User *user);

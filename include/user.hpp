@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/15 11:10:54 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/15 16:07:55 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "../include/userMode.hpp"
 
 class UserMode;
+class Channel;
 
 class User
 {
@@ -30,6 +31,7 @@ private:
     std::string	_nickname;
 	std::string	_pass;
     size_t		_joinedChannels;
+    std::vector<Channel*> _listChannel;
     UserMode*	_umode;
 
     std::string _username;
@@ -56,6 +58,7 @@ public:
     void    setRealname(const std::string &realname);
     void    setHostname(const std::string &hostname);
     void    setNickname(const std::string &nickname);
+    void	setJoinedChannels(Channel *channel);
     size_t	getJoinedChannels() const;
 	void	setUserName(const std::string& user);
     void	setIP(const std::string& ip);

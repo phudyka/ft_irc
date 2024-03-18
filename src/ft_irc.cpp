@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/15 11:12:45 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/18 11:11:09 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void ft_irc::newConnection(void)
 
  	if (UserInfo && UserInfo->h_name)
     {
-        User* newUser = new User(UserSocket, "USER", UserInfo->h_name, UserIP);
+        User* newUser = new User(UserSocket, "", UserInfo->h_name, UserIP);
         newUser->setHostname(UserInfo->h_name);
         newUser->setIP(UserIP);
         _clients.push_back(newUser);
