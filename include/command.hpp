@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 13:24:34 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:01:56 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ private:
     void	processPing(int userSocket);
     void	joinChannel(User *user, std::vector<Channel*> &channel);
     void	processNick(User *user);
-	void	processMode(User *user, const std::string &command);
-	void	processWhoIs(User *user, const std::string &command);
+	void	processMode(User *user);
+	void	processWhoIs(User *user);
     void    processList(User *user, std::vector<Channel*> &channel);
     void	sendMess(User *user, std::vector<Channel*> &channel);
     std::string extractParameter(const std::string& command, const std::string& prefix);

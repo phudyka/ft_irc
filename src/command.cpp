@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 13:38:59 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:05:07 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ void Command::parseIRCMessage(const std::string& command)
         }
     }
     else
-    {
         commandName = command;
-    }
 }
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass)
@@ -85,6 +83,10 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         processNick(user);
 	else if (commandName.find("USER") != std::string::npos)
         processUser(user);
+	else if (commandName.find("MODE") != std::string::npos)
+		processMode(user);
+	// else if (commandName.find("WHO") != std::string::npos)
+	// 	processWhoIs(user);
     else if (commandName.find("PING") != std::string::npos)
         processPing(userSocket);
     else if (commandName.find("JOIN") != std::string::npos)
@@ -110,15 +112,14 @@ void	Command::processPass(User *user, const std::string& serverPass)
 	}
 }
 
-void Command::processNick(User *user)
+void	Command::processNick(User *user)
 {
     std::string newNickname = parameters[0].substr(0, parameters[0].length() - 2);
     if (newNickname.empty())
     {
         std::cerr << "Error: Enter a valid nickname" << std::endl;
-        return;
+        return ;
     }
-
     std::string oldNickname = user->getNickname();
     user->setNickname(newNickname);
     //:Gerard!freiko@localhost NICK :david
@@ -136,11 +137,29 @@ void	Command::processUser(User *user)
     send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
 }
 
+void	Command::processMode(User *user)
+{
+    UserMode&	userMode = user->umode();
 
-// void	Command::processMode(User *user, const std::string &command)
-// {
-	
-// }
+    std::string	symbol = parameters[1].substr(0, 1);
+    std::string	mode = parameters[1].substr(1, parameters[1].length() - 3);
+
+	std::cout << "Symbol: " << symbol << ", Mode: " << mode << "]" << std::endl;
+    if (symbol == "+")
+    {
+        if (mode == "i")
+            userMode.set(UserMode::INVISIBLE, true);
+        else if (mode == "m")
+            userMode.set(UserMode::MARK, true);
+    }
+    else if (symbol == "-")
+    {
+        if (mode == "i")
+            userMode.set(UserMode::INVISIBLE, false);
+        else if (mode == "m")
+            userMode.set(UserMode::MARK, false);
+    }
+}
 
 // void	Command::processWhoIs(User *user, const std::string &command)
 // {
@@ -154,7 +173,7 @@ void	Command::processPing(int userSocket)
     send(userSocket, pong.c_str(), pong.size(), 0);
 }
 
-void Command::joinChannel(User *user, std::vector<Channel*> &channels)
+void	Command::joinChannel(User *user, std::vector<Channel*> &channels)
 {
     std::string name = parameters[0];
     name = extractParameter(name, "#");
@@ -169,12 +188,12 @@ void Command::joinChannel(User *user, std::vector<Channel*> &channels)
             user->setJoinedChannels(*it);
             std::string welcomeMessage = ":" + user->getNickname() + " JOIN #" + name + " :" "Welcome to the channel " + name + "! " + user->getNickname() + "\r\n";
             user->sendMessage(welcomeMessage);
-            break;
+            break ;
         }
     }
 }
 
-void Command::sendMess(User *user, std::vector<Channel*> &channels)
+void	Command::sendMess(User *user, std::vector<Channel*> &channels)
 {
     std::string chanName = parameters[0].substr(1);
     std::string message;
@@ -195,7 +214,7 @@ void Command::sendMess(User *user, std::vector<Channel*> &channels)
                     users[j]->sendMessage(message);
                 }
             }
-            break;
+            break ;
         }
     }
 }
@@ -219,14 +238,14 @@ void    Command::processList(User *user, std::vector<Channel*> &channel)
     std::cout << response << std::endl;
 }
 
-std::string Command::extractParameter(const std::string& command, const std::string& prefix)
+std::string	Command::extractParameter(const std::string& command, const std::string& prefix)
 {
     size_t begin = command.find(prefix) + prefix.length();
     size_t end = command.find("\r\n");
     if (begin == std::string::npos || end == std::string::npos)
-        return "";
+        return ("");
     std::string parameter = command.substr(begin, end - begin);
     parameter.erase(std::remove(parameter.begin(), parameter.end(), '\r'), parameter.end());
     parameter.erase(std::remove(parameter.begin(), parameter.end(), '\n'), parameter.end());
-    return parameter;
+    return (parameter);
 }

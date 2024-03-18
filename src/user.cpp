@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 11:57:44 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:00:15 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/user.hpp"
 
 User::User(int socket, const std::string &nick, const std::string &user, const std::string &ip)
-    : _socket(socket), _marked(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(NULL) {}
+    : _socket(socket), _marked(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()) {}
 
 
 User::User(const User&) {}
