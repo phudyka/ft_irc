@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 16:01:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/19 09:51:50 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ public:
     Command(const Command& other);
     ~Command();
     Command& operator=(const Command& other);
-    void masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass);
+    void masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass, std::vector<User*> &_users);
 
 private:
     std::string commandName;
@@ -43,7 +43,7 @@ private:
 	void	processMode(User *user);
 	void	processWhoIs(User *user);
     void    processList(User *user, std::vector<Channel*> &channel);
-    void	sendMess(User *user, std::vector<Channel*> &channel);
+    void	sendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users);
     std::string extractParameter(const std::string& command, const std::string& prefix);
 };
 #endif // COMMAND_HPP

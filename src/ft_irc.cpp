@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/18 11:59:50 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/19 09:53:24 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void    ft_irc::connectClient(int socket, User *user)
     for (; it != infoClient.end(); it++)
     {
             Command commandHandler;
-            commandHandler.masterCommand(user, *it, _channels, _pass);
+            commandHandler.masterCommand(user, *it, _channels, _pass, _clients);
     }
 }
 
@@ -171,7 +171,7 @@ void ft_irc::clientData(size_t index)
         for (size_t i = 0; i < _clients.size(); i++)
         {
             if (_clients[i]->getSocket() == UserSocket)
-                commandHandler.masterCommand(_clients[i], message, _channels, _pass);
+                commandHandler.masterCommand(_clients[i], message, _channels, _pass, _clients);
         }
     }
 }

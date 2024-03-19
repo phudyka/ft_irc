@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 16:05:07 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/19 10:56:27 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void Command::parseIRCMessage(const std::string& command)
         commandName = command;
 }
 
-void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass)
+void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass, std::vector<User*> &_users)
 {
 	int userSocket = user->getSocket();
     parseIRCMessage(command);
@@ -92,7 +92,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     else if (commandName.find("JOIN") != std::string::npos)
         joinChannel(user, channel);
     else if (commandName.find("PRIVMSG") != std::string::npos)
-        sendMess(user, channel);
+        sendMess(user, channel, _users);
     else if (commandName.find("LIST") != std::string::npos)
         processList(user, channel);
     // else
@@ -193,29 +193,46 @@ void	Command::joinChannel(User *user, std::vector<Channel*> &channels)
     }
 }
 
-void	Command::sendMess(User *user, std::vector<Channel*> &channels)
+void	Command::sendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users)
 {
-    std::string chanName = parameters[0].substr(1);
+    std::string target = parameters[0].substr(0);
     std::string message;
-
-    for (size_t i = 0; i < channels.size(); ++i)
+    if (target.find("#") != std::string::npos)
     {
-        if (channels[i]->getName() == chanName)
+        target = parameters[0].substr(1);
+        for (size_t i = 0; i < channels.size(); ++i)
         {
-            std::vector<User*> users = channels[i]->getUsers();
-            for (size_t j = 0; j < users.size(); ++j)
+            if (channels[i]->getName() == target)
             {
-                if (users[j] != user)
+                std::vector<User*> users = channels[i]->getUsers();
+                for (size_t j = 0; j < users.size(); ++j)
                 {
-                    //:senderNickname!senderUsername@senderHostname PRIVMSG #channelName :messageContent
-                    std::cout << "Envoi du message au client" << std::endl;
-                    message = ":" + user->getNickname() + "!" + user->getUsername();
-                    message += "@" + user->getHostname() + " " + commandName + " #" + chanName + " :" + trailing + "\r\n";
-                    users[j]->sendMessage(message);
+                    if (users[j] != user)
+                    {
+                        //:senderNickname!senderUsername@senderHostname PRIVMSG #channelName :messageContent
+                        std::cout << "Envoi du message au client" << std::endl;
+                        message = ":" + user->getNickname() + "!" + user->getUsername();
+                        message += "@" + user->getHostname() + " " + commandName + " #" + target + " :" + trailing + "\r\n";
+                        users[j]->sendMessage(message);
+                    }
                 }
+                break ;
             }
-            break ;
         }
+    }
+    else
+    {
+        std::vector<User*>::iterator it = _users.begin();
+        for (; it != _users.end(); it++)
+        {
+            if ((*it)->getNickname() == target)
+            {
+                std::string senderPrefix = ":" + user->getNickname() + "!" + user->getUsername() + "@" + user->getHostname();
+                message = senderPrefix + " PRIVMSG " + target + " :" + trailing + "\r\n";
+                (*it)->sendMessage(message);
+                break;
+            }    
+        } 
     }
 }
 
