@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 16:05:07 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/19 11:10:59 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,15 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 {
 	int userSocket = user->getSocket();
     parseIRCMessage(command);
-    std::cout << "Commande parser : " << std::endl;
-    std::cout << "command name :" << commandName << std::endl;
-    std::vector<std::string>:: iterator it = parameters.begin();
-    for (; it < parameters.end(); it++)
-    {
-        std::cout << "parametre :" << *it << std::endl;
-    }
-    std::cout << "trailing :" << trailing << std::endl;
-    std::cout << "fin du parsing" << std::endl;
+    // std::cout << "Commande parser : " << std::endl;
+    // std::cout << "command name :" << commandName << std::endl;
+    // std::vector<std::string>:: iterator it = parameters.begin();
+    // for (; it < parameters.end(); it++)
+    // {
+    //     std::cout << "parametre :" << *it << std::endl;
+    // }
+    // std::cout << "trailing :" << trailing << std::endl;
+    // std::cout << "fin du parsing" << std::endl;
     
 	if (commandName.find("PASS") != std::string::npos)
 		processPass(user, serverPass);
@@ -144,7 +144,6 @@ void	Command::processMode(User *user)
     std::string	symbol = parameters[1].substr(0, 1);
     std::string	mode = parameters[1].substr(1, parameters[1].length() - 3);
 
-	std::cout << "Symbol: " << symbol << ", Mode: " << mode << "]" << std::endl;
     if (symbol == "+")
     {
         if (mode == "i")

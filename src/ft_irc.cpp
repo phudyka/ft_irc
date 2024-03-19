@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/18 11:59:50 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/19 11:14:13 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void ft_irc::start()
     Channel *newChannel = new Channel("Default");
     this->_channels.push_back(newChannel);
     _isRunning = true;
+	displayClients();
     handleConnection();
 }
 
@@ -143,7 +144,6 @@ void ft_irc::newConnection(void)
         newUser->setHostname(UserInfo->h_name);
         newUser->setIP(UserIP);
         _clients.push_back(newUser);
-        logConnection("Connection from User: ", UserIP);
         connectClient(UserSocket, newUser);
     }
     else
@@ -151,6 +151,7 @@ void ft_irc::newConnection(void)
         std::cerr << RED << "Error: [Fail to get username]" << RESET << std::endl;
         close(UserSocket);
     }
+	displayClients();
 }
 
 void ft_irc::clientData(size_t index)
@@ -164,7 +165,7 @@ void ft_irc::clientData(size_t index)
     else
     {
         buff[len] = '\0';
-        std::cout << BLUE << "client: " << YELLOW << buff << RESET << std::endl;
+        // std::cout << BLUE << "client: " << YELLOW << buff << RESET << std::endl;
         int UserSocket = _pollfds[index].fd;
         std::string message = buff;
 
@@ -185,5 +186,6 @@ void ft_irc::removeClient(size_t index)
     _clients.erase(_clients.begin() + index);
 	std::cout << CYAN << "[User [" << index << "] has been succesfully removed]" << RESET << std::endl;
     std::cout << GREEN << "Connection closed." << RESET << std::endl;
+	displayClients();
 }
 

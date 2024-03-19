@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/15 08:41:35 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/19 10:17:15 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
@@ -71,6 +72,7 @@ public:
     ~ft_irc();
     void    start();
 	void	shutDown(void);
+	void	displayClients();
     void    handleConnection(void);
 
 private:

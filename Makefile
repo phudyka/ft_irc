@@ -6,7 +6,7 @@
 #    By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 15:51:03 by phudyka           #+#    #+#              #
-#    Updated: 2024/03/08 16:01:12 by phudyka          ###   ########.fr        #
+#    Updated: 2024/03/19 10:19:29 by phudyka          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 OBJ_DIR = obj
-SRCS = src/main.cpp src/ft_irc.cpp src/channel.cpp src/user.cpp src/userMode.cpp src/utils.cpp src/command.cpp
+SRCS =	src/main.cpp src/ft_irc.cpp src/channel.cpp src/user.cpp 		\
+		src/userMode.cpp src/utils.cpp src/command.cpp 					\
+
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.cpp=.o)))
 
 .PHONY: all clean fclean re
