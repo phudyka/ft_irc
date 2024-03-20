@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/19 11:14:55 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/20 11:14:25 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 	if (commandName.find("PASS") != std::string::npos)
 		processPass(user, serverPass);
     else if (commandName.find("NICK") != std::string::npos)
-        processNick(user);
+        processNick(user, _users);
 	else if (commandName.find("USER") != std::string::npos)
         processUser(user);
 	else if (commandName.find("MODE") != std::string::npos)
 		processMode(user);
-	// else if (commandName.find("WHO") != std::string::npos)
+	//else if (commandName.find("WHO") != std::string::npos)
 	// 	processWhoIs(user);
     else if (commandName.find("PING") != std::string::npos)
         processPing(userSocket);
@@ -112,18 +112,52 @@ void	Command::processPass(User *user, const std::string& serverPass)
 	}
 }
 
-void	Command::processNick(User *user)
+bool    Command::isValidNick(const std::string &nick)
+{
+    if (nick.empty() || nick.length() > 9)
+        return false;
+    for (size_t i = 0; i < nick.length(); i++)
+    {
+        if (!isalnum(nick[i]) && nick[i] != '_' && nick[i] != '-')
+            return false;
+    }
+    return true;
+}
+
+bool    Command::isAlreadyUse(const std::string &nick, std::vector<User*> &users)
+{
+    std::vector<User*>::iterator it = users.begin();
+    for (; it != users.end(); it++)
+    {
+        if ((*it)->getNickname() == nick)
+            return false;
+    }
+    return true; 
+}
+
+void	Command::processNick(User *user, std::vector<User*> &users)
 {
     std::string newNickname = parameters[0].substr(0, parameters[0].length() - 2);
-    if (newNickname.empty())
+    std::string response;
+    if (!isValidNick(newNickname))
+        response = ERR_NONICKNAMEGIVEN(user->getNickname());
+    else if(!isAlreadyUse(newNickname, users))
     {
-        std::cerr << "Error: Enter a valid nickname" << std::endl;
-        return ;
+        if (user->getNickname().empty())
+        {
+            std::string h = "*";
+            response = ERR_NICKNAMEINUSE(h, newNickname);
+        }
+        else
+            response = ERR_NICKNAMEINUSE(user->getNickname(), newNickname);
     }
-    std::string oldNickname = user->getNickname();
-    user->setNickname(newNickname);
-    //:Gerard!freiko@localhost NICK :david
-    std::string response = ":" + oldNickname + "!" + user->getUsername() + "@" + "localhost" + " NICK :" + user->getNickname() + "\r\n";
+    else
+    {
+        std::string oldNickname = user->getNickname();
+        user->setNickname(newNickname);
+        //:Gerard!freiko@localhost NICK :david
+        response = RPL_NICK(oldNickname, user->getUsername(), user->getNickname());
+    }
     send(user->getSocket(), response.c_str(), response.size(), 0);
 }
 
@@ -132,6 +166,8 @@ void	Command::processUser(User *user)
     user->setUsername(parameters[0]);
     user->setRealname(parameters[1]);
     user->setHostname(parameters[2]);
+    if (user->getNickname().empty())
+        user->setNickname("*");
     std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
                 " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
     send(user->getSocket(), welcome.c_str(), welcome.length(), 0);

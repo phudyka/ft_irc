@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/19 09:51:50 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/20 10:08:46 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,16 @@ private:
     void	processUser(User *user);
     void	processPing(int userSocket);
     void	joinChannel(User *user, std::vector<Channel*> &channel);
-    void	processNick(User *user);
+    void	processNick(User *user, std::vector<User*> &users);
 	void	processMode(User *user);
 	void	processWhoIs(User *user);
     void    processList(User *user, std::vector<Channel*> &channel);
     void	sendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users);
     std::string extractParameter(const std::string& command, const std::string& prefix);
+
+// PARSING
+
+    bool    isValidNick(const std::string &nick);
+    bool    isAlreadyUse(const std::string &nick, std::vector<User*> &users);
 };
 #endif // COMMAND_HPP

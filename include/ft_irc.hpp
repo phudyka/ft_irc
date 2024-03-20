@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/19 10:17:15 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/20 08:53:56 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 #include "channel.hpp"
 #include "userMode.hpp"
 #include "command.hpp"
+#include "response.hpp"
 
 #define RED		"\x1b[31m"
 #define GREEN   "\x1b[32m"
