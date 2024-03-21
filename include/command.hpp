@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/20 10:08:46 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/21 17:06:20 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,23 @@ private:
     std::string commandName;
     std::vector<std::string> parameters;
     std::string trailing;
-    void	parseIRCMessage(const std::string& command);
-    void	processCap(int userSocket);
 	void	processPass(User *user, const std::string& serverPass);
-    void	processCapReq(int userSocket);
-    void	processCapEnd(int userSocket);
-    void	processUser(User *user);
-    void	processPing(int userSocket);
-    void	joinChannel(User *user, std::vector<Channel*> &channel);
     void	processNick(User *user, std::vector<User*> &users);
+    void	processUser(User *user);
 	void	processMode(User *user);
 	void	processWhoIs(User *user);
+    void	processPing(User *user);
+    void	processJoinChannel(User *user, std::vector<Channel*> &channel);
+    void	processSendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users);
     void    processList(User *user, std::vector<Channel*> &channel);
-    void	sendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users);
+    void	parseIRCMessage(const std::string& command);
     std::string extractParameter(const std::string& command, const std::string& prefix);
 
 // PARSING
 
     bool    isValidNick(const std::string &nick);
     bool    isAlreadyUse(const std::string &nick, std::vector<User*> &users);
+	bool	isKeyRequired(void);
+	bool	checkKey(std::string key);
 };
 #endif // COMMAND_HPP
