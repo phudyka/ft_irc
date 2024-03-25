@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/20 08:55:22 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/25 08:51:47 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ private:
 
     int		    _socket;
     bool	    _marked;
+    bool        _isAuthentified;
 	std::string	_ip;
 	std::string	_user;
     std::string	_prefix;
@@ -54,6 +55,7 @@ public:
     const std::string getUsername() const;
     const std::string getRealname() const;
     const std::string getHostname() const;
+    bool              isAuthentified();
     const std::string getPass() const;
     void    setUsername(const std::string &username);
     void    setRealname(const std::string &realname);
@@ -61,11 +63,13 @@ public:
     void    setNickname(const std::string &nickname);
     void	setJoinedChannels(Channel *channel);
     void    setPassword(const std::string &nickname);
+    void    setAuthentified();
     size_t	getJoinedChannels() const;
 	void	setUserName(const std::string& user);
     void	setIP(const std::string& ip);
     void    sendMessage(const std::string& message) const;
     UserMode&	umode();
+    std::string temp_USER;
 };
 
-#endif // USER_HPP
+#endif

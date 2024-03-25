@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/21 17:00:46 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/25 08:51:26 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,12 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     else if (commandName.find("NICK") != std::string::npos)
         processNick(user, _users);
 	else if (commandName.find("USER") != std::string::npos)
-        processUser(user);
+    {
+        if (user->isAuthentified() == true)
+            processUser(user);
+        else
+            user->temp_USER = command;
+    }
 	else if (commandName.find("MODE") != std::string::npos)
 		processMode(user);
 	//else if (commandName.find("WHO") != std::string::npos)

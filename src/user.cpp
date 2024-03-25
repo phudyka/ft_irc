@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 16:00:15 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/22 09:17:57 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/user.hpp"
 
 User::User(int socket, const std::string &nick, const std::string &user, const std::string &ip)
-    : _socket(socket), _marked(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()) {}
+    : _socket(socket), _marked(false), _isAuthentified(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()) {}
 
 
 User::User(const User&) {}
@@ -61,6 +61,11 @@ const std::string User::getHostname() const
     return this->_hostname;
 }
 
+bool User::isAuthentified()
+{
+    return (_isAuthentified);
+}
+
 void    User::setUsername(const std::string &username)
 {
     this->_username = username;
@@ -78,6 +83,11 @@ void    User::setHostname(const std::string &hostname)
 void User::setIP(const std::string& ip)
 {
     _ip = ip;
+}
+
+void    User::setAuthentified()
+{
+    this->_isAuthentified = true;
 }
 
 size_t User::getJoinedChannels() const

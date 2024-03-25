@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/21 17:04:30 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/25 08:58:13 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ void	Command::processNick(User *user, std::vector<User*> &users)
     std::string response;
     if (!isValidNick(newNickname))
         response = ERR_ERRONEUSNICKNAME(user->getNickname(), newNickname);
-	else if (user->getNickname().empty())
+	else if (newNickname.empty())
 		response = ERR_NONICKNAMEGIVEN(user->getNickname());
     else if(!isAlreadyUse(newNickname, users))
     {
         if (user->getNickname().empty())
         {
-            std::string h = "*";
-            response = ERR_NICKNAMEINUSE(h, newNickname);
+            std::string tempName = "*";
+            response = ERR_NICKNAMEINUSE(tempName, newNickname);
         }
         else
             response = ERR_NICKNAMEINUSE(user->getNickname(), newNickname);
@@ -72,8 +72,14 @@ void	Command::processNick(User *user, std::vector<User*> &users)
         user->setNickname(newNickname);
         //:Gerard!freiko@localhost NICK :david
         response = RPL_NICK(oldNickname, user->getUsername(), user->getNickname());
+        user->setAuthentified();
     }
     send(user->getSocket(), response.c_str(), response.size(), 0);
+    if (user->isAuthentified() == true && !user->temp_USER.empty())
+    {
+        parseIRCMessage(user->temp_USER);
+        processUser(user);
+    }
 }
 
 void	Command::processUser(User *user)
@@ -84,14 +90,14 @@ void	Command::processUser(User *user)
         send(user->getSocket(), response.c_str(), response.length(), 0);
         return ;
 	}*/
-    user->setUsername(parameters[0]);
-    user->setRealname(parameters[1]);
-    user->setHostname(parameters[2]);
-    if (user->getNickname().empty())
-        user->setNickname("*");
-    std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
-                " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
-    send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
+        user->setUsername(parameters[0]);
+        user->setRealname(parameters[1]);
+        user->setHostname(parameters[2]);
+        /*if (user->getNickname().empty())
+            user->setNickname("*");*/
+        std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
+                    " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
+        send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
 }
 
 void Command::processMode(User *user)

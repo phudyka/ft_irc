@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/19 11:15:23 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/25 09:25:17 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ void ft_irc::handleConnection(void)
         for (size_t i = 1; i < _pollfds.size(); ++i)
         {
             if (_pollfds[i].revents & POLLIN)
+            {
                 clientData(i);
+                displayClients();
+            }
         }
     }
 }
