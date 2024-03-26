@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 11:19:11 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:37:28 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,9 +196,10 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
             std::string client = user_id(user->getNickname(), user->getUsername());
 
             std::string responses;
+            std::string symbol = "+i";
             responses += RPL_JOIN(client, channelName);
             std::string list = (*it)->getListInstring();
-            responses += RPL_NAMREPLY(client, user->getNickname(), channelName, list);
+            responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
             responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
 
             send(user->getSocket(), responses.c_str(), responses.length(), 0);

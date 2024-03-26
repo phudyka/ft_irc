@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 08:41:28 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/26 10:26:36 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:35:23 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@
 
 
 // NAMES
-# define RPL_NAMREPLY(user, client, channel, list_of_nicks) (user + " 353 " + client + " " + "=" + " #" + channel + " :" + list_of_nicks + "\r\n")
+# define RPL_NAMREPLY(client, symbol, channel, list_of_nicks) (":localhost 353 " + client + " " + symbol + " #" + channel + " :" + list_of_nicks + "\r\n")
 # define RPL_ENDOFNAMES(client, channel) (":localhost 366 " + client + " #" + channel + " :End of /NAMES list.\r\n")
 
 // NICK
