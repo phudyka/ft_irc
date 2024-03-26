@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/25 08:51:47 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/25 10:54:04 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ private:
     int		    _socket;
     bool	    _marked;
     bool        _isAuthentified;
+    bool        _isOperator;
 	std::string	_ip;
 	std::string	_user;
     std::string	_prefix;
@@ -52,10 +53,11 @@ public:
     const std::string&	getPrefix() const;
 	const std::string&	getUser() const;
     const std::string&	getIP() const;
-    const std::string getUsername() const;
-    const std::string getRealname() const;
-    const std::string getHostname() const;
-    bool              isAuthentified();
+    const std::string	getUsername() const;
+    const std::string	getRealname() const;
+    const std::string	getHostname() const;
+    bool				isAuthentified();
+	bool				isOperator();
     const std::string getPass() const;
     void    setUsername(const std::string &username);
     void    setRealname(const std::string &realname);
@@ -64,6 +66,7 @@ public:
     void	setJoinedChannels(Channel *channel);
     void    setPassword(const std::string &nickname);
     void    setAuthentified();
+	void	setOperator();
     size_t	getJoinedChannels() const;
 	void	setUserName(const std::string& user);
     void	setIP(const std::string& ip);

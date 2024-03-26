@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/22 12:16:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:08:19 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ private:
     void	processJoinChannel(User *user, std::vector<Channel*> &channel);
     void	processSendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users);
     void    processList(User *user, std::vector<Channel*> &channel);
+    void    processKill(User *user, std::vector<User*> &_users);
+    void    processQuit(User *user);
     void	parseIRCMessage(const std::string& command);
     std::string extractParameter(const std::string& command, const std::string& prefix);
 

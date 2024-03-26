@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:25:43 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 15:55:04 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:08:36 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ public:
 	{
         INVISIBLE,
         MARK,
-        NUM_MODES
+        NUM_MODES,
+		OPERATOR
     };
 
 private:

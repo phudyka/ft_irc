@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/25 08:58:13 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:33:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	Command::processNick(User *user, std::vector<User*> &users)
     {
         parseIRCMessage(user->temp_USER);
         processUser(user);
+		user->temp_USER.clear();
     }
 }
 
@@ -90,17 +91,17 @@ void	Command::processUser(User *user)
         send(user->getSocket(), response.c_str(), response.length(), 0);
         return ;
 	}*/
-        user->setUsername(parameters[0]);
-        user->setRealname(parameters[1]);
-        user->setHostname(parameters[2]);
-        /*if (user->getNickname().empty())
-            user->setNickname("*");*/
-        std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
-                    " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
-        send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
+    user->setUsername(parameters[0]);
+    user->setRealname(parameters[1]);
+    user->setHostname(parameters[2]);
+    /*if (user->getNickname().empty())
+		user->setNickname("*");*/
+    std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
+                " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
+    send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
 }
 
-void Command::processMode(User *user)
+void	Command::processMode(User *user)
 {
     UserMode& userMode = user->umode();
 
@@ -164,20 +165,6 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
                 send(user->getSocket(), response.c_str(), response.length(), 0);
                 return ;
             }
-            /*if ((*it)->isKeyRequired())
-            {
-                std::string key;
-                if (parameters.size() > 1)
-                    key = parameters[1];
-                else
-                    key = "";
-                if (!(*it)->checkKey(key))
-                {
-                    std::string response = ERR_BADCHANNELKEY(user->getNickname(), channelName);
-                    send(user->getSocket(), response.c_str(), response.length(), 0);
-                    return;
-                }
-            }*/
             (*it)->addUser(user);
             user->setJoinedChannels(*it);
             std::string	welcomeMessage = ":" + user->getNickname() + " JOIN #"
@@ -185,7 +172,7 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
                                          + channelName + "! " + user->getNickname() + "\r\n";
             user->sendMessage(welcomeMessage);
             std::string response = RPL_JOIN(":" + user->getNickname(), channelName);
-            /*(*it)->sendToAll(response);*/
+            // (*it)->sendToAll(response);
             return ;
         }
     }
@@ -269,4 +256,33 @@ void    Command::processList(User *user, std::vector<Channel*> &channel)
     response += "\r\n";
     send(user->getSocket(), response.c_str(), response.size(), 0);
     std::cout << response << std::endl;
+}
+
+void	Command::processKill(User *user, std::vector<User*> &_users)
+{
+	if (!user->isOperator())
+    {
+        std::string response = ERR_NOPRIVILEGES(user->getNickname());
+        send(user->getSocket(), response.c_str(), response.size(), 0);
+        return ;
+    }
+	std::string	target = parameters[0];
+	std::vector<User*>::iterator	it = _users.begin();
+    for (; it != _users.end(); ++it)
+    {
+        if ((*it)->getNickname() == target)
+        {
+            std::string	response = RPL_KILL(":" + user->getNickname(), target, "Killed by operator");
+            send((*it)->getSocket(), response.c_str(), response.size(), 0);
+            close((*it)->getSocket());
+            _users.erase(it);
+            return ;
+        }
+    }
+}
+
+void	Command::processQuit(User *user)
+{
+	std::string	response = RPL_QUIT(":" + user->getNickname(), " disconnected");
+	send(user->getSocket(), response.c_str(), response.size(), 0);
 }

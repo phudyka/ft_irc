@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/25 08:51:26 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/25 11:19:34 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,12 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         processSendMess(user, channel, _users);
     else if (commandName.find("LIST") != std::string::npos)
         processList(user, channel);
-    // else
-    //     std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
+	// else if (commandName.find("KILL") != std::string::npos)
+	// 	processKill(user, _users);
+	else if (commandName.find("QUIT") != std::string::npos)
+		processQuit(user);
+    else
+        std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
 }
 
 
