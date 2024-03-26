@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/22 12:16:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/25 09:45:51 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ private:
 	void	processWhoIs(User *user);
     void	processPing(User *user);
     void	processJoinChannel(User *user, std::vector<Channel*> &channel);
+    void    processPart(User *user, std::vector<Channel *> &channel);
     void	processSendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users);
     void    processList(User *user, std::vector<Channel*> &channel);
     void	parseIRCMessage(const std::string& command);

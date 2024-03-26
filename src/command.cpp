@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/25 08:51:26 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:27:00 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,16 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         else
             user->temp_USER = command;
     }
-	else if (commandName.find("MODE") != std::string::npos)
-		processMode(user);
-	//else if (commandName.find("WHO") != std::string::npos)
-	// 	processWhoIs(user);
+	/*else if (commandName.find("MODE") != std::string::npos)
+		processMode(user);*/
+	/*else if (commandName.find("WHO") != std::string::npos)
+	 	processWhoIs(user);*/
     else if (commandName.find("PING") != std::string::npos)
         processPing(user);
     else if (commandName.find("JOIN") != std::string::npos)
         processJoinChannel(user, channel);
+    else if (commandName.find("PART") != std::string::npos)
+        processPart(user, channel);
     else if (commandName.find("PRIVMSG") != std::string::npos)
         processSendMess(user, channel, _users);
     else if (commandName.find("LIST") != std::string::npos)

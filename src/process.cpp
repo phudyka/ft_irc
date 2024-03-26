@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/25 08:58:13 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:19:11 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,22 +79,16 @@ void	Command::processNick(User *user, std::vector<User*> &users)
     {
         parseIRCMessage(user->temp_USER);
         processUser(user);
+        user->temp_USER.clear();
     }
 }
 
 void	Command::processUser(User *user)
 {
-	/*if (user->getHostname() == )
-	{
-        std::string	response = ERR_ALREADYREGISTERED(user->getNickname());
-        send(user->getSocket(), response.c_str(), response.length(), 0);
-        return ;
-	}*/
         user->setUsername(parameters[0]);
         user->setRealname(parameters[1]);
         user->setHostname(parameters[2]);
-        /*if (user->getNickname().empty())
-            user->setNickname("*");*/
+
         std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
                     " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
         send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
@@ -133,15 +127,34 @@ void Command::processMode(User *user)
     send(user->getSocket(), response.c_str(), response.length(), 0);
 }
 
-// void	Command::processWhoIs(User *user, const std::string &command)
-// {
-	
-// }
+void    Command::processPart(User *user, std::vector<Channel *> &channel)
+{
+    if (parameters[0].empty() == false)
+    {
+        std::cout << "Condition PART" << std::endl;
+        std::string channelName = parameters[0].substr(1);
+        //channelName = extractParameter(channelName, "#");
+        std::cout << "ChannelName = " << channelName << std::endl;
+
+        std::vector<Channel *>::iterator it = channel.begin();
+        for (; it != channel.end(); it++)
+        {
+            if ((*it)->getName() == channelName)
+            {
+                std::cout << "si conditions reunis" << std::endl;
+                (*it)->removeUser(user->getNickname());
+                std::string reason = "";
+                std::string response = RPL_PART(user_id(user->getNickname(), user->getUsername()), channelName, reason);
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+            }
+        }
+    }
+}
 
 void	Command::processPing(User *user)
 {
     std::string	pingParam = parameters[0];
-    std::string	pong = RPL_PONG(":" + user->getHostname(), pingParam);
+    std::string	pong = RPL_PONG(user_id(user->getNickname(), user->getUsername()), pingParam);
     send(user->getSocket(), pong.c_str(), pong.size(), 0);
 }
 
@@ -180,12 +193,15 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
             }*/
             (*it)->addUser(user);
             user->setJoinedChannels(*it);
-            std::string	welcomeMessage = ":" + user->getNickname() + " JOIN #"
-                                         + channelName + " :Welcome to the channel "
-                                         + channelName + "! " + user->getNickname() + "\r\n";
-            user->sendMessage(welcomeMessage);
-            std::string response = RPL_JOIN(":" + user->getNickname(), channelName);
-            /*(*it)->sendToAll(response);*/
+            std::string client = user_id(user->getNickname(), user->getUsername());
+
+            std::string responses;
+            responses += RPL_JOIN(client, channelName);
+            std::string list = (*it)->getListInstring();
+            responses += RPL_NAMREPLY(client, user->getNickname(), channelName, list);
+            responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
+
+            send(user->getSocket(), responses.c_str(), responses.length(), 0);
             return ;
         }
     }
