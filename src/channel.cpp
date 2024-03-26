@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 11:30:14 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:44:34 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,16 @@ std::string	Channel::getName()
 std::vector<User*>	Channel::getUsers()
 {
     return _users;
+}
+
+std::string Channel::getListInstring()
+{
+    std::vector<User *>::iterator it = this->_users.begin();
+    std::string listUsers;
+
+    for (; it != _users.end(); it++)
+    {
+        listUsers += "@" + (*it)->getNickname() + " ";
+    }
+    return listUsers;
 }

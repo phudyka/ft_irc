@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/25 10:31:32 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:45:35 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                displayClients();
+                //displayClients();
             }
         }
     }

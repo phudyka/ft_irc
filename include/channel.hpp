@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 11:14:10 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/26 11:45:10 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ public:
     void	sendMessage(const std::string& message);
 	void	sendToAll(const std::string& message);
     void	archiveMessages();
+    std::string getListInstring();
     std::vector<User*>	getUsers();
     size_t	count() const;
     size_t	nbUserVisible() const;
