@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 11:41:36 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:24:38 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel)
 
 	int			socket = user->getSocket();
     std::string client = user->getNickname();
-    std::string symbol = parameters[1].substr(0, 1);
-    std::string mode = parameters[1].substr(1, parameters[1].length() - 3);
+    std::string symbol = parameters[0].substr(0, 1);
+    std::string mode = parameters[0].substr(1, parameters[1].length() - 3);
 
     if (symbol != "+" && symbol != "-")
     {

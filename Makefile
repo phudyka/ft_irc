@@ -6,7 +6,7 @@
 #    By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 15:51:03 by phudyka           #+#    #+#              #
-#    Updated: 2024/03/27 12:15:47 by phudyka          ###   ########.fr        #
+#    Updated: 2024/03/27 14:30:04 by phudyka          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,16 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 OBJ_DIR = obj
 
-SRCS =	src/main.cpp \
-		src/server/ft_irc.cpp \
-		src/commands/mode.cpp \
-		src/commands/command.cpp \
-		src/commands/process.cpp \
-		src/channels/channel.cpp \
-		src/users/user.cpp \
-		src/users/userMode.cpp \
-		src/server/utils.cpp
+SRCS =	src/main.cpp 					\
+		src/server/ft_irc.cpp 			\
+		src/commands/mode.cpp 			\
+		src/commands/command.cpp 		\
+		src/commands/process.cpp 		\
+		src/channels/channel.cpp 		\
+		src/channels/channelMode.cpp 	\
+		src/users/user.cpp 				\
+		src/users/userMode.cpp 			\
+		src/server/utils.cpp 			\
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.cpp=.o)))
 

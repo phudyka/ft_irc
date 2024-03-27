@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 17:14:57 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:21:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ private:
     void    processList(User *user, std::vector<Channel*> &channel);
     void    processKill(User *user, std::vector<User*> &_users);
     void    processQuit(User *user);
+	void	processKick(User *user);
+	void	processInvite(User *user, std::vector<Channel*> &channels);
+	void	processTopic(User *user, std::vector<Channel*> &channels);
+	void	processChannelMode(User *user, std::vector<Channel*> &channels);
     void	parseIRCMessage(const std::string& command);
     std::string extractParameter(const std::string& command, const std::string& prefix);
 
