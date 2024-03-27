@@ -6,11 +6,11 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:26:30 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/18 16:00:52 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 11:41:50 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/userMode.hpp"
+#include "../../include/userMode.hpp"
 
 UserMode::UserMode()
 {

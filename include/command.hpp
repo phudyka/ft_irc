@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 11:44:28 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/26 17:14:57 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ private:
 	void	processPass(User *user, const std::string& serverPass);
     void	processNick(User *user, std::vector<User*> &users);
     void	processUser(User *user);
-	void	processMode(User *user);
+	void	processMode(User *user, std::vector<Channel*> &channel);
 	void	processWhoIs(User *user);
     void	processPing(User *user);
     void	processJoinChannel(User *user, std::vector<Channel*> &channel);
@@ -50,7 +50,7 @@ private:
 
     bool    isValidNick(const std::string &nick);
     bool    isAlreadyUse(const std::string &nick, std::vector<User*> &users);
-	bool	isKeyRequired(void);
-	bool	checkKey(std::string key);
+	void	channelMode(int socket, std::vector<Channel*> &channel, std::string channelName, std::string client);
+	void	userMode(int socket, bool isSetMode, std::string mode, std::string client, UserMode& uMode);
 };
 #endif // COMMAND_HPP

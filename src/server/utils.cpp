@@ -6,11 +6,11 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 11:32:49 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/19 11:13:32 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 12:16:11 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_irc.hpp"
+#include "../../include/ft_irc.hpp"
 
 void	ft_irc::shutDown(void)
 {
@@ -28,8 +28,6 @@ void	ft_irc::logConnection(const std::string& msg, const std::string id)
     strftime(timeStr, sizeof(timeStr),"[%Y-%m-%d %H:%M] ", localTime);
     std::cout << BLUE << timeStr << RESET << msg << GREEN << id << RESET << std::endl;
 }
-
-#include <iomanip>
 
 void ft_irc::displayClients(void)
 {

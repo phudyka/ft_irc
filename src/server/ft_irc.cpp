@@ -6,11 +6,11 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/26 11:45:35 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 12:16:05 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_irc.hpp"
+#include "../../include/ft_irc.hpp"
 
 std::vector<std::string> split(std::string s, std::string delimiter)
 {
@@ -28,8 +28,7 @@ std::vector<std::string> split(std::string s, std::string delimiter)
         std::string lastToken = s.substr(pos_start);
         res.push_back(lastToken);
     }
-
-    return res;
+    return (res);
 }
 
 ft_irc::ft_irc(int port, std::string pass)
@@ -99,7 +98,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                //displayClients();
+                displayClients();
             }
         }
     }
@@ -168,7 +167,6 @@ void ft_irc::clientData(size_t index)
     else
     {
         buff[len] = '\0';
-        // std::cout << BLUE << "client: " << YELLOW << buff << RESET << std::endl;
         int UserSocket = _pollfds[index].fd;
         std::string message = buff;
 

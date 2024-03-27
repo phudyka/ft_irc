@@ -6,11 +6,11 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 11:45:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 11:41:57 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/command.hpp"
+#include "../../include/command.hpp"
 
 Command::Command() {}
 
@@ -77,8 +77,8 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         else
             user->temp_USER = command;
     }
-	/*else if (commandName.find("MODE") != std::string::npos)
-		processMode(user);*/
+	else if (commandName.find("MODE") != std::string::npos)
+		processMode(user, channel);
 	/*else if (commandName.find("WHO") != std::string::npos)
 	 	processWhoIs(user);*/
     else if (commandName.find("PING") != std::string::npos)

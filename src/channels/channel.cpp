@@ -6,11 +6,11 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 11:44:34 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 12:16:36 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/channel.hpp"
+#include "../../include/channel.hpp"
 
 Channel::Channel(const std::string &name)
 {

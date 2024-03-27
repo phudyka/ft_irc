@@ -6,11 +6,11 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 11:43:53 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 12:16:24 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/command.hpp"
+#include "../../include/command.hpp"
 
 void	Command::processPass(User *user, const std::string& serverPass)
 {
@@ -47,6 +47,7 @@ bool    Command::isAlreadyUse(const std::string &nick, std::vector<User*> &users
     }
     return true; 
 }
+
 
 void	Command::processNick(User *user, std::vector<User*> &users)
 {
@@ -92,39 +93,6 @@ void	Command::processUser(User *user)
         std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
                     " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
         send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
-}
-
-void	Command::processMode(User *user)
-{
-    UserMode& userMode = user->umode();
-
-    std::string client = user->getNickname();
-    std::string symbol = parameters[1].substr(0, 1);
-    std::string mode = parameters[1].substr(1, parameters[1].length() - 3);
-
-    if (symbol != "+" && symbol != "-")
-    {
-        std::string	response = ERR_UMODEUNKNOWNFLAG(client);
-        send(user->getSocket(), response.c_str(), response.length(), 0);
-        return ;
-    }
-
-    bool	isSetMode = (symbol == "+");
-
-    if (mode == "i")
-        userMode.set(UserMode::INVISIBLE, isSetMode);
-    else if (mode == "m")
-        userMode.set(UserMode::MARK, isSetMode);
-    else
-    {
-        std::string response = ERR_UMODEUNKNOWNFLAG(client);
-        send(user->getSocket(), response.c_str(), response.length(), 0);
-        return;
-    }
-    std::string	response = MODE_USERMSG(client, mode);
-    send(user->getSocket(), response.c_str(), response.length(), 0);
-    response = RPL_UMODEIS(client, mode);
-    send(user->getSocket(), response.c_str(), response.length(), 0);
 }
 
 void    Command::processPart(User *user, std::vector<Channel *> &channel)
@@ -247,7 +215,7 @@ void	Command::processSendMess(User *user, std::vector<Channel*> &channels, std::
                 std::string	senderPrefix = ":" + user->getNickname() + "!" + user->getUsername() + "@" + user->getHostname();
                 message = senderPrefix + " PRIVMSG " + target + " :" + trailing + "\r\n";
                 (*it)->sendMessage(message);
-                return;
+                return ;
             }
         }
         std::string	response = ERR_NOSUCHNICK(user->getNickname(), target);
