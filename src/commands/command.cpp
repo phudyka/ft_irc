@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 16:21:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 17:00:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,14 @@ void Command::parseIRCMessage(const std::string& command)
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass, std::vector<User*> &_users)
 {
+    
     parseIRCMessage(command);
+    std::cout << commandName << std::endl;
+    std::vector<std::string>::iterator it = parameters.begin();
+    for (; it != parameters.end(); it++)
+    {
+        std::cout << "Parametre : " << (*it) << std::endl;
+    }
 	if (commandName.find("PASS") != std::string::npos)
 		processPass(user, serverPass);
     else if (commandName.find("NICK") != std::string::npos)
