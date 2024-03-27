@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 11:41:57 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:03:01 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,14 @@ void Command::parseIRCMessage(const std::string& command)
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass, std::vector<User*> &_users)
 {
+    
     parseIRCMessage(command);
+    std::cout << commandName << std::endl;
+    std::vector<std::string>::iterator it = parameters.begin();
+    for (; it != parameters.end(); it++)
+    {
+        std::cout << "Parametre : " << (*it) << std::endl;
+    }
 	if (commandName.find("PASS") != std::string::npos)
 		processPass(user, serverPass);
     else if (commandName.find("NICK") != std::string::npos)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/26 17:14:57 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:09:24 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ private:
 
     bool    isValidNick(const std::string &nick);
     bool    isAlreadyUse(const std::string &nick, std::vector<User*> &users);
-	void	channelMode(int socket, std::vector<Channel*> &channel, std::string channelName, std::string client);
+	void	channelMode(int socket, std::vector<Channel*> &channel, std::string client);
 	void	userMode(int socket, bool isSetMode, std::string mode, std::string client, UserMode& uMode);
 };
 #endif // COMMAND_HPP

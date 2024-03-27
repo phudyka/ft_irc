@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/27 12:16:05 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:01:22 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                displayClients();
+                //displayClients();
             }
         }
     }
@@ -158,7 +158,7 @@ void ft_irc::newConnection(void)
 
 void ft_irc::clientData(size_t index)
 {
-    char buff[2048];
+    char buff[4096];
     int len = recv(_pollfds[index].fd, buff, sizeof(buff), 0);
 	Command	commandHandler;
 
