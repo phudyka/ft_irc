@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 16:57:29 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/28 08:38:17 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@ void	Command::channelMode(int socket, std::vector<Channel*> &channel, std::strin
     channelName = extractParameter(channelName, "#");
     for (; it != channel.end(); it++)
     {
-        std::cout << "for" << std::endl;
         if ((*it)->getName() == channelName)
         {
-            std::cout << "if" << std::endl;
 			std::string mode = "m";
             std::string response = RPL_CHANNELMODEIS(client, channelName, mode);
             send(socket, response.c_str(), response.length(), 0);
@@ -31,8 +29,14 @@ void	Command::channelMode(int socket, std::vector<Channel*> &channel, std::strin
     }
 }
 
-void	Command::userMode(int socket, bool isSetMode, std::string mode, std::string client, UserMode& uMode)
+void	Command::userMode(int socket, bool isSetMode, std::string symbol, std::string mode, std::string client, UserMode& uMode)
 {
+    if (symbol != "+" && symbol != "-")
+    {
+        std::string	response = ERR_UMODEUNKNOWNFLAG(client);
+        send(socket, response.c_str(), response.length(), 0);
+        return ;
+    }
 	if (mode.find("i") != std::string::npos)
         uMode.set(UserMode::INVISIBLE, isSetMode);
     else if (mode == "m")
@@ -65,12 +69,6 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel)
         mode = parameters[1].substr(1);
     }
     bool	isSetMode = (symbol == "+");
-    /*if (symbol != "+" && symbol != "-")
-    {
-        std::string	response = ERR_UMODEUNKNOWNFLAG(client);
-        send(socket, response.c_str(), response.length(), 0);
-        return ;
-    }*/
     std::cout << symbol << std::endl;
     std::cout << mode << std::endl;
 	if (symbol.find("#") != std::string::npos)
@@ -78,5 +76,5 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel)
 		channelMode(socket, channel, client);
     }
 	else
-		userMode(socket, isSetMode, mode, client, uMode);
+		userMode(socket, isSetMode, symbol, mode, client, uMode);
 }
