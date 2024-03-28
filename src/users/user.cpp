@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 12:16:18 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:13:16 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,4 +142,3 @@ void User::sendMessage(const std::string& message) const
         std::cerr << "Error sending message to user " << _nickname << std::endl;
     }
 }
-

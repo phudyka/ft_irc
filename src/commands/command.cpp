@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 16:03:01 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/27 17:00:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,14 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         processSendMess(user, channel, _users);
     else if (commandName.find("LIST") != std::string::npos)
         processList(user, channel);
+	else if (commandName.find("KICK") != std::string::npos)
+		processKick(user);
+	// else if (commandName.find("INVITE") != std::string::npos)
+	// 	processInvite(user, channel);
+	// else if (commandName.find("TOPIC") != std::string::npos)
+	// 	processTopic(user, channel);
+	// else if (commandName.find("MODE") != std::string::npos)
+	// 	processMode(user, channel);
 	// else if (commandName.find("KILL") != std::string::npos)
 	// 	processKill(user, _users);
 	else if (commandName.find("QUIT") != std::string::npos)

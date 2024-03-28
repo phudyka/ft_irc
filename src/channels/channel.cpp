@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 12:16:36 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 16:20:01 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,29 @@ size_t	Channel::count() const
 //     return (nb);
 // }
 
+bool	Channel::isInChannel(const std::string& nickname, Channel* channel)
+{
+    for (size_t i = 0; i < channel->getUsers().size(); ++i)
+    {
+        if (channel->getUsers()[i]->getNickname() == nickname)
+            return (true);
+    }
+    return (false);
+}
+
+void	Channel::kickUser(const std::string& targetNickname, const std::string& reason)
+{
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
+    {
+        if ((*it)->getNickname() == targetNickname)
+        {
+            _users.erase(it);
+            (*it)->sendMessage("You have been kicked from #" + _name + " by " + reason);
+            break;
+        }
+    }
+}
+
 void	Channel::removeUser(const std::string& username)
 {
     for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
@@ -94,13 +117,11 @@ void	Channel::sendMessage(const std::string& message)
     std::cout << "Message sent to channel '" << _name << "': " << message << std::endl;
 }
 
-// void	Channel::sendToAll(const std::string& message)
-// {
-//     std::vector<User*>::iterator	it;
-
-//     for (it = users.begin(); it != users.end(); ++it)
-//         (*it)->sendMessage(message);
-// }
+void Channel::sendToAll(const std::string& message)
+{
+    for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
+        (*it)->sendMessage(message);
+}
 
 void	Channel::archiveMessages()
 {

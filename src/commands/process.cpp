@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 12:16:24 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/27 15:49:52 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,8 +160,6 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
             return ;
         }
     }
-    std::string response = "Channel #" + channelName + " not found.\r\n";
-    user->sendMessage(response);
 }
 
 void	Command::processSendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users)
