@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 17:00:26 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/28 09:41:28 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     }
 	else if (commandName.find("MODE") != std::string::npos)
 		processMode(user, channel);
-	/*else if (commandName.find("WHO") != std::string::npos)
-	 	processWhoIs(user);*/
+	else if (commandName.find("WHO") != std::string::npos)
+	 	processWhoIs(user, channel);
     else if (commandName.find("PING") != std::string::npos)
         processPing(user);
     else if (commandName.find("JOIN") != std::string::npos)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 15:49:52 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/28 10:59:24 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,7 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
 {
     if (parameters[0].empty() == false)
     {
-        std::cout << "Condition PART" << std::endl;
         std::string channelName = parameters[0].substr(1);
-        //channelName = extractParameter(channelName, "#");
         std::cout << "ChannelName = " << channelName << std::endl;
 
         std::vector<Channel *>::iterator it = channel.begin();
@@ -109,11 +107,19 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
         {
             if ((*it)->getName() == channelName)
             {
-                std::cout << "si conditions reunis" << std::endl;
                 (*it)->removeUser(user->getNickname());
-                std::string reason = "";
+                std::string reason = "Ciao";
                 std::string response = RPL_PART(user_id(user->getNickname(), user->getUsername()), channelName, reason);
                 send(user->getSocket(), response.c_str(), response.length(), 0);
+
+                // Envoyer le message a tous les utilisateurs encore present
+                std::vector<User*> users = (*it)->getUsers();
+                std::vector<User*>::iterator itu = users.begin();
+                for (; itu != users.end(); itu++)
+                {
+                    if ((*itu)->getNickname() != user->getNickname())
+                        send((*itu)->getSocket(), response.c_str(), response.length(), 0);
+                }
             }
         }
     }
@@ -126,13 +132,17 @@ void	Command::processPing(User *user)
     send(user->getSocket(), pong.c_str(), pong.size(), 0);
 }
 
-void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
+void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
 {
-    std::string	channelName = parameters[0];
+    std::string channelName = parameters[0];
     channelName = extractParameter(channelName, "#");
 
     if (channelName.empty())
-        channelName = "Default";
+    {
+        std::string response = ERR_NEEDMOREPARAMS(user->getNickname(), commandName);
+        send(user->getSocket(), response.c_str(), response.length(), 0);
+        return;
+    }
 
     std::vector<Channel*>::iterator it;
     for (it = channels.begin(); it != channels.end(); ++it)
@@ -141,26 +151,55 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
         {
             if ((*it)->isBanned(user))
             {
-                std::string	response = ERR_BANNEDFROMCHAN(user->getNickname(), channelName);
+                std::string response = ERR_BANNEDFROMCHAN(user->getNickname(), channelName);
                 send(user->getSocket(), response.c_str(), response.length(), 0);
-                return ;
+                return;
             }
+
+            // Ajouter l'utilisateur au canal
             (*it)->addUser(user);
             user->setJoinedChannels(*it);
             std::string client = user_id(user->getNickname(), user->getUsername());
 
+            // Preparer les réponses pour le nouvel utilisateur
             std::string responses;
             std::string symbol = "+i";
-            responses += RPL_JOIN(client, channelName);
             std::string list = (*it)->getListInstring();
             responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
             responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
+            responses += RPL_JOIN(client, channelName);
 
+            // Envoyer les réponses au nouvel utilisateur
             send(user->getSocket(), responses.c_str(), responses.length(), 0);
-            return ;
+
+            // Envoyer le nouveau client a tous les utilisateurs present
+            std::vector<User*> users = (*it)->getUsers();
+            std::vector<User*>::iterator itu = users.begin();
+            for (; itu != users.end(); itu++)
+            {
+                if ((*itu)->getNickname() != user->getNickname())
+                    send((*itu)->getSocket(), responses.c_str(), responses.length(), 0);
+            }
+            return;
         }
     }
+
+    // Creer un nouveau canal si le canal n'existe pas deja
+    Channel *newChannel = new Channel(channelName);
+    newChannel->addUser(user);
+    user->setJoinedChannels(newChannel);
+    channels.push_back(newChannel);
+    std::string client = user_id(user->getNickname(), user->getUsername());
+    std::string responses;
+    std::string symbol = "+i";
+    responses += RPL_JOIN(client, channelName);
+    std::string list = (newChannel)->getListInstring();
+    responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
+    responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
+
+    send(user->getSocket(), responses.c_str(), responses.length(), 0);
 }
+
 
 void	Command::processSendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users)
 {
@@ -259,6 +298,29 @@ void	Command::processKill(User *user, std::vector<User*> &_users)
             close((*it)->getSocket());
             _users.erase(it);
             return ;
+        }
+    }
+}
+
+void	Command::processWhoIs(User *user, std::vector<Channel*> &channels)
+{
+    std::string target = parameters[0].substr(0, parameters[0].length() -2);
+    if (target[0] == '#')
+    {
+        std::string channelName = target.substr(1);
+        std::vector<Channel*>::iterator it = channels.begin();
+        for (; it != channels.end(); it++)
+        {
+            if ((*it)->getName() == channelName)
+            {
+                std::string list = ((*it))->getListInstring();
+                std::string responses;
+                std::string symbol = "i";
+                responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
+                responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
+                send(user->getSocket(), responses.c_str(), responses.length(), 0);
+                return;
+            }
         }
     }
 }
