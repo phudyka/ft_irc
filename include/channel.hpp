@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 16:19:53 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/02 10:31:33 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ private:
     };
 
     std::string	                _name;
-	std::vector<User*>			_users;
+	std::vector<User*>			_users; // liste des utilisateurs actifs
+    std::vector<std::string>    _modeChannel; // les modes du channel a implementer
     std::set<std::string>		_invitations;
     std::set<std::string>		_masks[3];
-    std::vector<std::string>	_messageHistory;
+    std::map<std::string, std::string> _modeUser; // liste des utilisateurs et leur mode(dans le channel)
 
 public:
 
@@ -42,7 +43,7 @@ public:
     ~Channel();
     Channel& operator=(const Channel& other);
 	void	markAllMembers();
-    void	addUser(User* user);
+    void	addUser(User* user, const std::string &mode);
     void	addMask(MaskSetType type, const std::string& mask);
     void	invite(const User* user);
     bool	isBanned(const User* u) const;

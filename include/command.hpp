@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/28 09:41:00 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/29 11:42:33 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ private:
     void	processNick(User *user, std::vector<User*> &users);
     void	processUser(User *user);
 	void	processMode(User *user, std::vector<Channel*> &channel);
-	void	processWhoIs(User *user, std::vector<Channel*> &channels);
+	void	processWhoIs(User *user, std::vector<Channel*> &channels, std::vector<User*> &users);
     void	processPing(User *user);
     void	processJoinChannel(User *user, std::vector<Channel*> &channel);
     void    processPart(User *user, std::vector<Channel *> &channel);

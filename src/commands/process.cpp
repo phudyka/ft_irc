@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/28 10:59:24 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/02 10:22:23 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,13 +157,13 @@ void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
             }
 
             // Ajouter l'utilisateur au canal
-            (*it)->addUser(user);
+            (*it)->addUser(user, user->getMode());
             user->setJoinedChannels(*it);
             std::string client = user_id(user->getNickname(), user->getUsername());
 
             // Preparer les réponses pour le nouvel utilisateur
             std::string responses;
-            std::string symbol = "+i";
+            std::string symbol = user->getMode();
             std::string list = (*it)->getListInstring();
             responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
             responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
@@ -186,12 +186,12 @@ void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
 
     // Creer un nouveau canal si le canal n'existe pas deja
     Channel *newChannel = new Channel(channelName);
-    newChannel->addUser(user);
+    newChannel->addUser(user, "+o");
     user->setJoinedChannels(newChannel);
     channels.push_back(newChannel);
     std::string client = user_id(user->getNickname(), user->getUsername());
     std::string responses;
-    std::string symbol = "+i";
+    std::string symbol = "+o";
     responses += RPL_JOIN(client, channelName);
     std::string list = (newChannel)->getListInstring();
     responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
@@ -302,7 +302,7 @@ void	Command::processKill(User *user, std::vector<User*> &_users)
     }
 }
 
-void	Command::processWhoIs(User *user, std::vector<Channel*> &channels)
+void	Command::processWhoIs(User *user, std::vector<Channel*> &channels, std::vector<User*> &users)
 {
     std::string target = parameters[0].substr(0, parameters[0].length() -2);
     if (target[0] == '#')
@@ -315,11 +315,26 @@ void	Command::processWhoIs(User *user, std::vector<Channel*> &channels)
             {
                 std::string list = ((*it))->getListInstring();
                 std::string responses;
-                std::string symbol = "i";
+                std::string symbol = user->getMode();
                 responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
                 responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
                 send(user->getSocket(), responses.c_str(), responses.length(), 0);
                 return;
+            }
+        }
+    }
+    else
+    {
+        std::vector<User*>::iterator it = users.begin();
+        for (; it != users.end(); it++)
+        {
+            if ((*it)->getNickname() == target)
+            {
+                std::string response = RPL_WHOISUSER(user_id(user->getNickname(), user->getUsername()), user->getNickname(), (*it)->getNickname(), (*it)->getUsername(), (*it)->getHostname(), (*it)->getRealname());
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+                response = RPL_ENDOFWHOIS(user_id(user->getNickname(), user->getUsername()), (*it)->getNickname());
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+                return ;
             }
         }
     }

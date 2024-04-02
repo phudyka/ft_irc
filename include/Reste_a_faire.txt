@@ -1,0 +1,25 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Reste_a_faire.txt                                  :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/04/02 10:32:48 by dtassel           #+#    #+#              #
+#    Updated: 2024/04/02 10:41:35 by dtassel          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+- Implementer le nouveau systeme de mode dans MODE :
+
+    user a maintenant une std::string _mode contenant le mode de l'user,
+    il doit etre defini a la connection de l'user et ne plus changer.
+    Channel a egalement son _mode mais c'est un vector car il peut avoir plusieurs
+    modes en simultannees.
+    Channel contient egalement un std::map qui stock le nickname et son mode,
+    quand un channel est creer le mode du nickname change en +o, uniquement dans cette variable
+    pour que le _mode de base du client reste identique a ce qui a etait defini a sa connexion.
+
+- Coder les commandes INVITE et TOPIC;
+
+- Nettoyer les leaks;

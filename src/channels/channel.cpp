@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 16:20:01 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/02 10:09:58 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ Channel&	Channel::operator=(const Channel& other)
     return *this;
 }
 
-void	Channel::addUser(User* user)
+void	Channel::addUser(User* user, const std::string &mode)
 {
     _users.push_back(user);
+    _modeUser.insert(std::make_pair(user->getNickname(), mode));
 }
 
 void	Channel::addMask(MaskSetType type, const std::string& mask)
@@ -111,11 +112,11 @@ void	Channel::removeUser(const std::string& username)
     }
 }
 
-void	Channel::sendMessage(const std::string& message)
+/*void	Channel::sendMessage(const std::string& message)
 {
    _messageHistory.push_back(message);
     std::cout << "Message sent to channel '" << _name << "': " << message << std::endl;
-}
+}*/
 
 void Channel::sendToAll(const std::string& message)
 {
@@ -145,7 +146,14 @@ std::string Channel::getListInstring()
 
     for (; it != _users.end(); it++)
     {
-        listUsers += "@" + (*it)->getNickname() + " ";
+        if (_modeUser.find((*it)->getNickname()) != _modeUser.end())
+        {
+
+            if (_modeUser[(*it)->getNickname()] != "+o")
+                listUsers += (*it)->getNickname() + " ";
+            else
+                listUsers += "@" + (*it)->getNickname() + " ";
+        }
     }
     return listUsers;
 }

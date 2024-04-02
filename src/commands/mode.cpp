@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/28 08:39:37 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/28 11:17:33 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Command::channelMode(int socket, std::vector<Channel*> &channel, std::strin
     {
         if ((*it)->getName() == channelName)
         {
-			std::string mode = "m";
+			std::string mode = "+n";
             std::string response = RPL_CHANNELMODEIS(client, channelName, mode);
             send(socket, response.c_str(), response.length(), 0);
             return ;

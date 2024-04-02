@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/27 16:01:22 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/03/29 10:31:06 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                //displayClients();
+                displayClients();
             }
         }
     }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   user.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/25 10:54:04 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/02 09:47:08 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ private:
     size_t		_joinedChannels;
     std::vector<Channel*> _listChannel;
     UserMode*	_umode;
+    std::string _mode;
 
     std::string _username;
     std::string _realname;
@@ -56,6 +57,7 @@ public:
     const std::string	getUsername() const;
     const std::string	getRealname() const;
     const std::string	getHostname() const;
+    const std::string   getMode() const;
     bool				isAuthentified();
 	bool				isOperator();
     const std::string getPass() const;
@@ -63,6 +65,7 @@ public:
     void    setRealname(const std::string &realname);
     void    setHostname(const std::string &hostname);
     void    setNickname(const std::string &nickname);
+    void    setMode(const std::string &mode);
     void	setJoinedChannels(Channel *channel);
     void    setPassword(const std::string &nickname);
     void    setAuthentified();

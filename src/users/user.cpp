@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   user.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 16:13:16 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/02 09:43:50 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/user.hpp"
 
 User::User(int socket, const std::string &nick, const std::string &user, const std::string &ip)
-    : _socket(socket), _marked(false), _isAuthentified(false), _isOperator(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()) {}
+    : _socket(socket), _marked(false), _isAuthentified(false), _isOperator(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()), _mode("+") {}
 
 
 User::User(const User&) {}
@@ -105,6 +105,16 @@ size_t User::getJoinedChannels() const
     return (_joinedChannels);
 }
 
+const std::string   User::getMode() const
+{
+    return(_mode);
+}
+
+void   User::setMode(const std::string &mode)
+{
+    _mode = mode;
+}
+
 int User::getSocket() const
 {
     return (_socket);
@@ -133,6 +143,7 @@ void    User::setNickname(const std::string &nickname)
 void	User::setJoinedChannels(Channel *channel)
 {
     this->_listChannel.push_back(channel);
+    this->_joinedChannels++;
 }
 
 void User::sendMessage(const std::string& message) const

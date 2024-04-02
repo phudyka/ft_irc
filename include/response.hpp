@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 08:41:28 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/26 17:15:38 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/03/29 12:09:30 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@
 # define ERR_PASSWDMISMATCH(client) (":localhost 464 " + client + " :Password incorrect.\r\n")
 
 // PING
-# define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n")
+# define RPL_PONG(user_id, token) (user_id + " PONG :" + token + "\r\n")
 
 // QUIT
 # define RPL_QUIT(user_id, reason) (user_id + " QUIT :Quit: " + reason + "\r\n")
@@ -117,5 +117,9 @@
 
 // USER
 # define ERR_ALREADYREGISTERED(client) (":localhost 462 " + client + " :You may not reregister.\r\n")
+
+// WHOIS
+# define RPL_WHOISUSER(user_id, target_nickname, target_username, nickname, target_hostname, realname) (user_id + " 311 " + nickname + " " + target_nickname + " " + target_username + " " + "localhost" + " * :" + realname + "\r\n")
+# define RPL_ENDOFWHOIS(user_id, target_nickname) (user_id + " 318 " + target_nickname + " :End of WHOIS list\r\n")
 
 #endif
