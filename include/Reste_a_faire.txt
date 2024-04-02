@@ -6,7 +6,7 @@
 #    By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 10:32:48 by dtassel           #+#    #+#              #
-#    Updated: 2024/04/02 10:41:35 by dtassel          ###   ########.fr        #
+#    Updated: 2024/04/02 10:54:27 by dtassel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,4 +22,4 @@
 
 - Coder les commandes INVITE et TOPIC;
 
-- Nettoyer les leaks;
+- Nettoyer les leaks et faire caca;
