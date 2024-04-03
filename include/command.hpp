@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/29 11:42:33 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 11:34:36 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ private:
 	void	processPass(User *user, const std::string& serverPass);
     void	processNick(User *user, std::vector<User*> &users);
     void	processUser(User *user);
-	void	processMode(User *user, std::vector<Channel*> &channel);
+	void	processMode(User *user, std::vector<Channel*> &channel, std::vector<User*> &users);
 	void	processWhoIs(User *user, std::vector<Channel*> &channels, std::vector<User*> &users);
     void	processPing(User *user);
     void	processJoinChannel(User *user, std::vector<Channel*> &channel);
@@ -49,12 +49,13 @@ private:
 	void	processChannelMode(User *user, std::vector<Channel*> &channels);
     void	parseIRCMessage(const std::string& command);
     std::string extractParameter(const std::string& command, const std::string& prefix);
+    bool    searchChannelName(std::string channelName, std::vector<Channel*> &channel);
 
 // PARSING
 
     bool    isValidNick(const std::string &nick);
     bool    isAlreadyUse(const std::string &nick, std::vector<User*> &users);
-	void	channelMode(int socket, std::vector<Channel*> &channel, std::string client);
-	void	userMode(int socket, bool isSetMode, std::string symbol, std::string mode, std::string client, UserMode& uMode);
+    void    channelMode(User *user, std::vector<Channel*> &channel);
+	void	userMode(User *user, std::vector<Channel *> &channels);
 };
 #endif // COMMAND_HPP

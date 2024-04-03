@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/02 10:31:33 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 11:24:57 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ public:
     void	send(const std::string& msg, User* origin, bool useReceipt) const;
     void	removeUser(const std::string& username);
     void	sendMessage(const std::string& message);
+    const std::string getMode();
 	void	sendToAll(const std::string& message);
     void	archiveMessages();
+    void    setMode(const std::string &mode);
     std::string getListInstring();
     std::vector<User*>	getUsers();
     size_t	count() const;

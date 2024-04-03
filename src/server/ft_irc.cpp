@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/03/29 10:31:06 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 10:16:12 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void ft_irc::start()
     Channel *newChannel = new Channel("Default");
     this->_channels.push_back(newChannel);
     _isRunning = true;
-	displayClients();
+	//displayClients();
     handleConnection();
 }
 
@@ -98,7 +98,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                displayClients();
+                //displayClients();
             }
         }
     }
@@ -153,7 +153,7 @@ void ft_irc::newConnection(void)
         std::cerr << RED << "Error: [Fail to get username]" << RESET << std::endl;
         close(UserSocket);
     }
-	displayClients();
+	//displayClients();
 }
 
 void ft_irc::clientData(size_t index)

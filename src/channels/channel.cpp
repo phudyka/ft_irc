@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/02 10:09:58 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 11:30:52 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 Channel::Channel(const std::string &name)
 {
     this->_name = name;
+    _modeChannel.push_back("+n");
 }
 
 Channel::Channel(const Channel&) {}
@@ -156,4 +157,29 @@ std::string Channel::getListInstring()
         }
     }
     return listUsers;
+}
+
+const std::string Channel::getMode()
+{
+    std::string list_mode;
+    std::vector<std::string>::iterator it = _modeChannel.begin();
+    for (; it != _modeChannel.end(); it++)
+    {
+        list_mode += *it + " ";
+    }
+    std::cout << "resultat getMode : " << list_mode << std::endl;
+    return list_mode;
+}
+
+void    Channel::setMode(const std::string &mode)
+{
+    bool exist = false;
+    std::vector<std::string>::iterator it = _modeChannel.begin();
+    for (; it != _modeChannel.end(); it++)
+    {
+        if (mode == (*it))
+            exist = true;
+    }
+    if (exist == false)
+        _modeChannel.push_back(mode);
 }
