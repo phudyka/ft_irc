@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 11:24:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 17:06:58 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ public:
 	void	sendToAll(const std::string& message);
     void	archiveMessages();
     void    setMode(const std::string &mode);
+    std::string getOperator();
     std::string getListInstring();
     std::vector<User*>	getUsers();
     size_t	count() const;

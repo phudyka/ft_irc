@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 15:40:21 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 17:12:39 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,4 +183,15 @@ void    Channel::setMode(const std::string &mode)
     if (exist == false)
         _modeChannel.push_back(mode);
     return;
+}
+
+std::string Channel::getOperator()
+{
+    std::map<std::string, std::string>::iterator it = _modeUser.begin();
+    for (; it != _modeUser.end(); it++)
+    {
+        if (it->second == "+o")
+            return it->first;
+    }
+    return NULL;
 }
