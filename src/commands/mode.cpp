@@ -6,49 +6,57 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 11:43:18 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 15:51:22 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_irc.hpp"
 
-bool    Command::searchChannelName(std::string channelName, std::vector<Channel*> &channel)
+std::vector<Channel *>::iterator     Command::searchChannelName(std::string channelName, std::vector<Channel*> &channel)
 {
     std::vector<Channel*>::iterator it = channel.begin();
-    std::string channelName = parameters[0];
-    channelName = extractParameter(channelName, "#");
+
     for (; it != channel.end(); it++)
     {
         if ((*it)->getName() == channelName)
         {
-            return true;
+            return it;
         }
     }
-    return false;
+    return channel.end();
 }
 
 void	Command::channelMode(User *user, std::vector<Channel*> &channel)
 {
-    if (!parameters[1].empty())
-    {
-        if (parameters[1].find("+i\r\n") || parameters[1].find("+t\r\n") || parameters[1].find("+k\r\n")
-            || parameters[1].find("+o\r\n") || parameters[1].find("+l\r\n"))
-        {
-            
-        }
-    }
-	std::vector<Channel*>::iterator it = channel.begin();
     std::string channelName = parameters[0];
     channelName = extractParameter(channelName, "#");
-    for (; it != channel.end(); it++)
+    if (parameters[1].empty() == false)
     {
-        if ((*it)->getName() == channelName)
+        if (parameters[1].find("+i") || parameters[1].find("+t") || parameters[1].find("+k")
+            || parameters[1].find("+o") || parameters[1].find("+l"))
         {
-            std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
-            send(user->getSocket(), response.c_str(), response.length(), 0);
-            return ;
+            std::vector<Channel *>::iterator it = searchChannelName(channelName, channel);
+            if (it != channel.end())
+            {
+                (*it)->setMode(parameters[1].substr(0, parameters[1].length() -2));
+                std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+                return;
+            }
         }
     }
+	// std::vector<Channel*>::iterator it = channel.begin();
+    // //std::string channelName = parameters[0];
+    // channelName = extractParameter(channelName, "#");
+    // for (; it != channel.end(); it++)
+    // {
+    //     if ((*it)->getName() == channelName)
+    //     {
+    //         std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+    //         send(user->getSocket(), response.c_str(), response.length(), 0);
+    //         return ;
+    //     }
+    // }
 }
 
 void	Command::userMode(User *user, std::vector<Channel *> &channels)

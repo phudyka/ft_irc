@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 11:34:36 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/03 15:35:07 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ private:
 	void	processChannelMode(User *user, std::vector<Channel*> &channels);
     void	parseIRCMessage(const std::string& command);
     std::string extractParameter(const std::string& command, const std::string& prefix);
-    bool    searchChannelName(std::string channelName, std::vector<Channel*> &channel);
+    std::vector<Channel *>::iterator    searchChannelName(std::string channelName, std::vector<Channel*> &channel);
 
 // PARSING
 
