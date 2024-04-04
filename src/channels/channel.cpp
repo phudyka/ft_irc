@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 17:12:39 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/04 09:11:00 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ const std::string Channel::getMode()
     std::vector<std::string>::iterator it = _modeChannel.begin();
     for (; it != _modeChannel.end(); it++)
     {
-        list_mode += *it + " ";
+        list_mode += *it;
     }
     std::cout << "resultat getMode : " << list_mode << std::endl;
     return list_mode;
@@ -175,13 +175,14 @@ void    Channel::setMode(const std::string &mode)
 {
     bool exist = false;
     std::vector<std::string>::iterator it = _modeChannel.begin();
+    char modeChar = mode[1];
     for (; it != _modeChannel.end(); it++)
     {
-        if (mode == (*it))
+        if (std::string(1, modeChar) == (*it))
             exist = true;
     }
     if (exist == false)
-        _modeChannel.push_back(mode);
+        _modeChannel.push_back(std::string(1, modeChar));
     return;
 }
 

@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 17:17:40 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/04 10:34:01 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ std::vector<Channel*>::iterator     Command::searchChannelName(std::string chann
 void	Command::channelMode(User *user, std::vector<Channel*> &channel)
 {
     std::string channelName = parameters[0].substr(1);
-    std::cout << "Avant if" << std::endl;
     if (parameters.size() > 1)
     {
         if (!parameters[1].find("+i") || !parameters[1].find("+t") || !parameters[1].find("+k")
@@ -38,7 +37,7 @@ void	Command::channelMode(User *user, std::vector<Channel*> &channel)
             std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
             if (it != channel.end() && (*it)->getOperator() == user->getNickname())
             {
-                    (*it)->setMode(parameters[1].substr(0, parameters[1].length() -2));
+                    (*it)->setMode(parameters[1]);
                     std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
                     send(user->getSocket(), response.c_str(), response.length(), 0);
                     return;
@@ -86,7 +85,6 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel, std::vecto
     }
     std::vector<User*>::iterator it = users.begin();
     std::string name = parameters[0];
-    name = extractParameter(name, "#");
     for (; it != users.end(); it++)
     {
         if ((*it)->getNickname() == name)
@@ -96,7 +94,7 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel, std::vecto
     {
         channelMode(user, channel);
     }
-    else if (isSet == true)
+    else if(isSet == true)
     {
         userMode(user, channel);
     }

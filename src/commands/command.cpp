@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 11:11:58 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/04 09:22:57 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 		processMode(user, channel, _users);
 	else if (commandName.find("WHO") != std::string::npos || commandName.find("WHOIS") != std::string::npos)
 	 	processWhoIs(user, channel, _users);
-    else if (commandName.find("PING") != std::string::npos)
+    else if (commandName.find("PING") != std::string::npos || commandName.find("PONG") != std::string::npos)
         processPing(user);
     else if (commandName.find("JOIN") != std::string::npos)
         processJoinChannel(user, channel);
