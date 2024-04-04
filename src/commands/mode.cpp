@@ -6,13 +6,13 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:30:30 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/04 15:42:37 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_irc.hpp"
 
-std::vector<Channel *>::iterator     Command::searchChannelName(std::string channelName, std::vector<Channel*> &channel)
+std::vector<Channel*>::iterator     Command::searchChannelName(std::string channelName, std::vector<Channel*> &channel)
 {
     std::vector<Channel*>::iterator it = channel.begin();
 
@@ -74,16 +74,16 @@ void	Command::channelMode(User *user, std::vector<Channel*> &channel)
     channelName = extractParameter(channelName, "#");
     if (parameters[1].empty())
     {
-        if (parameters[1].find("+i") || parameters[1].find("+t") || parameters[1].find("+k")
-            || parameters[1].find("+o") || parameters[1].find("+l"))
+        if (!parameters[1].find("+i") || !parameters[1].find("+t") || !parameters[1].find("+k")
+            || !parameters[1].find("+o") || !parameters[1].find("+l"))
         {
-            std::vector<Channel *>::iterator it = searchChannelName(channelName, channel);
-            if (it != channel.end())
+            std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
+            if (it != channel.end() && (*it)->getOperator() == user->getNickname())
             {
-                (*it)->setMode(parameters[1].substr(0, parameters[1].length() -2));
-                std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
-                send(user->getSocket(), response.c_str(), response.length(), 0);
-                return;
+                    (*it)->setMode(parameters[1]);
+                    std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+                    send(user->getSocket(), response.c_str(), response.length(), 0);
+                    return;
             }
         }
     }
@@ -108,7 +108,7 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel, std::vecto
 {
     bool    isSet = false;
 
-    if (parameters[0].empty() && parameters[1].empty())
+    if (parameters[0].empty())
     {
         std::string response = ERR_UMODEUNKNOWNFLAG(user->getNickname());
         send(user->getSocket(), response.c_str(), response.length(), 0);

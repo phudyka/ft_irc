@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:40:31 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/04 15:41:24 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ const std::string Channel::getMode()
     std::vector<std::string>::iterator it = _modeChannel.begin();
     for (; it != _modeChannel.end(); it++)
     {
-        list_mode += *it + " ";
+        list_mode += *it;
     }
     std::cout << "resultat getMode : " << list_mode << std::endl;
     return list_mode;
@@ -149,37 +149,13 @@ void    Channel::setMode(const std::string &mode)
 {
     bool exist = false;
     std::vector<std::string>::iterator it = _modeChannel.begin();
+    char modeChar = mode[1];
     for (; it != _modeChannel.end(); it++)
     {
-        if (mode == (*it))
+        if (std::string(1, modeChar) == (*it))
             exist = true;
     }
     if (exist == false)
-        _modeChannel.push_back(mode);
+        _modeChannel.push_back(std::string(1, modeChar));
     return;
-}
-
-void	Channel::setInviteOnly(bool value)
-{
-	_inviteOnly = value;
-}
-
-void	Channel::setTopic(bool value)
-{
-    _topic = value;
-}
-
-void	Channel::setPassword(const std::string& newPass)
-{
-	_password = newPass;
-}
-
-void	Channel::addOperator(const std::string& operatorName)
-{
-	_operators.push_back(operatorName);
-}
-
-void	Channel::setUserLimit(int limit)
-{
-	_userLimit = limit;
 }

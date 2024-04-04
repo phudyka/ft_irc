@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:38:01 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/04 15:42:06 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ public:
 	void	setPassword(const std::string& newPass);
 	void	addOperator(const std::string& operatorName);
 	void	setUserLimit(int limit);
+    std::string getOperator();
     std::string getListInstring();
     std::vector<User*>	getUsers();
     size_t	count() const;
