@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:41:24 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/04 16:05:58 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,5 +157,41 @@ void    Channel::setMode(const std::string &mode)
     }
     if (exist == false)
         _modeChannel.push_back(std::string(1, modeChar));
-    return;
+    return ;
+}
+
+std::string Channel::getOperator()
+{
+    std::map<std::string, std::string>::iterator it = _modeUser.begin();
+    for (; it != _modeUser.end(); it++)
+    {
+        if (it->second == "+o")
+            return it->first;
+    }
+    return ("");
+}
+
+void	Channel::setInviteOnly(bool value)
+{
+	_inviteOnly = value;
+}
+
+void	Channel::setTopic(bool value)
+{
+	_topic = value;
+}
+
+void	Channel::setPassword(const std::string& newPass)
+{
+	_password = newPass;
+}
+
+void	Channel::addOperator(const std::string& operatorName)
+{
+	_operators.push_back(operatorName);
+}
+
+void	Channel::setUserLimit(int limit)
+{
+	_userLimit = limit;
 }

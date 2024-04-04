@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:42:37 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/04 16:07:25 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,68 +26,95 @@ std::vector<Channel*>::iterator     Command::searchChannelName(std::string chann
     return channel.end();
 }
 
-// void	Command::channelMode(User *user, std::vector<Channel*> &channel)
-// {
-// 	std::string	mode = parameters[1];
-//     std::string	channelName = parameters[0];
-//     channelName = extractParameter(channelName, "#");
-	
-//     if (parameters[1].empty())
-//     {
-//         std::vector<Channel *>::iterator it = searchChannelName(channelName, channel);
-//         if (it != channel.end())
-//         {
-//             char	modeFlag = mode[1];
-//             switch(modeFlag)
-//             {
-//                 case 'i':
-//                     // (*it)->setInviteOnly(true);
-//                     break;
-//                 case 't':
-//                     // (*it)->setTopicLocked(true);
-//                     break;
-//                 case 'k':
-//                     // if (parameters.size() >= 3)
-//                         // (*it)->setPassword(parameters[2]);
-//                     break;
-//                 case 'o':
-//                     // if (parameters.size() >= 3)
-//                         // (*it)->addOperator(parameters[2]);
-//                     break;
-//                 case 'l':
-//                     // if (parameters.size() >= 3)
-//                     //     (*it)->setUserLimit(std::stoi(parameters[2]));
-//                     break;
-//                 default:
-//                     break;
-//             }
-//             std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
-//             send(user->getSocket(), response.c_str(), response.length(), 0);
-//             return ;
-//         }
-//     }
-// }
-
 void	Command::channelMode(User *user, std::vector<Channel*> &channel)
 {
-    std::string channelName = parameters[0];
-    channelName = extractParameter(channelName, "#");
-    if (parameters[1].empty())
+    std::string	channelName = parameters[0].substr(1);
+    if (parameters.size() > 1)
     {
-        if (!parameters[1].find("+i") || !parameters[1].find("+t") || !parameters[1].find("+k")
-            || !parameters[1].find("+o") || !parameters[1].find("+l"))
+        if (parameters[1].find("+i") != std::string::npos || parameters[1].find("+t") != std::string::npos || 
+            parameters[1].find("+k") != std::string::npos || parameters[1].find("+o") != std::string::npos || 
+            parameters[1].find("+l") != std::string::npos)
         {
             std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
             if (it != channel.end() && (*it)->getOperator() == user->getNickname())
             {
-                    (*it)->setMode(parameters[1]);
-                    std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
-                    send(user->getSocket(), response.c_str(), response.length(), 0);
-                    return;
+                char	modeFlag = parameters[1][1];
+                switch (modeFlag)
+                {
+                    case 'i':
+                        (*it)->setInviteOnly(true);
+                        break;
+                    case 't':
+                        (*it)->setTopic(true);
+                        break;
+                    case 'k':
+                        if (parameters.size() >= 3)
+                            (*it)->setPassword(parameters[2]);
+                        break;
+                    case 'o':
+                        if (parameters.size() >= 3)
+                            (*it)->addOperator(parameters[2]);
+                        break;
+                    case 'l':
+                        if (parameters.size() >= 3)
+                            (*it)->setUserLimit(atoi(parameters[2].c_str()));
+                        break;
+                    default:
+                        break;
+                }
+                std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+                return;
+            }
+        }
+    }
+    else
+    {
+        std::vector<Channel*>::iterator	it = channel.begin();
+        for (; it != channel.end(); it++)
+        {
+            if ((*it)->getName() == channelName)
+            {
+                std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+                return;
             }
         }
     }
 }
+
+// void	Command::channelMode(User *user, std::vector<Channel*> &channel)
+// {
+//     std::string channelName = parameters[0].substr(1);
+//     if (parameters.size() > 1)
+//     {
+//         if (!parameters[1].find("+i") || !parameters[1].find("+t") || !parameters[1].find("+k")
+//             || !parameters[1].find("+o") || !parameters[1].find("+l"))
+//         {
+//             std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
+//             if (it != channel.end() && (*it)->getOperator() == user->getNickname())
+//             {
+//                     (*it)->setMode(parameters[1]);
+//                     std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+//                     send(user->getSocket(), response.c_str(), response.length(), 0);
+//                     return;
+//             }
+//         }
+//     }     
+//     else
+//     {
+//         std::vector<Channel*>::iterator it = channel.begin();
+//         for (; it != channel.end(); it++)
+//         {
+//             if ((*it)->getName() == channelName)
+//             {
+//                 std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+//                 send(user->getSocket(), response.c_str(), response.length(), 0);
+//                 return ;
+//             }
+//         }
+//     }
+// }
 
 void	Command::userMode(User *user, std::vector<Channel *> &channels)
 {

@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:42:06 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/04 16:00:34 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ public:
     std::vector<User*>	getUsers();
     size_t	count() const;
     std::string	getName();
-
 };
 
 #endif // CHANNEL_HPP
