@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 15:40:21 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/04 15:40:31 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/channel.hpp"
 
-Channel::Channel(const std::string &name)
+Channel::Channel(const std::string &name) : _name(name), _inviteOnly(false), _topic(false), _userLimit(0)
 {
-    this->_name = name;
     _modeChannel.push_back("+n");
 }
 
@@ -54,29 +53,10 @@ bool	Channel::isInvited(const User* u) const
     return (_invitations.count(u->getNickname()) || _masks[INVITATION_SET].count(u->getPrefix()));
 }
 
-// void Channel::markAllMembers()
-// {
-//     for (std::vector<std::string>::const_iterator i = _users.begin(); i != _users.end(); ++i)
-//         (*i)->mark();
-// }
-
 size_t	Channel::count() const
 {
     return (_users.size());
 }
-
-// size_t	Channel::nbUserVisible() const
-// {
-//     size_t	nb = 0;
-
-//     for (std::vector<User>::const_iterator i = _users.begin(); i != _users.end(); ++i)
-// 	{
-//         const UserMode&	umode = i->umode();
-//         if (!umode.isSet(UserMode::INVISIBLE))
-//             nb++;
-//     }
-//     return (nb);
-// }
 
 bool	Channel::isInChannel(const std::string& nickname, Channel* channel)
 {
@@ -112,12 +92,6 @@ void	Channel::removeUser(const std::string& username)
         }
     }
 }
-
-/*void	Channel::sendMessage(const std::string& message)
-{
-   _messageHistory.push_back(message);
-    std::cout << "Message sent to channel '" << _name << "': " << message << std::endl;
-}*/
 
 void Channel::sendToAll(const std::string& message)
 {
@@ -183,4 +157,29 @@ void    Channel::setMode(const std::string &mode)
     if (exist == false)
         _modeChannel.push_back(mode);
     return;
+}
+
+void	Channel::setInviteOnly(bool value)
+{
+	_inviteOnly = value;
+}
+
+void	Channel::setTopic(bool value)
+{
+    _topic = value;
+}
+
+void	Channel::setPassword(const std::string& newPass)
+{
+	_password = newPass;
+}
+
+void	Channel::addOperator(const std::string& operatorName)
+{
+	_operators.push_back(operatorName);
+}
+
+void	Channel::setUserLimit(int limit)
+{
+	_userLimit = limit;
 }

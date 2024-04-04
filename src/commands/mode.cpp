@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 15:51:22 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/04 15:30:30 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,53 @@ std::vector<Channel *>::iterator     Command::searchChannelName(std::string chan
     return channel.end();
 }
 
+// void	Command::channelMode(User *user, std::vector<Channel*> &channel)
+// {
+// 	std::string	mode = parameters[1];
+//     std::string	channelName = parameters[0];
+//     channelName = extractParameter(channelName, "#");
+	
+//     if (parameters[1].empty())
+//     {
+//         std::vector<Channel *>::iterator it = searchChannelName(channelName, channel);
+//         if (it != channel.end())
+//         {
+//             char	modeFlag = mode[1];
+//             switch(modeFlag)
+//             {
+//                 case 'i':
+//                     // (*it)->setInviteOnly(true);
+//                     break;
+//                 case 't':
+//                     // (*it)->setTopicLocked(true);
+//                     break;
+//                 case 'k':
+//                     // if (parameters.size() >= 3)
+//                         // (*it)->setPassword(parameters[2]);
+//                     break;
+//                 case 'o':
+//                     // if (parameters.size() >= 3)
+//                         // (*it)->addOperator(parameters[2]);
+//                     break;
+//                 case 'l':
+//                     // if (parameters.size() >= 3)
+//                     //     (*it)->setUserLimit(std::stoi(parameters[2]));
+//                     break;
+//                 default:
+//                     break;
+//             }
+//             std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+//             send(user->getSocket(), response.c_str(), response.length(), 0);
+//             return ;
+//         }
+//     }
+// }
+
 void	Command::channelMode(User *user, std::vector<Channel*> &channel)
 {
     std::string channelName = parameters[0];
     channelName = extractParameter(channelName, "#");
-    if (parameters[1].empty() == false)
+    if (parameters[1].empty())
     {
         if (parameters[1].find("+i") || parameters[1].find("+t") || parameters[1].find("+k")
             || parameters[1].find("+o") || parameters[1].find("+l"))
@@ -45,18 +87,6 @@ void	Command::channelMode(User *user, std::vector<Channel*> &channel)
             }
         }
     }
-	// std::vector<Channel*>::iterator it = channel.begin();
-    // //std::string channelName = parameters[0];
-    // channelName = extractParameter(channelName, "#");
-    // for (; it != channel.end(); it++)
-    // {
-    //     if ((*it)->getName() == channelName)
-    //     {
-    //         std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
-    //         send(user->getSocket(), response.c_str(), response.length(), 0);
-    //         return ;
-    //     }
-    // }
 }
 
 void	Command::userMode(User *user, std::vector<Channel *> &channels)
@@ -91,11 +121,7 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel, std::vecto
             isSet = true;
     }
     if (parameters[0].find("#") != std::string::npos)
-    {
         channelMode(user, channel);
-    }
     else if (isSet == true)
-    {
         userMode(user, channel);
-    }
 }

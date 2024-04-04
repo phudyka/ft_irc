@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/03 11:24:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/04 15:38:01 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ private:
     std::set<std::string>		_invitations;
     std::set<std::string>		_masks[3];
     std::map<std::string, std::string> _modeUser; // liste des utilisateurs et leur mode(dans le channel)
+	bool						_inviteOnly;
+    bool						_topic;
+    std::string					_password;
+    std::vector<std::string>	_operators;
+    int							_userLimit;
 
 public:
 
@@ -42,7 +47,6 @@ public:
     Channel(const Channel&);
     ~Channel();
     Channel& operator=(const Channel& other);
-	void	markAllMembers();
     void	addUser(User* user, const std::string &mode);
     void	addMask(MaskSetType type, const std::string& mask);
     void	invite(const User* user);
@@ -52,15 +56,18 @@ public:
 	void	kickUser(const std::string& targetNickname, const std::string& reason);
     void	send(const std::string& msg, User* origin, bool useReceipt) const;
     void	removeUser(const std::string& username);
-    void	sendMessage(const std::string& message);
     const std::string getMode();
 	void	sendToAll(const std::string& message);
     void	archiveMessages();
     void    setMode(const std::string &mode);
+	void	setInviteOnly(bool value);
+	void	setTopic(bool value);
+	void	setPassword(const std::string& newPass);
+	void	addOperator(const std::string& operatorName);
+	void	setUserLimit(int limit);
     std::string getListInstring();
     std::vector<User*>	getUsers();
     size_t	count() const;
-    size_t	nbUserVisible() const;
     std::string	getName();
 
 };
