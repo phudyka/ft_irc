@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 10:12:32 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/08 10:17:30 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	Command::processPass(User *user, const std::string& serverPass)
 	{
 		send(socket, wrongPass.c_str(), wrongPass.size(), 0);
 		close(socket);
+		return;
 	}
 }
 

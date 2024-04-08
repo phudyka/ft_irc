@@ -6,13 +6,13 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 10:13:24 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/08 10:17:10 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/channel.hpp"
 
-Channel::Channel(const std::string &name) : _name(name), _inviteOnly(false), _topic(false), _userLimit(0)
+Channel::Channel(const std::string &name) : _name(name), _inviteOnly(false), _topic("none"), _userLimit(0)
 {
     _modeChannel.push_back("+n");
 }
@@ -210,9 +210,9 @@ void	Channel::setInviteOnly(bool value)
 	_inviteOnly = value;
 }
 
-void	Channel::setTopic(bool value)
+void	Channel::setTopic(const std::string& topic)
 {
-	_topic = value;
+	_topic = topic;
 }
 
 void	Channel::setPassword(const std::string& newPass)
