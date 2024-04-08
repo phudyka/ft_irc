@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:42:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/04 16:27:05 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	Command::processPass(User *user, const std::string& serverPass)
 	{
 		send(socket, wrongPass.c_str(), wrongPass.size(), 0);
 		close(socket);
+		return;
 	}
 }
 

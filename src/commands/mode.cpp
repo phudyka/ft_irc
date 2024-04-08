@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 16:07:25 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/05 11:40:34 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	Command::channelMode(User *user, std::vector<Channel*> &channel)
                     case 'i':
                         (*it)->setInviteOnly(true);
                         break;
-                    case 't':
-                        (*it)->setTopic(true);
-                        break;
+                    // case 't':
+                    //     (*it)->setTopic(true);
+                        // break;
                     case 'k':
                         if (parameters.size() >= 3)
                             (*it)->setPassword(parameters[2]);

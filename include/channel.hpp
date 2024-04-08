@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 16:00:34 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/05 11:36:30 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ private:
     std::set<std::string>		_masks[3];
     std::map<std::string, std::string> _modeUser; // liste des utilisateurs et leur mode(dans le channel)
 	bool						_inviteOnly;
-    bool						_topic;
+    std::string					_topic;
     std::string					_password;
     std::vector<std::string>	_operators;
     int							_userLimit;
@@ -61,7 +61,7 @@ public:
     void	archiveMessages();
     void    setMode(const std::string &mode);
 	void	setInviteOnly(bool value);
-	void	setTopic(bool value);
+	void	setTopic(const std::string& topic);
 	void	setPassword(const std::string& newPass);
 	void	addOperator(const std::string& operatorName);
 	void	setUserLimit(int limit);
