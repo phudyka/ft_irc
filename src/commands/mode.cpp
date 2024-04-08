@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 08:25:45 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/08 08:27:39 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	Command::channelMode(User *user, std::vector<Channel*> &channel)
     {
         channelName = channelName.substr(0, channelName.length() -2);
         std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
-        std::cout << "else de modechannel" << std::endl;
         if (it != channel.end())
         {
             std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());

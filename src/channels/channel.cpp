@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 16:05:58 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/08 10:13:24 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,30 @@ Channel&	Channel::operator=(const Channel& other)
     return *this;
 }
 
-void	Channel::addUser(User* user, const std::string &mode)
+bool	Channel::addUser(User* user, const std::string &mode)
 {
-    _users.push_back(user);
-    _modeUser.insert(std::make_pair(user->getNickname(), mode));
+    if (_inviteOnly == false)
+    {
+        _users.push_back(user);
+        _modeUser.insert(std::make_pair(user->getNickname(), mode));
+        return true;
+    }
+    else if (_inviteOnly == true)
+    {
+        if (isInvited(user) == true)
+        {
+            _users.push_back(user);
+            _modeUser.insert(std::make_pair(user->getNickname(), mode));
+            std::set<std::string>::iterator it = _invitations.begin();
+            for (; it != _invitations.end(); it++)
+            {
+                if (*it == user->getNickname())
+                    _invitations.erase(it);
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 void	Channel::addMask(MaskSetType type, const std::string& mask)
@@ -40,7 +60,15 @@ void	Channel::addMask(MaskSetType type, const std::string& mask)
 
 void	Channel::invite(const User* user)
 {
-    _invitations.insert(user->getNickname());
+    bool exist = false;
+    std::set<std::string>::iterator it = _invitations.begin();
+    for (; it != _invitations.end(); it++)
+    {
+        if (*it == user->getNickname())
+            exist = true;
+    }
+    if (exist == false)
+        _invitations.insert(user->getNickname());
 }
 
 bool	Channel::isBanned(const User* u) const
@@ -48,9 +76,15 @@ bool	Channel::isBanned(const User* u) const
     return (_masks[BAN_SET].count(u->getPrefix()) && !_masks[EXCEPTION_SET].count(u->getPrefix()));
 }
 
-bool	Channel::isInvited(const User* u) const
+bool	Channel::isInvited(const User* user) const
 {
-    return (_invitations.count(u->getNickname()) || _masks[INVITATION_SET].count(u->getPrefix()));
+    std::set<std::string>::iterator it = _invitations.begin();
+    for (; it != _invitations.end(); it++)
+    {
+        if (*it == user->getNickname())
+            return true;
+    }
+    return false;
 }
 
 size_t	Channel::count() const

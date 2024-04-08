@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 16:00:34 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/08 09:59:08 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ public:
     Channel(const Channel&);
     ~Channel();
     Channel& operator=(const Channel& other);
-    void	addUser(User* user, const std::string &mode);
+    bool	addUser(User* user, const std::string &mode);
     void	addMask(MaskSetType type, const std::string& mask);
     void	invite(const User* user);
     bool	isBanned(const User* u) const;
-    bool	isInvited(const User* u) const;
+    bool	isInvited(const User* user) const;
 	bool	isInChannel(const std::string& nickname, Channel* channel);
 	void	kickUser(const std::string& targetNickname, const std::string& reason);
     void	send(const std::string& msg, User* origin, bool useReceipt) const;

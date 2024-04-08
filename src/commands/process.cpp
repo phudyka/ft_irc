@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 15:42:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/08 10:12:32 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
 
 void Command::processPing(User *user)
 {
-    if (commandName.find("PONG") != std::string::npos)
+    if (commandName.find("PING") != std::string::npos)
     {
         // Vérifiez que le vecteur parameters a au moins un élément
         if (!trailing.empty())
@@ -137,16 +137,16 @@ void Command::processPing(User *user)
             send(user->getSocket(), pong.c_str(), pong.size(), 0);
         }
     }
-    else if (commandName.find("PING") != std::string::npos)
-    {
-        // Vérifiez que le vecteur parameters a au moins un élément
-        if (!parameters.empty())
-        {
-            std::string pingParam = parameters[0];
-            std::string ping = "PING " + pingParam;
-            send(user->getSocket(), ping.c_str(), ping.size(), 0);
-        }
-    }
+    // else if (commandName.find("PING") != std::string::npos)
+    // {
+    //     // Vérifiez que le vecteur parameters a au moins un élément
+    //     if (!parameters.empty())
+    //     {
+    //         std::string pingParam = parameters[0];
+    //         std::string ping = "PING " + pingParam;
+    //         send(user->getSocket(), ping.c_str(), ping.size(), 0);
+    //     }
+    // }
 }
 
 void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
@@ -174,30 +174,40 @@ void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
             }
 
             // Ajouter l'utilisateur au canal
-            (*it)->addUser(user, user->getMode());
-            user->setJoinedChannels(*it);
-            std::string client = user_id(user->getNickname(), user->getUsername());
-
-            // Preparer les réponses pour le nouvel utilisateur
-            std::string responses;
-            std::string symbol = user->getMode();
-            std::string list = (*it)->getListInstring();
-            responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
-            responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
-            responses += RPL_JOIN(client, channelName);
-
-            // Envoyer les réponses au nouvel utilisateur
-            send(user->getSocket(), responses.c_str(), responses.length(), 0);
-
-            // Envoyer le nouveau client a tous les utilisateurs present
-            std::vector<User*> users = (*it)->getUsers();
-            std::vector<User*>::iterator itu = users.begin();
-            for (; itu != users.end(); itu++)
+            
+            if ((*it)->addUser(user, user->getMode()) == true)
             {
-                if ((*itu)->getNickname() != user->getNickname())
-                    send((*itu)->getSocket(), responses.c_str(), responses.length(), 0);
+                user->setJoinedChannels(*it);
+                std::string client = user_id(user->getNickname(), user->getUsername());
+
+                // Preparer les réponses pour le nouvel utilisateur
+                std::string responses;
+                std::string symbol = user->getMode();
+                std::string list = (*it)->getListInstring();
+                responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
+                responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
+                responses += RPL_JOIN(client, channelName);
+
+                // Envoyer les réponses au nouvel utilisateur
+                send(user->getSocket(), responses.c_str(), responses.length(), 0);
+
+                // Envoyer le nouveau client a tous les utilisateurs present
+                std::vector<User*> users = (*it)->getUsers();
+                std::vector<User*>::iterator itu = users.begin();
+                for (; itu != users.end(); itu++)
+                {
+                    if ((*itu)->getNickname() != user->getNickname())
+                        send((*itu)->getSocket(), responses.c_str(), responses.length(), 0);
+                }
+                return;
             }
-            return;
+            else
+            {
+                std::string responses;
+                responses = ERR_INVITEONLY(user->getNickname(), channelName);
+                send(user->getSocket(), responses.c_str(), responses.length(), 0);
+                return;
+            }
         }
     }
 
