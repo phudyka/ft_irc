@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 10:17:30 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/08 10:41:39 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,22 +87,27 @@ void	Command::processNick(User *user, std::vector<User*> &users)
 
 void	Command::processUser(User *user)
 {
-        user->setUsername(parameters[0]);
-        user->setRealname(parameters[1]);
-        user->setHostname(parameters[2]);
+        if (parameters.size() == 3)
+        {
+            user->setUsername(parameters[0]);
+            user->setRealname(parameters[1]);
+            user->setHostname(parameters[2]);
 
-        std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
-                    " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
-        send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
+            std::string welcome = ":" + user->getNickname() + "!" + user->getRealname() + "@localhost 001 " + user->getNickname() + " :Welcome to the Internet Relay Network"
+                        " " + user->getNickname() + "!" + user->getRealname() + "@" + "localhost" + "\r\n";
+            send(user->getSocket(), welcome.c_str(), welcome.length(), 0);
+        }
 }
 
 void    Command::processPart(User *user, std::vector<Channel *> &channel)
 {
     if (parameters[0].empty() == false)
     {
-        std::string channelName = parameters[0].substr(1);
-        std::cout << "ChannelName = " << channelName << std::endl;
-
+        std::string channelName;
+        channelName = parameters[0].substr(1);
+        if (trailing.empty() == true)
+            channelName = parameters[0].substr(1, channelName.length() -2);
+        std::cout << channelName << "test" << std::endl;
         std::vector<Channel *>::iterator it = channel.begin();
         for (; it != channel.end(); it++)
         {
@@ -130,10 +135,9 @@ void Command::processPing(User *user)
 {
     if (commandName.find("PING") != std::string::npos)
     {
-        // Vérifiez que le vecteur parameters a au moins un élément
         if (!trailing.empty())
         {
-            std::string pingParam = trailing; // Supprimez le substr() pour conserver le paramètre PING tel quel
+            std::string pingParam = trailing;
             std::string pong = RPL_PONG(pingParam);
             send(user->getSocket(), pong.c_str(), pong.size(), 0);
         }
@@ -202,7 +206,7 @@ void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
                 }
                 return;
             }
-            else
+            else // Dans le cas ou mode i et que le client n'est pas invite
             {
                 std::string responses;
                 responses = ERR_INVITEONLY(user->getNickname(), channelName);
