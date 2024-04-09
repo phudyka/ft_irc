@@ -6,14 +6,14 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/02 09:43:50 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/09 13:41:17 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/user.hpp"
 
 User::User(int socket, const std::string &nick, const std::string &user, const std::string &ip)
-    : _socket(socket), _marked(false), _isAuthentified(false), _isOperator(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()), _mode("+") {}
+    : _socket(socket), _marked(false), _isAuthentified(false), _isOperator(false), _passOk(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()), _mode("+") {}
 
 
 User::User(const User&) {}
@@ -152,4 +152,14 @@ void User::sendMessage(const std::string& message) const
     {
         std::cerr << "Error sending message to user " << _nickname << std::endl;
     }
+}
+
+void    User::setPassword()
+{
+    _passOk = true;
+}
+
+bool    User::getAuthPass()
+{
+    return _passOk;
 }

@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/02 09:35:05 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/09 13:58:38 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ private:
 	void	clientData(size_t index);
 	void	logConnection(const std::string& msg, const std::string id);
 	void	broadcastShutdown(void);
-    void    connectClient(int socket, User *user);
+    bool    connectClient(int socket, User *user);
 };
 
 #endif

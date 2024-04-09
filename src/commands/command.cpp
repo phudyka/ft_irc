@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 11:44:26 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/09 13:36:39 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
         std::cout << "Parametre : " << (*it) << std::endl;
     }
 	if (commandName.find("PASS") != std::string::npos)
-		processPass(user, serverPass);
+    {
+		if (processPass(user, serverPass) == false)
+            return;
+    }
     else if (commandName.find("NICK") != std::string::npos)
         processNick(user, _users);
 	else if (commandName.find("USER") != std::string::npos)

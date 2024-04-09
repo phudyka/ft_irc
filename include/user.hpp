@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/02 09:47:08 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/09 13:41:43 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ private:
     bool	    _marked;
     bool        _isAuthentified;
     bool        _isOperator;
+    bool        _passOk;
 	std::string	_ip;
 	std::string	_user;
     std::string	_prefix;
@@ -58,6 +59,7 @@ public:
     const std::string	getRealname() const;
     const std::string	getHostname() const;
     const std::string   getMode() const;
+    bool                getAuthPass();
     bool				isAuthentified();
 	bool				isOperator();
     const std::string getPass() const;
@@ -67,7 +69,7 @@ public:
     void    setNickname(const std::string &nickname);
     void    setMode(const std::string &mode);
     void	setJoinedChannels(Channel *channel);
-    void    setPassword(const std::string &nickname);
+    void    setPassword();
     void    setAuthentified();
 	void	setOperator();
     size_t	getJoinedChannels() const;

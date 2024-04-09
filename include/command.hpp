@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/04 11:37:31 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/09 13:35:50 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ private:
     std::string commandName;
     std::vector<std::string> parameters;
     std::string trailing;
-	void	processPass(User *user, const std::string& serverPass);
+	bool	processPass(User *user, const std::string& serverPass);
     void	processNick(User *user, std::vector<User*> &users);
     void	processUser(User *user);
 	void	processMode(User *user, std::vector<Channel*> &channel, std::vector<User*> &users);

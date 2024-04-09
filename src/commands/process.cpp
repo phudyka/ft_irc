@@ -6,13 +6,13 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 10:41:39 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/09 14:10:40 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/command.hpp"
 
-void	Command::processPass(User *user, const std::string& serverPass)
+bool	Command::processPass(User *user, const std::string& serverPass)
 {
 	int			socket = user->getSocket();
 	std::string	clientPass = parameters[0].substr(0, parameters[0].length() - 2);
@@ -21,9 +21,10 @@ void	Command::processPass(User *user, const std::string& serverPass)
 	if (clientPass != serverPass)
 	{
 		send(socket, wrongPass.c_str(), wrongPass.size(), 0);
-		close(socket);
-		return;
+		return false;
 	}
+    user->setPassword();
+    return true;
 }
 
 bool    Command::isValidNick(const std::string &nick)
@@ -133,25 +134,25 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
 
 void Command::processPing(User *user)
 {
-    if (commandName.find("PING") != std::string::npos)
-    {
-        if (!trailing.empty())
-        {
-            std::string pingParam = trailing;
-            std::string pong = RPL_PONG(pingParam);
-            send(user->getSocket(), pong.c_str(), pong.size(), 0);
-        }
-    }
-    // else if (commandName.find("PING") != std::string::npos)
+    // if (commandName.find("PING") != std::string::npos)
     // {
-    //     // Vérifiez que le vecteur parameters a au moins un élément
-    //     if (!parameters.empty())
+    //     if (!trailing.empty())
     //     {
-    //         std::string pingParam = parameters[0];
-    //         std::string ping = "PING " + pingParam;
-    //         send(user->getSocket(), ping.c_str(), ping.size(), 0);
+    //         std::string pingParam = trailing;
+    //         std::string pong = RPL_PONG(pingParam);
+    //         send(user->getSocket(), pong.c_str(), pong.size(), 0);
     //     }
     // }
+    if (commandName.find("PING") != std::string::npos)
+    {
+        // Vérifiez que le vecteur parameters a au moins un élément
+        if (!parameters.empty())
+        {
+            std::string pingParam = parameters[0];
+            std::string pong = RPL_PONG(pingParam);
+            send(user->getSocket(), pong.c_str(), pong.length(), 0);
+        }
+    } 
 }
 
 void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)

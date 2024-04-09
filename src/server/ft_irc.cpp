@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/03 10:16:12 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/09 14:07:25 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,19 +80,21 @@ void ft_irc::start()
 
 void ft_irc::handleConnection(void)
 {
-	while (_isRunning)
-	{
-        int	readyCount = poll(&_pollfds[0], static_cast<nfds_t>(_pollfds.size()), -1);
+    while (_isRunning)
+    {
+        int readyCount = poll(&_pollfds[0], static_cast<nfds_t>(_pollfds.size()), -1);
 
         if (readyCount == -1)
         {
             if (errno == EINTR)
-                continue ;
+                continue;
             else
                 throw std::runtime_error(RED "Error: [poll() failed]" RESET);
         }
+
         if (_pollfds[0].revents & POLLIN)
             newConnection();
+
         for (size_t i = 1; i < _pollfds.size(); ++i)
         {
             if (_pollfds[i].revents & POLLIN)
@@ -100,11 +102,16 @@ void ft_irc::handleConnection(void)
                 clientData(i);
                 //displayClients();
             }
+            else if (_pollfds[i].revents & (POLLHUP | POLLERR))
+            {
+                removeClient(i);
+            }
         }
     }
 }
 
-void    ft_irc::connectClient(int socket, User *user)
+
+bool    ft_irc::connectClient(int socket, User *user)
 {
     size_t len;
     char client[256];
@@ -116,7 +123,10 @@ void    ft_irc::connectClient(int socket, User *user)
     {
             Command commandHandler;
             commandHandler.masterCommand(user, *it, _channels, _pass, _clients);
+            if (it->find("PASS") != std::string::npos && user->getAuthPass() == false)
+                return false;
     }
+    return true;
 }
 
 void ft_irc::newConnection(void)
@@ -146,7 +156,13 @@ void ft_irc::newConnection(void)
         newUser->setHostname(UserInfo->h_name);
         newUser->setIP(UserIP);
         _clients.push_back(newUser);
-        connectClient(UserSocket, newUser);
+        if (connectClient(UserSocket, newUser) == false)
+        {
+            close(UserSocket);
+            _pollfds.pop_back();
+            delete newUser;
+            _clients.pop_back();
+        }
     }
     else
     {
