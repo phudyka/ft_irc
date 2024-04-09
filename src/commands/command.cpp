@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/09 13:36:39 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/09 15:28:19 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 		if (processPass(user, serverPass) == false)
             return;
     }
-    else if (commandName.find("NICK") != std::string::npos)
+    else if (commandName.find("NICK") != std::string::npos && user->getAuthPass() == true)
         processNick(user, _users);
 	else if (commandName.find("USER") != std::string::npos)
     {
@@ -104,7 +104,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 	else if (commandName.find("KICK") != std::string::npos)
 		processKick(user);
 	else if (commandName.find("INVITE") != std::string::npos)
-		processInvite(user, channel);
+		processInvite(user, channel, _users);
 	// else if (commandName.find("TOPIC") != std::string::npos)
 	// 	processTopic(user, channel);
 	// else if (commandName.find("MODE") != std::string::npos)

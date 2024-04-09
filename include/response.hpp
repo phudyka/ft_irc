@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 08:41:28 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/08 11:42:53 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/09 16:31:08 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + " #" + channel + " :No such channel\r\n")
 # define ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " #" + channel + " :The user is not on this channel.\r\n")
 # define ERR_USERONCHANNEL(client, nick, channel) (":localhost 443 " + client + " " + nick + " #" + channel + " :Is already on channel\r\n")
-# define RPL_INVITING(user_id, client, nick, channel) (user_id + " 341 " + client + " " + nick + " #" + channel + "\r\n")
-# define RPL_INVITE(user_id, invited, invited_nick, channel) (user_id + " INVITE " + invited + " " + invited_nick + " #" + channel + "\r\n")
+# define RPL_INVITING(user_id, nick, channel) (user_id + " 341 " + nick + " #" + channel + "\r\n")
+# define RPL_INVITE(user_id, invited, invited_nick, channel) (user_id + " INVITE " + invited_nick + " #" + channel + "\r\n")
 
 
 // JOIN

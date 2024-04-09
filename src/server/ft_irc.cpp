@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/09 14:07:25 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/09 14:55:08 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,12 @@ bool    ft_irc::connectClient(int socket, User *user)
             commandHandler.masterCommand(user, *it, _channels, _pass, _clients);
             if (it->find("PASS") != std::string::npos && user->getAuthPass() == false)
                 return false;
+    }
+    if (user->getAuthPass() == false)
+    {
+        std::string	wrongPass = ERR_PASSWDMISMATCH(user->getNickname());
+        send(socket, wrongPass.c_str(), wrongPass.size(), 0);
+        return false;
     }
     return true;
 }
