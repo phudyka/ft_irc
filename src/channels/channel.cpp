@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 10:10:39 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:20:51 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,19 @@ void    Channel::setMode(const std::string &mode)
     if (exist == false)
         _modeChannel.push_back(std::string(1, modeChar));
     return ;
+}
+
+void Channel::unsetMode(const std::string &mode)
+{
+    char modeChar = mode[1];
+    for (std::vector<std::string>::iterator it = _modeChannel.begin(); it != _modeChannel.end(); ++it)
+	{
+        if (*it == std::string(1, modeChar))
+		{
+            _modeChannel.erase(it);
+            return ;
+        }
+    }
 }
 
 std::string Channel::getOperator()

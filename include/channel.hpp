@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 10:10:46 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:16:41 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ public:
 	void	sendToAll(const std::string& message);
     void	archiveMessages();
     void    setMode(const std::string &mode);
+    void    unsetMode(const std::string &mode);
 	void	setInviteOnly(bool value);
 	void	setTopic(const std::string& topic);
 	void	setPassword(const std::string& newPass);

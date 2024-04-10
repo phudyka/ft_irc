@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 14:30:05 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:01:08 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ private:
     void    channelMode(User *user, std::vector<Channel*> &channel);
 	void	processUserMode(User *user, std::vector<Channel *> &channels);
 	void	processChannelMode(User *user, std::vector<Channel*> &channels);
-	void	addMode(User *user, Channel *channel, const std::string &modeString);
-	void	removeMode(User *user, Channel *channel, const std::string &modeString);
+	void	addMode(User *user, std::vector<Channel*> &channel, std::string channelName);
+	void	removeMode(User *user, std::vector<Channel*> &channel, std::string channelName);
 };
 #endif // COMMAND_HPP

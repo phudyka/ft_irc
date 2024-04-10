@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 14:29:31 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:20:06 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,16 @@ std::vector<Channel*>::iterator     Command::searchChannelName(std::string chann
     return channel.end();
 }
 
-void	Command::processChannelMode(User *user, std::vector<Channel*> &channel)
+void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string channelName)
 {
-    std::string	channelName = parameters[0].substr(1);
-    if (parameters.size() >= 2)
-    {
-        if (parameters[1].find("+i") != std::string::npos || parameters[1].find("+t") != std::string::npos || 
+    char	modeFlag = parameters[1][1];
+	if (parameters[1].find("+i") != std::string::npos || parameters[1].find("+t") != std::string::npos || 
             parameters[1].find("+k") != std::string::npos || parameters[1].find("+o") != std::string::npos || 
             parameters[1].find("+l") != std::string::npos)
         {
             std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
             if (it != channel.end() && (*it)->getOperator() == user->getNickname())
             {
-                char	modeFlag = parameters[1][1];
                 switch (modeFlag)
                 {
                     case 'i':
@@ -68,6 +65,65 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channel)
                 return;
             }
         }
+	else
+		user->sendMessage(ERR_INVALIDMODEPARAM(user->getNickname(), channelName, std::string(1, modeFlag), ""));
+}
+
+void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string channelName)
+{
+    char	modeFlag = parameters[1][1];
+    if (parameters[1].find("-i") != std::string::npos || parameters[1].find("-t") != std::string::npos || 
+            parameters[1].find("-k") != std::string::npos || parameters[1].find("-o") != std::string::npos || 
+            parameters[1].find("-l") != std::string::npos)
+        {
+            std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
+            if (it != channel.end() && (*it)->getOperator() == user->getNickname())
+            {
+                switch (modeFlag)
+                {
+                    case 'i':
+                        (*it)->setInviteOnly(false);
+                        break;
+                    // case 't':
+                    //     (*it)->setTopic(true);
+                        // break;
+                    case 'k':
+                        if (parameters.size() >= 3)
+                            (*it)->setPassword(parameters[2]);
+                        break;
+                    case 'o':
+                        if (parameters.size() >= 3)
+                            (*it)->addOperator(parameters[2]);
+                        break;
+                    case 'l':
+                        if (parameters.size() >= 3)
+                            (*it)->setUserLimit(atoi(parameters[2].c_str()));
+                        break;
+                    default:
+                        break;
+                }
+                (*it)->unsetMode(parameters[1]);
+                std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+                return;
+            }
+        }
+		else
+			user->sendMessage(ERR_INVALIDMODEPARAM(user->getNickname(), channelName, std::string(1, modeFlag), ""));
+		
+}
+
+void	Command::processChannelMode(User *user, std::vector<Channel*> &channel)
+{
+    std::string	channelName = parameters[0].substr(1);
+    if (parameters.size() >= 2 && parameters[1].length() == 4)
+    {
+        if (parameters[1].find("+") != std::string::npos)
+			addMode(user, channel, channelName);
+		else if (parameters[1].find("-") != std::string::npos)
+			removeMode(user, channel, channelName);
+		else
+			user->sendMessage(ERR_INVALIDMODEPARAM(user->getNickname(), channelName, std::string(1, parameters[1][1]), ""));
     }
     else
     {
