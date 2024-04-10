@@ -6,13 +6,13 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 15:20:51 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:33:54 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/channel.hpp"
 
-Channel::Channel(const std::string &name) : _name(name), _inviteOnly(false), _topic("none"), _userLimit(0)
+Channel::Channel(const std::string &name) : _name(name), _inviteOnly(false), _topic("none"), _userLimit(-1)
 {
     _modeChannel.push_back("+n");
 }
@@ -243,4 +243,9 @@ void	Channel::addOperator(const std::string& operatorName)
 void	Channel::setUserLimit(int limit)
 {
 	_userLimit = limit;
+}
+
+int	Channel::getUserLimit()
+{
+	return _userLimit;
 }

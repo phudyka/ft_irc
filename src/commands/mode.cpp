@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 15:26:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:46:20 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,29 +40,26 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                 {
                     case 'i':
                         (*it)->setInviteOnly(true);
-                        break;
+                        break ;
                     // case 't':
                     //     (*it)->setTopic(true);
                         // break;
                     case 'k':
-                        if (parameters.size() >= 3)
-                            (*it)->setPassword(parameters[2]);
-                        break;
+                        (*it)->setPassword(parameters[2]);
+                        break ;
                     case 'o':
-                        if (parameters.size() >= 3)
-                            (*it)->addOperator(parameters[2]);
-                        break;
+                        (*it)->addOperator(parameters[2]);
+                        break ;
                     case 'l':
-                        if (parameters.size() >= 3)
-                            (*it)->setUserLimit(atoi(parameters[2].c_str()));
-                        break;
+                        (*it)->setUserLimit(atoi(parameters[2].c_str()));
+                        break ;
                     default:
-                        break;
+                        break ;
                 }
                 (*it)->setMode(parameters[1]);
                 std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
                 send(user->getSocket(), response.c_str(), response.length(), 0);
-                return;
+                return ;
             }
         }
 	else
@@ -83,24 +80,21 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
                 {
                     case 'i':
                         (*it)->setInviteOnly(false);
-                        break;
+                        break ;
                     // case 't':
                     //     (*it)->setTopic(true);
-                        // break;
+                        // break ;
                     case 'k':
-                        if (parameters.size() >= 3)
-                            (*it)->setPassword(parameters[2]);
-                        break;
+                        (*it)->setPassword(parameters[2]);
+                        break ;
                     case 'o':
-                        if (parameters.size() >= 3)
-                            (*it)->addOperator(parameters[2]);
-                        break;
+                        (*it)->addOperator(parameters[2]);
+                        break ;
                     case 'l':
-                        if (parameters.size() >= 3)
-                            (*it)->setUserLimit(atoi(parameters[2].c_str()));
-                        break;
+                        (*it)->setUserLimit(-1);
+                        break ;
                     default:
-                        break;
+                        break ;
                 }
                 (*it)->unsetMode(parameters[1]);
                 std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
@@ -154,7 +148,7 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
         {
             std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
             send(user->getSocket(), response.c_str(), response.length(), 0);
-            return;
+            return ;
         }
     }
 }

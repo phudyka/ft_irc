@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 15:16:41 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:29:23 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ class	Channel
 {
 private:
     enum	MaskSetType
-    {
-        BAN_SET,
+    {        BAN_SET,
         EXCEPTION_SET,
         INVITATION_SET
     };
@@ -65,6 +64,7 @@ public:
 	void	setPassword(const std::string& newPass);
 	void	addOperator(const std::string& operatorName);
 	void	setUserLimit(int limit);
+	int		getUserLimit();
     std::string getOperator();
     std::string getListInstring();
     std::vector<User*>	getUsers();

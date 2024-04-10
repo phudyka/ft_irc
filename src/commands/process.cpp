@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/09 14:10:40 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 16:37:23 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void Command::processPing(User *user)
     } 
 }
 
-void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
+void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
 {
     std::string channelName = parameters[0];
     channelName = extractParameter(channelName, "#");
@@ -166,7 +166,7 @@ void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
         send(user->getSocket(), response.c_str(), response.length(), 0);
         return;
     }
-
+	
     std::vector<Channel*>::iterator it;
     for (it = channels.begin(); it != channels.end(); ++it)
     {
@@ -178,9 +178,15 @@ void Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
                 send(user->getSocket(), response.c_str(), response.length(), 0);
                 return;
             }
-
+			// Check la limite des users
+			size_t	userLimit = (*it)->getUserLimit();
+            if (userLimit != static_cast<size_t>(-1) && (*it)->getUsers().size() >= userLimit)
+			{
+                std::string response = ERR_CHANNELISFULL(user->getNickname(), channelName);
+                send(user->getSocket(), response.c_str(), response.length(), 0);
+                return ;
+            }
             // Ajouter l'utilisateur au canal
-            
             if ((*it)->addUser(user, user->getMode()) == true)
             {
                 user->setJoinedChannels(*it);
