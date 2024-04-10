@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 08:53:24 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 14:30:05 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ private:
 	void	processKick(User *user, std::vector<Channel*> &channel, std::vector<User*> &users);
 	void	processInvite(User *user, std::vector<Channel*> &channels, std::vector<User*> &users);
 	void	processTopic(User *user, std::vector<Channel*> &channels);
-	void	processChannelMode(User *user, std::vector<Channel*> &channels);
     void	parseIRCMessage(const std::string& command);
     std::string extractParameter(const std::string& command, const std::string& prefix);
     std::vector<Channel *>::iterator    searchChannelName(std::string channelName, std::vector<Channel*> &channel);
@@ -56,6 +55,9 @@ private:
     bool    isValidNick(const std::string &nick);
     bool    isAlreadyUse(const std::string &nick, std::vector<User*> &users);
     void    channelMode(User *user, std::vector<Channel*> &channel);
-	void	userMode(User *user, std::vector<Channel *> &channels);
+	void	processUserMode(User *user, std::vector<Channel *> &channels);
+	void	processChannelMode(User *user, std::vector<Channel*> &channels);
+	void	addMode(User *user, Channel *channel, const std::string &modeString);
+	void	removeMode(User *user, Channel *channel, const std::string &modeString);
 };
 #endif // COMMAND_HPP

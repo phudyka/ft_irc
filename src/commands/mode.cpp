@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 10:17:58 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 14:29:31 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ std::vector<Channel*>::iterator     Command::searchChannelName(std::string chann
     return channel.end();
 }
 
-void	Command::channelMode(User *user, std::vector<Channel*> &channel)
+void	Command::processChannelMode(User *user, std::vector<Channel*> &channel)
 {
     std::string	channelName = parameters[0].substr(1);
     if (parameters.size() >= 2)
@@ -82,40 +82,7 @@ void	Command::channelMode(User *user, std::vector<Channel*> &channel)
     }
 }
 
-// void	Command::channelMode(User *user, std::vector<Channel*> &channel)
-// {
-//     std::string channelName = parameters[0].substr(1);
-//     if (parameters.size() > 1)
-//     {
-//         if (!parameters[1].find("+i") || !parameters[1].find("+t") || !parameters[1].find("+k")
-//             || !parameters[1].find("+o") || !parameters[1].find("+l"))
-//         {
-//             std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
-//             if (it != channel.end() && (*it)->getOperator() == user->getNickname())
-//             {
-//                     (*it)->setMode(parameters[1]);
-//                     std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
-//                     send(user->getSocket(), response.c_str(), response.length(), 0);
-//                     return;
-//             }
-//         }
-//     }     
-//     else
-//     {
-//         std::vector<Channel*>::iterator it = channel.begin();
-//         for (; it != channel.end(); it++)
-//         {
-//             if ((*it)->getName() == channelName)
-//             {
-//                 std::string response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
-//                 send(user->getSocket(), response.c_str(), response.length(), 0);
-//                 return ;
-//             }
-//         }
-//     }
-// }
-
-void	Command::userMode(User *user, std::vector<Channel *> &channels)
+void	Command::processUserMode(User *user, std::vector<Channel *> &channels)
 {
     (void)channels;
     if (parameters[1].empty())
@@ -147,7 +114,7 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel, std::vecto
             isSet = true;
     }
     if (parameters[0].find("#") != std::string::npos)
-        channelMode(user, channel);
+        processChannelMode(user, channel);
     else if (isSet == true)
-        userMode(user, channel);
+        processUserMode(user, channel);
 }
