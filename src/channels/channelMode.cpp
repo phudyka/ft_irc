@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/09 16:31:29 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 08:14:46 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,11 @@ void Command::processInvite(User *user, std::vector<Channel*> &channels, std::ve
         user->sendMessage(ERR_NOSUCHNICK(user->getNickname(), userToInviteNick));
         return;
     }
-    
-    std::string response = RPL_INVITING(user_id(user->getNickname(), user->getUsername()), userToInviteNick, channelName);
+    std::string response = RPL_INVITING(user_id(user->getNickname(), user->getUsername()), user->getNickname(), channelName, userToInviteNick);
     user->sendMessage(response);
     
+    (*it)->invite(*itu);
+
     response = RPL_INVITE(user_id(user->getNickname(), user->getUsername()), user->getNickname(), (*itu)->getNickname(), channelName);
     send((*itu)->getSocket(), response.c_str(), response.length(), 0);
     std::cout << "FIN" << std::endl;

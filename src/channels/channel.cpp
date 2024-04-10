@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 10:17:10 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 08:22:36 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ bool	Channel::addUser(User* user, const std::string &mode)
             for (; it != _invitations.end(); it++)
             {
                 if (*it == user->getNickname())
-                    _invitations.erase(it);
+                    break;
             }
+            _invitations.erase(it);
             return true;
         }
     }
