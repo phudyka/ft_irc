@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 08:22:36 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 10:10:39 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,14 +103,15 @@ bool	Channel::isInChannel(const std::string& nickname, Channel* channel)
     return (false);
 }
 
-void	Channel::kickUser(const std::string& targetNickname, const std::string& reason)
+void	Channel::kickUser(User *user, const std::string& targetNickname, const std::string& reason)
 {
     for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
     {
         if ((*it)->getNickname() == targetNickname)
         {
+            std::string response = RPL_KICK(user_id(user->getNickname(), user->getUsername()), _name, targetNickname, reason);
+            send((*it)->getSocket(), response.c_str(), response.length(), 0);
             _users.erase(it);
-            (*it)->sendMessage("You have been kicked from #" + _name + " by " + reason);
             break;
         }
     }

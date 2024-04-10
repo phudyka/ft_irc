@@ -6,41 +6,53 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 08:14:46 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 10:00:54 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/channel.hpp"
 
-void	Command::processKick(User *user)
+void	Command::processKick(User *user, std::vector<Channel*> &channel, std::vector<User*> &users)
 {
+    (void)users;
     if (parameters.size() < 2)
     {
         user->sendMessage(ERR_NEEDMOREPARAMS(user->getNickname(), "KICK"));
         return ;
     }
-    if (!user->isOperator())
-    {
-        user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));
-        return ;
-    }
-
-    Channel	*channel = NULL;
-    std::string	channelName = parameters[0].substr(0, parameters[0].length()-2);
+    std::string	channelName = parameters[0].substr(1);
     std::string	target = parameters[1];
-    if (!channel)
+
+    std::vector<Channel*>::iterator it = channel.begin();
+    bool    chanExist = false;
+    for (; it != channel.end(); it++)
+    {
+        if ((*it)->getName() == channelName)
+        {
+            chanExist = true;
+            break;
+        }
+    }
+    if (chanExist == false)
     {
         user->sendMessage(ERR_NOSUCHCHANNEL(user->getNickname(), channelName));
         return ;
     }
-    if (!channel->isInChannel(target, channel))
+    std::string operatorName = (*it)->getOperator();
+    if (operatorName != user->getNickname())
+    {
+        user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));
+        return;
+    }
+
+    if ((*it)->isInChannel(target, *it) == false)
     {
         user->sendMessage(ERR_USERNOTINCHANNEL(user->getNickname(), target, channelName));
         return ;
     }
-    channel->kickUser(target, "Kicked by " + user->getNickname());
-    std::string response = RPL_KICK(user->getNickname(), channelName, target, "Kicked by " + user->getNickname());
-    channel->sendToAll(response);
+    (*it)->kickUser(user, target, "");
+    std::string response = RPL_KICK(user_id(user->getNickname(), user->getUsername()), channelName, target, "");
+    (*it)->sendToAll(response);
 }
 
 void Command::processInvite(User *user, std::vector<Channel*> &channels, std::vector<User*> &users)
@@ -70,7 +82,6 @@ void Command::processInvite(User *user, std::vector<Channel*> &channels, std::ve
     }
     
     std::string operatorName = (*it)->getOperator();
-    std::cout << "operatorname = " << operatorName << std::endl;
     if (operatorName != user->getNickname())
     {
         user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));

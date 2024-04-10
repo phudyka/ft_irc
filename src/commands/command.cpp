@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/09 15:28:19 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 08:53:12 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     else if (commandName.find("LIST") != std::string::npos)
         processList(user, channel);
 	else if (commandName.find("KICK") != std::string::npos)
-		processKick(user);
+		processKick(user, channel, _users);
 	else if (commandName.find("INVITE") != std::string::npos)
 		processInvite(user, channel, _users);
 	// else if (commandName.find("TOPIC") != std::string::npos)

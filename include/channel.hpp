@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/08 10:17:18 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 10:10:46 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ public:
     bool	isBanned(const User* u) const;
     bool	isInvited(const User* user) const;
 	bool	isInChannel(const std::string& nickname, Channel* channel);
-	void	kickUser(const std::string& targetNickname, const std::string& reason);
-    void	send(const std::string& msg, User* origin, bool useReceipt) const;
+	void	kickUser(User *user, const std::string& targetNickname, const std::string& reason);
     void	removeUser(const std::string& username);
     const std::string getMode();
 	void	sendToAll(const std::string& message);
