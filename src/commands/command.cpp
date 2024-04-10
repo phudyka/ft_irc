@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 08:53:12 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/10 10:20:05 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,8 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 		processKick(user, channel, _users);
 	else if (commandName.find("INVITE") != std::string::npos)
 		processInvite(user, channel, _users);
-	// else if (commandName.find("TOPIC") != std::string::npos)
-	// 	processTopic(user, channel);
+	else if (commandName.find("TOPIC") != std::string::npos)
+		processTopic(user, channel);
 	// else if (commandName.find("MODE") != std::string::npos)
 	// 	processMode(user, channel);
 	// else if (commandName.find("KILL") != std::string::npos)
