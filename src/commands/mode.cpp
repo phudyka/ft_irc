@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 15:20:06 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:26:56 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,23 +113,44 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
 		
 }
 
-void	Command::processChannelMode(User *user, std::vector<Channel*> &channel)
+void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
 {
+	bool	chanExist = false;
     std::string	channelName = parameters[0].substr(1);
+	std::vector<Channel*>::iterator it = channels.begin();
+    for (; it < channels.end(); it++)
+    {
+        if ((*it)->getName() == channelName)
+        {
+            chanExist = true;
+            break ;
+        }
+    }
+    if (chanExist == false)
+    {
+        user->sendMessage(ERR_NOSUCHCHANNEL(user->getNickname(), channelName));
+        return ;
+    }
+	std::string operatorName = (*it)->getOperator();
+    if (operatorName != user->getNickname())
+    {
+        user->sendMessage(ERR_CHANOPRIVSNEEDED(user->getNickname(), channelName));
+        return;
+    }
     if (parameters.size() >= 2 && parameters[1].length() == 4)
     {
         if (parameters[1].find("+") != std::string::npos)
-			addMode(user, channel, channelName);
+			addMode(user, channels, channelName);
 		else if (parameters[1].find("-") != std::string::npos)
-			removeMode(user, channel, channelName);
+			removeMode(user, channels, channelName);
 		else
 			user->sendMessage(ERR_INVALIDMODEPARAM(user->getNickname(), channelName, std::string(1, parameters[1][1]), ""));
     }
     else
     {
         channelName = channelName.substr(0, channelName.length() -2);
-        std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
-        if (it != channel.end())
+        std::vector<Channel*>::iterator it = searchChannelName(channelName, channels);
+        if (it != channels.end())
         {
             std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
             send(user->getSocket(), response.c_str(), response.length(), 0);
