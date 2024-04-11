@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/09 14:55:08 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/11 11:20:58 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,23 +182,42 @@ void ft_irc::clientData(size_t index)
 {
     char buff[4096];
     int len = recv(_pollfds[index].fd, buff, sizeof(buff), 0);
-	Command	commandHandler;
+    Command commandHandler;
 
     if (len <= 0)
         removeClient(index);
     else
     {
         buff[len] = '\0';
-        int UserSocket = _pollfds[index].fd;
-        std::string message = buff;
-
-        for (size_t i = 0; i < _clients.size(); i++)
+        std::string receivedData(buff);
+        User* client = NULL;
+        for (size_t i = 0; i < _clients.size(); ++i)
         {
-            if (_clients[i]->getSocket() == UserSocket)
-                commandHandler.masterCommand(_clients[i], message, _channels, _pass, _clients);
+            if (_clients[i]->getSocket() == _pollfds[index].fd)
+            {
+                client = _clients[i];
+                break;
+            }
+        }
+        if (client)
+        {
+            if (receivedData.find("\r\n") != std::string::npos)
+            {
+                if (!client->_buffer.empty())
+                {
+                    receivedData = client->_buffer + receivedData;
+                    client->_buffer.clear();
+                }
+                commandHandler.masterCommand(client, receivedData, _channels, _pass, _clients);
+            }
+            else
+            {
+                client->_buffer += receivedData;
+            }
         }
     }
 }
+
 
 void ft_irc::removeClient(size_t index)
 {

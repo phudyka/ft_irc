@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 16:46:20 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/11 12:45:26 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,12 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
 void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
 {
 	bool	chanExist = false;
-    std::string	channelName = parameters[0].substr(1);
+    std::string	channelName;
+    if (parameters[0].find("\r\n") != std::string::npos)
+        channelName = parameters[0].substr(1, parameters[0].length()-3);
+    else
+        channelName = parameters[0].substr(1);
+    std::cout << channelName << "yo" << std::endl;
 	std::vector<Channel*>::iterator it = channels.begin();
     for (; it < channels.end(); it++)
     {

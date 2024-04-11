@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/09 13:41:17 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/11 11:37:08 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,21 @@ void	User::setJoinedChannels(Channel *channel)
 {
     this->_listChannel.push_back(channel);
     this->_joinedChannels++;
+}
+
+void    User::removeListChannels(Channel *channel)
+{
+    std::vector<Channel*>::iterator it = _listChannel.begin();
+    for (; it != _listChannel.end(); it++)
+    {
+        if ((*it)->getName() == channel->getName())
+        {
+            _listChannel.erase(it);
+            this->_joinedChannels--;
+            break;
+        }
+    }
+    
 }
 
 void User::sendMessage(const std::string& message) const

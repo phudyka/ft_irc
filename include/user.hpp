@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/09 13:41:43 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/11 11:31:23 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,16 @@ public:
     void    setNickname(const std::string &nickname);
     void    setMode(const std::string &mode);
     void	setJoinedChannels(Channel *channel);
+    void    removeListChannels(Channel *channel);
     void    setPassword();
     void    setAuthentified();
 	void	setOperator();
     size_t	getJoinedChannels() const;
-	void	setUserName(const std::string& user);
     void	setIP(const std::string& ip);
     void    sendMessage(const std::string& message) const;
     UserMode&	umode();
     std::string temp_USER;
+    std::string _buffer;
 };
 
 #endif

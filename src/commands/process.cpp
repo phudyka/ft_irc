@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 16:37:23 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/11 11:37:49 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,13 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
         channelName = parameters[0].substr(1);
         if (trailing.empty() == true)
             channelName = parameters[0].substr(1, channelName.length() -2);
-        std::cout << channelName << "test" << std::endl;
         std::vector<Channel *>::iterator it = channel.begin();
         for (; it != channel.end(); it++)
         {
             if ((*it)->getName() == channelName)
             {
                 (*it)->removeUser(user->getNickname());
+                user->removeListChannels(*it);
                 std::string reason = "Ciao";
                 std::string response = RPL_PART(user_id(user->getNickname(), user->getUsername()), channelName, reason);
                 send(user->getSocket(), response.c_str(), response.length(), 0);
