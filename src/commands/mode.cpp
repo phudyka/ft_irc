@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/11 12:45:26 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/11 17:40:42 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,20 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                     // case 't':
                     //     (*it)->setTopic(true);
                         // break;
-                    case 'k':
-                        (*it)->setPassword(parameters[2]);
-                        break ;
-                    case 'o':
-                        (*it)->addOperator(parameters[2]);
-                        break ;
-                    case 'l':
-                        (*it)->setUserLimit(atoi(parameters[2].c_str()));
-                        break ;
+                    // case 'k':
+                        // (*it)->setPassword(parameters[2]);
+                        // break ;
+                    // case 'o':
+                    //     (*it)->addOperator(parameters[2]);
+                    //     break ;
+                    // case 'l':
+                    //     (*it)->setUserLimit(atoi(parameters[2].c_str()));
+                    //     break ;
                     default:
                         break ;
                 }
                 (*it)->setMode(parameters[1]);
-                std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+                std::string	response = RPL_CHANNELMODEIS(user_id(user->getNickname(), user->getUsername()), user->getNickname(), channelName, (*it)->getMode());
                 send(user->getSocket(), response.c_str(), response.length(), 0);
                 return ;
             }
@@ -84,20 +84,20 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
                     // case 't':
                     //     (*it)->setTopic(true);
                         // break ;
-                    case 'k':
-                        (*it)->setPassword(parameters[2]);
+                    // case 'k':
+                    //     (*it)->setPassword(parameters[2]);
+                    //     break ;
+                    // case 'o':
+                    //     (*it)->addOperator(parameters[2]);
                         break ;
-                    case 'o':
-                        (*it)->addOperator(parameters[2]);
-                        break ;
-                    case 'l':
-                        (*it)->setUserLimit(-1);
+                    // case 'l':
+                    //     (*it)->setUserLimit(-1);
                         break ;
                     default:
                         break ;
                 }
                 (*it)->unsetMode(parameters[1]);
-                std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+                std::string	response = RPL_CHANNELMODEIS(user_id(user->getNickname(), user->getUsername()), user->getNickname(), channelName, (*it)->getMode());
                 send(user->getSocket(), response.c_str(), response.length(), 0);
                 return;
             }
@@ -147,11 +147,11 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
     }
     else
     {
-        channelName = channelName.substr(0, channelName.length() -2);
+        //hannelName = channelName.substr(0, channelName.length() -2);
         std::vector<Channel*>::iterator it = searchChannelName(channelName, channels);
         if (it != channels.end())
         {
-            std::string	response = RPL_CHANNELMODEIS(user->getNickname(), channelName, (*it)->getMode());
+            std::string	response = RPL_CHANNELMODEIS(user_id(user->getNickname(), user->getUsername()), user->getNickname(), channelName, (*it)->getMode());
             send(user->getSocket(), response.c_str(), response.length(), 0);
             return ;
         }
