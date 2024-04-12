@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/11 11:37:49 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/12 09:06:11 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	Command::processPass(User *user, const std::string& serverPass)
 {
 	int			socket = user->getSocket();
-	std::string	clientPass = parameters[0].substr(0, parameters[0].length() - 2);
+	std::string	clientPass = parameters[0].substr(0);
 	std::string	wrongPass = ERR_PASSWDMISMATCH(user->getNickname());
 
 	if (clientPass != serverPass)
@@ -53,7 +53,7 @@ bool    Command::isAlreadyUse(const std::string &nick, std::vector<User*> &users
 
 void	Command::processNick(User *user, std::vector<User*> &users)
 {
-    std::string newNickname = parameters[0].substr(0, parameters[0].length() - 2);
+    std::string newNickname = parameters[0].substr(0);
     std::string response;
     if (!isValidNick(newNickname))
         response = ERR_ERRONEUSNICKNAME(user->getNickname(), newNickname);
@@ -107,7 +107,7 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
         std::string channelName;
         channelName = parameters[0].substr(1);
         if (trailing.empty() == true)
-            channelName = parameters[0].substr(1, channelName.length() -2);
+            channelName = parameters[0].substr(1);
         std::vector<Channel *>::iterator it = channel.begin();
         for (; it != channel.end(); it++)
         {
@@ -157,8 +157,7 @@ void Command::processPing(User *user)
 
 void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
 {
-    std::string channelName = parameters[0];
-    channelName = extractParameter(channelName, "#");
+    std::string channelName = parameters[0].substr(1);
 
     if (channelName.empty())
     {
@@ -343,7 +342,7 @@ void	Command::processKill(User *user, std::vector<User*> &_users)
 
 void	Command::processWhoIs(User *user, std::vector<Channel*> &channels, std::vector<User*> &users)
 {
-    std::string target = parameters[0].substr(0, parameters[0].length() -2);
+    std::string target = parameters[0].substr(0);
     if (target[0] == '#')
     {
         std::string channelName = target.substr(1);

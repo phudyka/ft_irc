@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 14:16:27 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/12 08:53:19 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void Command::processInvite(User *user, std::vector<Channel*> &channels, std::ve
         return;
     }
     bool    chanExist = false;
-    std::string channelName = parameters[1].substr(0, parameters[1].length()-2);
+    std::string channelName = parameters[1].substr(0);
     std::vector<Channel*>::iterator it = channels.begin();
     for (; it < channels.end(); it++)
     {

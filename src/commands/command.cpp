@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 11:37:02 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/12 08:47:03 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,12 @@ void Command::parseIRCMessage(const std::string& command)
                     break;
                 parameters.push_back(param);
             }
-            paramsStart = command.find(':');
+            paramsStart = command.find_last_of(':');
             if (paramsStart != std::string::npos)
             {
                 trailing = command.substr(paramsStart + 1);
-                if (!trailing.empty() && trailing[0] == ':') {
+                if (!trailing.empty() && trailing[0] == ':')
+                {
                     trailing = trailing.substr(1);
                 }
             }
@@ -61,7 +62,20 @@ void Command::parseIRCMessage(const std::string& command)
     }
     else
         commandName = command;
+
+    if (trailing.empty())
+    {
+        for (size_t i = 0; i < parameters.size(); ++i)
+        {
+            if (parameters[i].find("\r\n") != std::string::npos)
+            {
+                parameters[i].erase(parameters[i].find("\r\n"));
+                break;
+            }
+        }
+    }
 }
+
 
 void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass, std::vector<User*> &_users)
 {

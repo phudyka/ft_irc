@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/11 17:40:42 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/12 08:50:52 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                     //     (*it)->setTopic(true);
                         // break;
                     // case 'k':
-                        // (*it)->setPassword(parameters[2]);
-                        // break ;
+                    //     (*it)->setPassword(parameters[2]);
+                    //     break ;
                     // case 'o':
                     //     (*it)->addOperator(parameters[2]);
                     //     break ;
@@ -83,7 +83,7 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
                         break ;
                     // case 't':
                     //     (*it)->setTopic(true);
-                        // break ;
+                    //     break ;
                     // case 'k':
                     //     (*it)->setPassword(parameters[2]);
                     //     break ;
@@ -111,11 +111,8 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
 {
 	bool	chanExist = false;
     std::string	channelName;
-    if (parameters[0].find("\r\n") != std::string::npos)
-        channelName = parameters[0].substr(1, parameters[0].length()-3);
-    else
-        channelName = parameters[0].substr(1);
-    std::cout << channelName << "yo" << std::endl;
+    channelName = parameters[0].substr(1);
+        
 	std::vector<Channel*>::iterator it = channels.begin();
     for (; it < channels.end(); it++)
     {
@@ -136,7 +133,7 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
         user->sendMessage(ERR_CHANOPRIVSNEEDED(user->getNickname(), channelName));
         return;
     }
-    if (parameters.size() >= 2 && parameters[1].length() == 4)
+    if (parameters.size() >= 2)
     {
         if (parameters[1].find("+") != std::string::npos)
 			addMode(user, channels, channelName);
@@ -147,7 +144,6 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
     }
     else
     {
-        //hannelName = channelName.substr(0, channelName.length() -2);
         std::vector<Channel*>::iterator it = searchChannelName(channelName, channels);
         if (it != channels.end())
         {
@@ -165,7 +161,7 @@ void	Command::processUserMode(User *user, std::vector<Channel *> &channels)
         return;
 	else
     {
-        user->setMode(parameters[1].substr(0, parameters[1].length() -2));
+        user->setMode(parameters[1].substr(0));
         std::string	response = MODE_USERMSG(user->getNickname(), user->getMode());
         send(user->getSocket(), response.c_str(), response.length(), 0);
         response = RPL_UMODEIS(user->getNickname(), user->getMode());
