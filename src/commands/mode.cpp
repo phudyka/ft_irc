@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 08:50:52 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:52:57 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ std::vector<Channel*>::iterator     Command::searchChannelName(std::string chann
     return channel.end();
 }
 
-void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string channelName)
+void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string channelName, std::vector<User*> &users)
 {
     char	modeFlag = parameters[1][1];
 	if (parameters[1].find("+i") != std::string::npos || parameters[1].find("+t") != std::string::npos || 
@@ -34,7 +34,7 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
             parameters[1].find("+l") != std::string::npos)
         {
             std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
-            if (it != channel.end() && (*it)->getOperator() == user->getNickname())
+            if (it != channel.end() && (*it)->getOperator(user->getNickname()) == user->getNickname())
             {
                 switch (modeFlag)
                 {
@@ -43,16 +43,35 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                         break ;
                     // case 't':
                     //     (*it)->setTopic(true);
-                        // break;
-                    // case 'k':
-                    //     (*it)->setPassword(parameters[2]);
-                    //     break ;
-                    // case 'o':
-                    //     (*it)->addOperator(parameters[2]);
-                    //     break ;
-                    // case 'l':
-                    //     (*it)->setUserLimit(atoi(parameters[2].c_str()));
-                    //     break ;
+                    //     break;
+                    case 'k':
+                        if (parameters.size() == 3)
+                            (*it)->setPassword(parameters[2]);
+                        else
+                            return;
+                        break ;
+                    case 'o':
+                        if (parameters.size() != 3 || (*it)->addOperator(parameters[2]) == false)
+                            return;
+                        else
+                        {
+                            std::string response = RPL_YOUREOPER(parameters[2]);
+                            std::vector<User*>::iterator itu = users.begin();
+                            for (; itu != users.end(); itu++)
+                            {
+                                if ((*itu)->getNickname() == parameters[2])
+                                    break;
+                            }
+                            std::cout << (*it)->getListInstring() << std::endl;
+                            send((*itu)->getSocket(), response.c_str(), response.length(), 0);
+                        }
+                        break ;
+                    case 'l':
+                        if (parameters.size() == 3)
+                            (*it)->setUserLimit(atoi(parameters[2].c_str()));
+                        else
+                            return;
+                        break ;
                     default:
                         break ;
                 }
@@ -74,7 +93,7 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
             parameters[1].find("-l") != std::string::npos)
         {
             std::vector<Channel*>::iterator it = searchChannelName(channelName, channel);
-            if (it != channel.end() && (*it)->getOperator() == user->getNickname())
+            if (it != channel.end() && (*it)->getOperator(user->getNickname()) == user->getNickname())
             {
                 switch (modeFlag)
                 {
@@ -107,7 +126,7 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
 		
 }
 
-void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
+void	Command::processChannelMode(User *user, std::vector<Channel*> &channels, std::vector<User*> &users)
 {
 	bool	chanExist = false;
     std::string	channelName;
@@ -127,8 +146,8 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
         user->sendMessage(ERR_NOSUCHCHANNEL(user->getNickname(), channelName));
         return ;
     }
-	std::string operatorName = (*it)->getOperator();
-    if (operatorName != user->getNickname())
+	std::string operatorName = (*it)->getOperator(user->getNickname());
+    if (operatorName != user->getNickname() && parameters.size() > 1)
     {
         user->sendMessage(ERR_CHANOPRIVSNEEDED(user->getNickname(), channelName));
         return;
@@ -136,7 +155,7 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels)
     if (parameters.size() >= 2)
     {
         if (parameters[1].find("+") != std::string::npos)
-			addMode(user, channels, channelName);
+			addMode(user, channels, channelName, users);
 		else if (parameters[1].find("-") != std::string::npos)
 			removeMode(user, channels, channelName);
 		else
@@ -186,7 +205,7 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel, std::vecto
             isSet = true;
     }
     if (parameters[0].find("#") != std::string::npos)
-        processChannelMode(user, channel);
+        processChannelMode(user, channel, users);
     else if (isSet == true)
         processUserMode(user, channel);
 }

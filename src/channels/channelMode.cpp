@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 08:53:19 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:53:14 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	Command::processKick(User *user, std::vector<Channel*> &channel, std::vecto
         user->sendMessage(ERR_NOSUCHCHANNEL(user->getNickname(), channelName));
         return ;
     }
-    std::string operatorName = (*it)->getOperator();
+    std::string operatorName = (*it)->getOperator(user->getNickname());
     if (operatorName != user->getNickname())
     {
         user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));
@@ -79,7 +79,7 @@ void Command::processInvite(User *user, std::vector<Channel*> &channels, std::ve
         return ;
     }
     
-    std::string operatorName = (*it)->getOperator();
+    std::string operatorName = (*it)->getOperator(user->getNickname());
     if (operatorName != user->getNickname())
     {
         user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));
@@ -134,7 +134,7 @@ void	Command::processTopic(User *user, std::vector<Channel*> &channels)
         user->sendMessage(ERR_NOSUCHCHANNEL(user->getNickname(), channelName));
         return ;
     }
-    std::string operatorName = (*it)->getOperator();
+    std::string operatorName = (*it)->getOperator(user->getNickname());
     if (operatorName != user->getNickname())
     {
         user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));

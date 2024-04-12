@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 08:47:03 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:06:09 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 	else if (commandName.find("TOPIC") != std::string::npos)
 		processTopic(user, channel);
 	else if (commandName.find("MODE") != std::string::npos)
-		processChannelMode(user, channel);
+		processChannelMode(user, channel, _users);
 	// else if (commandName.find("KILL") != std::string::npos)
 	// 	processKill(user, _users);
 	else if (commandName.find("QUIT") != std::string::npos)

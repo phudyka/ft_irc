@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 15:01:08 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:01:36 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ private:
     bool    isAlreadyUse(const std::string &nick, std::vector<User*> &users);
     void    channelMode(User *user, std::vector<Channel*> &channel);
 	void	processUserMode(User *user, std::vector<Channel *> &channels);
-	void	processChannelMode(User *user, std::vector<Channel*> &channels);
-	void	addMode(User *user, std::vector<Channel*> &channel, std::string channelName);
+	void	processChannelMode(User *user, std::vector<Channel*> &channels, std::vector<User*> &users);
+	void	addMode(User *user, std::vector<Channel*> &channel, std::string channelName, std::vector<User*> &users);
 	void	removeMode(User *user, std::vector<Channel*> &channel, std::string channelName);
 };
 #endif // COMMAND_HPP

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 16:33:54 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:51:49 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ std::string Channel::getListInstring()
     {
         if (_modeUser.find((*it)->getNickname()) != _modeUser.end())
         {
-
+            std::cout << "Mode de l'utilisateur " << (*it)->getNickname() << " : " << _modeUser[(*it)->getNickname()] << std::endl;
             if (_modeUser[(*it)->getNickname()] != "+o")
                 listUsers += (*it)->getNickname() + " ";
             else
@@ -209,12 +209,12 @@ void Channel::unsetMode(const std::string &mode)
     }
 }
 
-std::string Channel::getOperator()
+std::string Channel::getOperator(const std::string &nick)
 {
     std::map<std::string, std::string>::iterator it = _modeUser.begin();
     for (; it != _modeUser.end(); it++)
     {
-        if (it->second == "+o")
+        if (it->first == nick && it->second == "+o")
             return it->first;
     }
     return ("");
@@ -235,9 +235,26 @@ void	Channel::setPassword(const std::string& newPass)
 	_password = newPass;
 }
 
-void	Channel::addOperator(const std::string& operatorName)
+bool    Channel::checkPassword(const std::string &pass)
 {
-	_operators.push_back(operatorName);
+    if (pass == _password)
+        return true;
+    return false;
+}
+
+bool	Channel::addOperator(const std::string& operatorName)
+{
+    std::cout << "add Op" << std::endl;
+	std::map<std::string, std::string>::iterator it = _modeUser.begin();
+    for (; it != _modeUser.end(); it++)
+    {
+        if (it->first == operatorName)
+        {
+            it->second = "+o";
+            return true;
+        }
+    }
+    return false;
 }
 
 void	Channel::setUserLimit(int limit)

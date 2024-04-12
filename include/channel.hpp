@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/10 16:29:23 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/12 11:50:58 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,11 @@ public:
 	void	setInviteOnly(bool value);
 	void	setTopic(const std::string& topic);
 	void	setPassword(const std::string& newPass);
-	void	addOperator(const std::string& operatorName);
+    bool    checkPassword(const std::string &pass);
+	bool	addOperator(const std::string& operatorName);
 	void	setUserLimit(int limit);
 	int		getUserLimit();
-    std::string getOperator();
+    std::string getOperator(const std::string &nick);
     std::string getListInstring();
     std::vector<User*>	getUsers();
     size_t	count() const;
