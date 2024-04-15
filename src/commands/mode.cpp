@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 11:52:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/15 08:08:32 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                                 if ((*itu)->getNickname() == parameters[2])
                                     break;
                             }
-                            std::cout << (*it)->getListInstring() << std::endl;
                             send((*itu)->getSocket(), response.c_str(), response.length(), 0);
                         }
                         break ;

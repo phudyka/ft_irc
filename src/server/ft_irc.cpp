@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/11 11:20:58 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/15 09:37:55 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,12 @@ bool    ft_irc::connectClient(int socket, User *user)
     char client[256];
     len = recv(socket, client, sizeof(client), 0);
     client[len] = '\0';
+    std::string buf = client;
+    if (buf.find("\r\n") == std::string::npos)
+    {
+        user->_buffer += client;
+        return true;
+    }
     std::vector<std::string> infoClient = split(client, "\r\n");
     std::vector<std::string>::iterator it = infoClient.begin();
     for (; it != infoClient.end(); it++)
@@ -201,23 +207,19 @@ void ft_irc::clientData(size_t index)
         }
         if (client)
         {
-            if (receivedData.find("\r\n") != std::string::npos)
+            client->_buffer += receivedData;
+            size_t pos;
+            while ((pos = client->_buffer.find("\r\n")) != std::string::npos)
             {
-                if (!client->_buffer.empty())
-                {
-                    receivedData = client->_buffer + receivedData;
-                    client->_buffer.clear();
-                }
-                commandHandler.masterCommand(client, receivedData, _channels, _pass, _clients);
-            }
-            else
-            {
-                client->_buffer += receivedData;
+                std::string fullCommand = client->_buffer.substr(0, pos + 2);
+
+                commandHandler.masterCommand(client, fullCommand, _channels, _pass, _clients);
+
+                client->_buffer.erase(0, pos + 2);
             }
         }
     }
 }
-
 
 void ft_irc::removeClient(size_t index)
 {
