@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:13:29 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:58:57 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ public:
     bool    getStTopic();
     void    enablePass(bool value);
     bool    getStPass();
+    std::string getTopic();
     std::string getOperator(const std::string &nick);
     std::string getListInstring();
     std::vector<User*>	getUsers();

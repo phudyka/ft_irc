@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:15:14 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:58:41 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,11 @@ void    Channel::enableTopic(bool value)
 bool    Channel::getStTopic()
 {
     return _topicOn;
+}
+
+std::string Channel::getTopic()
+{
+    return _topic;
 }
 
 void	Channel::setPassword(const std::string& newPass)

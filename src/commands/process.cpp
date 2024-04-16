@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:18:04 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:59:23 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -366,6 +366,7 @@ void	Command::processWhoIs(User *user, std::vector<Channel*> &channels, std::vec
                 std::string symbol = user->getMode();
                 responses += RPL_NAMREPLY(user->getNickname(), symbol, channelName, list);
                 responses += RPL_ENDOFNAMES(user->getNickname(), channelName);
+                responses += RPL_TOPIC(user->getNickname(), channelName, (*it)->getTopic());
                 send(user->getSocket(), responses.c_str(), responses.length(), 0);
                 return;
             }
