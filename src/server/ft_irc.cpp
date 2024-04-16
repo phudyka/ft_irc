@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/15 09:37:55 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:37:25 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,8 @@ void ft_irc::start()
 {
 	std::cout << YELLOW << "[Welcome to ft_irc]" << RESET << std::endl << std::endl;
 	std::cout << PURPLE << "Waiting for connection..." << RESET << std::endl << std::endl;
-    Channel *newChannel = new Channel("Default");
-    this->_channels.push_back(newChannel);
     _isRunning = true;
-	//displayClients();
+	displayClients();
     handleConnection();
 }
 
@@ -100,7 +98,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                //displayClients();
+                displayClients();
             }
             else if (_pollfds[i].revents & (POLLHUP | POLLERR))
             {
@@ -172,7 +170,6 @@ void ft_irc::newConnection(void)
         {
             close(UserSocket);
             _pollfds.pop_back();
-            delete newUser;
             _clients.pop_back();
         }
     }
@@ -181,7 +178,7 @@ void ft_irc::newConnection(void)
         std::cerr << RED << "Error: [Fail to get username]" << RESET << std::endl;
         close(UserSocket);
     }
-	//displayClients();
+	displayClients();
 }
 
 void ft_irc::clientData(size_t index)

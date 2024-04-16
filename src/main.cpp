@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 06:53:43 by phudyka           #+#    #+#             */
-/*   Updated: 2024/03/27 11:49:32 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:33:21 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ int main(int argc, char **argv)
         std::cout << RED << "Error : [Bad arguments] './ircserv <port> <password>'" << RESET << std::endl;
         return (EXIT_FAILURE);
     }
+    system("leaks ircserv");
     return (EXIT_FAILURE);
 }

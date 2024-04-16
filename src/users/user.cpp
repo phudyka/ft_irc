@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/11 11:37:08 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:31:41 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ User::User(int socket, const std::string &nick, const std::string &user, const s
 
 User::User(const User&) {}
 
-User::~User() {}
+User::~User()
+{
+    delete _umode;
+}
 
 User& User::operator=(const User& other)
 {
