@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 11:51:49 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:15:14 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 Channel::Channel(const std::string &name) : _name(name), _inviteOnly(false), _topic("none"), _userLimit(-1)
 {
     _modeChannel.push_back("+n");
+    _topicOn = false;
+    _passwordOn = false;
 }
 
 Channel::Channel(const Channel&) {}
@@ -230,6 +232,16 @@ void	Channel::setTopic(const std::string& topic)
 	_topic = topic;
 }
 
+void    Channel::enableTopic(bool value)
+{
+    _topicOn = value;
+}
+
+bool    Channel::getStTopic()
+{
+    return _topicOn;
+}
+
 void	Channel::setPassword(const std::string& newPass)
 {
 	_password = newPass;
@@ -240,6 +252,16 @@ bool    Channel::checkPassword(const std::string &pass)
     if (pass == _password)
         return true;
     return false;
+}
+
+void    Channel::enablePass(bool value)
+{
+    _passwordOn = value;
+}
+
+bool    Channel::getStPass()
+{
+    return _passwordOn;
 }
 
 bool	Channel::addOperator(const std::string& operatorName)

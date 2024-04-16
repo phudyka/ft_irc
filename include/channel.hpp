@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 11:50:58 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:13:29 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ private:
     std::map<std::string, std::string> _modeUser; // liste des utilisateurs et leur mode(dans le channel)
 	bool						_inviteOnly;
     std::string					_topic;
+    bool                        _topicOn;
     std::string					_password;
+    bool                        _passwordOn;
     std::vector<std::string>	_operators;
     int							_userLimit;
 
@@ -66,6 +68,10 @@ public:
 	bool	addOperator(const std::string& operatorName);
 	void	setUserLimit(int limit);
 	int		getUserLimit();
+    void    enableTopic(bool value);
+    bool    getStTopic();
+    void    enablePass(bool value);
+    bool    getStPass();
     std::string getOperator(const std::string &nick);
     std::string getListInstring();
     std::vector<User*>	getUsers();

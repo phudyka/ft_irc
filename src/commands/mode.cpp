@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/15 08:08:32 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:16:30 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,15 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                     case 'i':
                         (*it)->setInviteOnly(true);
                         break ;
-                    // case 't':
-                    //     (*it)->setTopic(true);
-                    //     break;
+                    case 't':
+                        (*it)->enableTopic(true);
+                        break;
                     case 'k':
                         if (parameters.size() == 3)
+                        {
                             (*it)->setPassword(parameters[2]);
+                            (*it)->enablePass(true);
+                        }
                         else
                             return;
                         break ;
@@ -63,6 +66,7 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                                     break;
                             }
                             send((*itu)->getSocket(), response.c_str(), response.length(), 0);
+                            return;
                         }
                         break ;
                     case 'l':
@@ -99,17 +103,15 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
                     case 'i':
                         (*it)->setInviteOnly(false);
                         break ;
-                    // case 't':
-                    //     (*it)->setTopic(true);
-                    //     break ;
-                    // case 'k':
-                    //     (*it)->setPassword(parameters[2]);
-                    //     break ;
-                    // case 'o':
-                    //     (*it)->addOperator(parameters[2]);
+                    case 't':
+                        (*it)->enableTopic(false);
                         break ;
-                    // case 'l':
-                    //     (*it)->setUserLimit(-1);
+                    case 'k':
+                        (*it)->setPassword("");
+                        (*it)->enablePass(false);
+                        break ;
+                    case 'l':
+                        (*it)->setUserLimit(-1);
                         break ;
                     default:
                         break ;

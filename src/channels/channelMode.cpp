@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 11:53:14 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:04:03 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void	Command::processTopic(User *user, std::vector<Channel*> &channels)
         return ;
     }
     std::string operatorName = (*it)->getOperator(user->getNickname());
-    if (operatorName != user->getNickname())
+    if (operatorName != user->getNickname() && (*it)->getStTopic() == true)
     {
         user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));
         return;

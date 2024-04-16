@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 10:33:46 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/16 11:18:04 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
             if ((*it)->getMode().find("k") != std::string::npos)
             {
                 std::cout << "premiere condition" << std::endl;
-                if (parameters.size() < 2 || (*it)->checkPassword(parameters[1]) == false)
+                if ((parameters.size() < 2 || (*it)->checkPassword(parameters[1]) == false) && (*it)->getStPass() == true)
                 {
                     std::string	wrongPass = ERR_BADCHANNELKEY(user->getNickname(), channelName);
                     send(user->getSocket(), wrongPass.c_str(), wrongPass.length(), 0);
