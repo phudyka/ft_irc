@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 09:12:09 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 10:03:04 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,12 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     {
         std::cout << "Parametre : " << (*it) << std::endl;
     }
-	if (commandName.find("PASS") != std::string::npos)
+    if (commandName.find("CAP") != std::string::npos)
+    {
+        std::string response = CAP_LS_NONE();
+        send(user->getSocket(), response.c_str(), response.length(), 0);
+    }
+	else if (commandName.find("PASS") != std::string::npos)
     {
 		if (processPass(user, serverPass) == false)
             return;
