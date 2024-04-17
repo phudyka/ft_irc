@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 09:04:37 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 10:01:37 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
 		user->sendMessage(ERR_INVALIDMODEPARAM(user->getNickname(), channelName, std::string(1, modeFlag), ""));
 }
 
-void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string channelName)
+void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string channelName, std::vector<User*> &users)
 {
     char	modeFlag = parameters[1][1];
     if (parameters[1].find("-i") != std::string::npos || parameters[1].find("-t") != std::string::npos || 
@@ -112,6 +112,24 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
                         (*it)->setPassword("");
                         (*it)->enablePass(false);
                         break ;
+					case 'o':
+                    	if (parameters.size() != 3 || (*it)->removeOperator(parameters[2]) == false)
+                        	return;
+                    	else
+                    	{
+                        	std::string response = RPL_REMOVED_OPERATOR(parameters[2]);
+							response += RPL_NAMREPLY(user->getNickname(), user->getMode(), channelName, (*it)->getListInstring());
+                            response += RPL_ENDOFNAMES(user->getNickname(), channelName);
+                        	std::vector<User*>::iterator itu;
+                        	for (itu = users.begin(); itu != users.end(); ++itu)
+                        	{
+								if ((*itu)->getNickname() == parameters[2])
+									break;
+							}
+							send((*itu)->getSocket(), response.c_str(), response.length(), 0);
+							return;
+						}
+                    	break;
                     case 'l':
                         (*it)->setUserLimit(-1);
                         break ;
@@ -126,7 +144,6 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
         }
 		else
 			user->sendMessage(ERR_INVALIDMODEPARAM(user->getNickname(), channelName, std::string(1, modeFlag), ""));
-		
 }
 
 void	Command::processChannelMode(User *user, std::vector<Channel*> &channels, std::vector<User*> &users)
@@ -160,7 +177,7 @@ void	Command::processChannelMode(User *user, std::vector<Channel*> &channels, st
         if (parameters[1].find("+") != std::string::npos)
 			addMode(user, channels, channelName, users);
 		else if (parameters[1].find("-") != std::string::npos)
-			removeMode(user, channels, channelName);
+			removeMode(user, channels, channelName, users);
 		else
 			user->sendMessage(ERR_INVALIDMODEPARAM(user->getNickname(), channelName, std::string(1, parameters[1][1]), ""));
     }

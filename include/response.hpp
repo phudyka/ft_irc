@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 08:41:28 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/12 09:03:31 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 10:19:47 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@
 
 // OPER
 # define ERR_NOOPERHOST(client) ("491 " + client + " :No O-lines for your host\r\n")
-# define RPL_YOUREOPER(client) ("381 " + client + " :You are now an IRC operator\r\n")
+# define RPL_REMOVED_OPERATOR(nickname) (":localhost 345" + nickname + " :You have been removed from operator status\r\n")
+# define RPL_YOUREOPER(client) (":localhost 381 " + client + " :You are now an IRC operator\r\n")
 
 // PART
 # define RPL_PART(user_id, channel, reason) (user_id + " PART #" + channel + " :" + (reason.empty() ? "." : reason ) + "\r\n")
@@ -124,4 +125,4 @@
 # define RPL_WHOISUSER(user_id, target_nickname, target_username, nickname, target_hostname, realname) (user_id + " 311 " + nickname + " " + target_nickname + " " + target_username + " " + "localhost" + " * :" + realname + "\r\n")
 # define RPL_ENDOFWHOIS(user_id, target_nickname) (user_id + " 318 " + target_nickname + " :End of WHOIS list\r\n")
 
-#endif
+#endif 

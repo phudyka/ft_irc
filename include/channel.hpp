@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:58:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 09:53:27 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ public:
 	void	setPassword(const std::string& newPass);
     bool    checkPassword(const std::string &pass);
 	bool	addOperator(const std::string& operatorName);
+	bool	removeOperator(const std::string& operatorName);
 	void	setUserLimit(int limit);
 	int		getUserLimit();
     void    enableTopic(bool value);

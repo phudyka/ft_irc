@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 11:01:36 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 09:56:40 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ private:
 	void	processUserMode(User *user, std::vector<Channel *> &channels);
 	void	processChannelMode(User *user, std::vector<Channel*> &channels, std::vector<User*> &users);
 	void	addMode(User *user, std::vector<Channel*> &channel, std::string channelName, std::vector<User*> &users);
-	void	removeMode(User *user, std::vector<Channel*> &channel, std::string channelName);
+	void	removeMode(User *user, std::vector<Channel*> &channel, std::string channelName, std::vector<User*> &users);
 };
 #endif // COMMAND_HPP

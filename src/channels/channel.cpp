@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:58:41 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 09:53:04 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,6 @@ bool    Channel::getStPass()
 
 bool	Channel::addOperator(const std::string& operatorName)
 {
-    std::cout << "add Op" << std::endl;
 	std::map<std::string, std::string>::iterator it = _modeUser.begin();
     for (; it != _modeUser.end(); it++)
     {
@@ -280,6 +279,17 @@ bool	Channel::addOperator(const std::string& operatorName)
             it->second = "+o";
             return true;
         }
+    }
+    return false;
+}
+
+bool Channel::removeOperator(const std::string& operatorName)
+{
+    std::map<std::string, std::string>::iterator it = _modeUser.find(operatorName);
+    if (it != _modeUser.end())
+    {
+        it->second = "-o";
+        return true;
     }
     return false;
 }
