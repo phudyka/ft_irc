@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:16:30 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 09:04:37 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                         else
                         {
                             std::string response = RPL_YOUREOPER(parameters[2]);
+                            response += RPL_NAMREPLY(user->getNickname(), user->getMode(), channelName, (*it)->getListInstring());
+                            response += RPL_ENDOFNAMES(user->getNickname(), channelName);
                             std::vector<User*>::iterator itu = users.begin();
                             for (; itu != users.end(); itu++)
                             {

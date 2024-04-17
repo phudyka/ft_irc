@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/12 11:06:09 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 09:12:09 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,10 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 	else if (commandName.find("QUIT") != std::string::npos)
 		processQuit(user);
     else
-        std::cout << ORANGE << "Command unknown: " << RESET << command << std::endl;
+        {
+            std::string response = ERR_UNKNOWNCOMMAND(user->getNickname(), commandName);
+            send(user->getSocket(), response.c_str(), response.length(), 0);
+        }
 }
 
 

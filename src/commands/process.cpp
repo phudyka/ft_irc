@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:59:23 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 08:33:33 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,16 @@ void Command::processPing(User *user)
 
 void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
 {
-    std::string channelName = parameters[0].substr(1);
+    std::string channelName;
+    if (parameters.size() > 0)
+    {
+        if (parameters[0].find("#") != std::string::npos)
+            channelName = parameters[0].substr(1);
+        else
+            channelName = parameters[0];
+    }
+    else
+        return;
 
     if (channelName.empty())
     {

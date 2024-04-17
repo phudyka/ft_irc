@@ -6,11 +6,18 @@
 #    By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 10:32:48 by dtassel           #+#    #+#              #
-#    Updated: 2024/04/16 12:14:36 by dtassel          ###   ########.fr        #
+#    Updated: 2024/04/17 09:40:14 by dtassel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 - Gerer -o
+- CAP LS
+- Lancer un who lors d'un part, ou quit
+- Afficher le premier privmsg
+- /topic tout seul doit afficher le topic actuel
+- Envisager de rajouter l'info du nombre max que peut contenir le chann
+- 482 pour specifier que le client n'est pas un operateur de channel
+- Renvoyer une erreur en cas de +o sur un client innexistant
 
 
 - Faire caca;
