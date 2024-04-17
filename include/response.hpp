@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 08:41:28 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/17 10:19:47 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/17 10:22:41 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 //void	sendMessage(int const client_fd, std::string message);
 
 # define user_id(nickname, username) (":" + nickname + "!" + username + "@localhost")
+
+//CAP
+#define CAP_LS_NONE() (":localhost 410 * :No CAP features supported\r\n")
 
 # define RPL_WELCOME(user_id, nickname) (":localhost 001 " + nickname + " :Welcome to the Internet Relay Network " + user_id + "\r\n")
 # define RPL_YOURHOST(client, servername, version) (":localhost 002 " + client + " :Your host is " + servername + " (localhost), running version " + version + "\r\n")
