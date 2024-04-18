@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 08:50:59 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/18 10:35:08 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,7 @@ void Command::processInvite(User *user, std::vector<Channel*> &channels, std::ve
         return;
     }
     bool    chanExist = false;
-    std::string channelName;
-    if (parameters[1].find("#") != std::string::npos)
-        channelName = parameters[1].substr(1);
-    else
-        channelName = parameters[1];
+    std::string channelName = parameters[1].substr(0);
     std::vector<Channel*>::iterator it = channels.begin();
     for (; it < channels.end(); it++)
     {
@@ -142,7 +138,7 @@ void	Command::processTopic(User *user, std::vector<Channel*> &channels)
     if (operatorName != user->getNickname() && (*it)->getStTopic() == true)
     {
         user->sendMessage(ERR_NOPRIVILEGES(user->getNickname()));
-        return;
+        return ;
     }
     (*it)->setTopic(trailing);
     std::string	response = RPL_TOPIC(user->getNickname(), channelName, trailing);

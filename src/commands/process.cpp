@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 08:33:33 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/17 11:08:22 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
                 user->removeListChannels(*it);
                 std::string reason = "Ciao";
                 std::string response = RPL_PART(user_id(user->getNickname(), user->getUsername()), channelName, reason);
+				response += RPL_ENDOFNAMES(user->getNickname(), channelName);
                 send(user->getSocket(), response.c_str(), response.length(), 0);
 
                 // Envoyer le message a tous les utilisateurs encore present
@@ -132,17 +133,8 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
     }
 }
 
-void Command::processPing(User *user)
+void	Command::processPing(User *user)
 {
-    // if (commandName.find("PING") != std::string::npos)
-    // {
-    //     if (!trailing.empty())
-    //     {
-    //         std::string pingParam = trailing;
-    //         std::string pong = RPL_PONG(pingParam);
-    //         send(user->getSocket(), pong.c_str(), pong.size(), 0);
-    //     }
-    // }
     if (commandName.find("PING") != std::string::npos)
     {
         // Vérifiez que le vecteur parameters a au moins un élément
