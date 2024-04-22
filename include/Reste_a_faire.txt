@@ -6,16 +6,13 @@
 #    By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 10:32:48 by dtassel           #+#    #+#              #
-#    Updated: 2024/04/18 10:36:59 by phudyka          ###   ########.fr        #
+#    Updated: 2024/04/18 11:57:18 by phudyka          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+- password incorrect a la connexion
 - Afficher le premier privmsg
 - /topic tout seul doit afficher le topic actuel
 - Envisager de rajouter l'info du nombre max que peut contenir le chann
 - 482 pour specifier que le client n'est pas un operateur de channel
 - Renvoyer une erreur en cas de +o sur un client innexistant
-- password incorrect a la connexion
-
-
-- Faire caca;
