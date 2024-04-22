@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 11:08:22 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/18 10:41:14 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ bool	Command::processPass(User *user, const std::string& serverPass)
 	int			socket = user->getSocket();
 	std::string	clientPass = parameters[0].substr(0);
 	std::string	wrongPass = ERR_PASSWDMISMATCH(user->getNickname());
-
+	
 	if (clientPass != serverPass)
 	{
 		send(socket, wrongPass.c_str(), wrongPass.size(), 0);
