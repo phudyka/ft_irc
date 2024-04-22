@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 09:57:41 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:12:23 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ bool    Command::isAlreadyUse(const std::string &nick, std::vector<User*> &users
 }
 
 
-void	Command::processNick(User *user, std::vector<User*> &users)
+void	Command::processNick(User *user, std::vector<User*> &users, std::vector<Channel*> &channels)
 {
-    std::string newNickname = parameters[0].substr(0);
+    std::string newNickname = parameters[0];
     std::string response;
     if (!isValidNick(newNickname))
         response = ERR_ERRONEUSNICKNAME(user->getNickname(), newNickname);
@@ -76,6 +76,18 @@ void	Command::processNick(User *user, std::vector<User*> &users)
         //:Gerard!freiko@localhost NICK :david
         response = RPL_NICK(oldNickname, user->getUsername(), user->getNickname());
         user->setAuthentified();
+        if (user->getJoinedChannels() > 0)
+        {
+            std::vector<Channel*>::iterator it = channels.begin();
+            for (; it != channels.end(); it++)
+            {
+                if ((*it)->isInChannel(user->getNickname(), (*it)) == true)
+                {
+                    (*it)->sendToAll(response);
+                }
+            }
+            
+        }
     }
     send(user->getSocket(), response.c_str(), response.size(), 0);
     if (user->isAuthentified() == true && !user->temp_USER.empty())

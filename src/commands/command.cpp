@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 11:08:44 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/22 10:45:17 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
             return;
     }
     else if (commandName.find("NICK") != std::string::npos && user->getAuthPass() == true)
-        processNick(user, _users);
+        processNick(user, _users, channel);
 	else if (commandName.find("USER") != std::string::npos)
     {
         if (user->isAuthentified() == true)

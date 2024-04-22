@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:38:14 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 11:50:19 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/22 10:45:37 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ private:
     std::vector<std::string> parameters;
     std::string trailing;
 	bool	processPass(User *user, const std::string& serverPass);
-    void	processNick(User *user, std::vector<User*> &users);
+    void	processNick(User *user, std::vector<User*> &users, std::vector<Channel*> &channels);
     void	processUser(User *user);
 	void	processMode(User *user, std::vector<Channel*> &channel, std::vector<User*> &users);
 	void	processWhoIs(User *user, std::vector<Channel*> &channels, std::vector<User*> &users);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 10:01:37 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:04:57 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                                     break;
                             }
                             send((*itu)->getSocket(), response.c_str(), response.length(), 0);
+                            send(user->getSocket(), response.c_str(), response.length(), 0);
                             return;
                         }
                         break ;
@@ -127,6 +128,7 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
 									break;
 							}
 							send((*itu)->getSocket(), response.c_str(), response.length(), 0);
+                            send(user->getSocket(), response.c_str(), response.length(), 0);
 							return;
 						}
                     	break;
