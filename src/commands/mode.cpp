@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 11:04:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:52:12 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,14 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                         break ;
                     case 'o':
                         if (parameters.size() != 3 || (*it)->addOperator(parameters[2]) == false)
+                        {
+                            if ((*it)->addOperator(parameters[2]) == false)
+                            {
+                                std::string response = ERR_NOSUCHNICK(user->getNickname(), parameters[2]);
+                                send(user->getSocket(), response.c_str(), response.length(), 0);
+                            }
                             return;
+                        }
                         else
                         {
                             std::string response = RPL_YOUREOPER(parameters[2]);

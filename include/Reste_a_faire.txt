@@ -6,14 +6,13 @@
 #    By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/02 10:32:48 by dtassel           #+#    #+#              #
-#    Updated: 2024/04/22 10:55:18 by dtassel          ###   ########.fr        #
+#    Updated: 2024/04/22 11:54:15 by dtassel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 - password incorrect a la connexion : Fait
 - Avertir les autres client d'un chan en cas de changement de nick : Fait
 - Afficher le premier privmsg
-- /topic tout seul doit afficher le topic actuel
-- Envisager de rajouter l'info du nombre max que peut contenir le chann
+- /topic tout seul doit afficher le topic actuel : Fait
 - 482 pour specifier que le client n'est pas un operateur de channel
-- Renvoyer une erreur en cas de +o sur un client innexistant
+- Renvoyer une erreur en cas de +o sur un client innexistant : Fait

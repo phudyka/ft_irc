@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 11:12:23 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:33:21 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,6 @@ void	Command::processPing(User *user)
 {
     if (commandName.find("PING") != std::string::npos)
     {
-        // Vérifiez que le vecteur parameters a au moins un élément
         if (!parameters.empty())
         {
             std::string pingParam = parameters[0];
