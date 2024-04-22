@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 09:53:04 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/22 09:31:17 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,10 @@ void	Channel::removeUser(const std::string& username)
         if ((*it)->getNickname() == username)
         {
             _users.erase(it);
+            std::string reason = "";
+            std::string response = RPL_PART(user_id((*it)->getNickname(), (*it)->getUsername()), this->getName(), reason);
+			response += RPL_ENDOFNAMES((*it)->getNickname(), this->getName());
+            sendToAll(response);
             break;
         }
     }

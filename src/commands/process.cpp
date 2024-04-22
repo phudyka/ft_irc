@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/17 11:08:22 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/22 09:51:58 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	Command::processPass(User *user, const std::string& serverPass)
 {
 	int			socket = user->getSocket();
-	std::string	clientPass = parameters[0].substr(0);
+	std::string	clientPass = parameters[0];
 	std::string	wrongPass = ERR_PASSWDMISMATCH(user->getNickname());
 
 	if (clientPass != serverPass)
@@ -155,7 +155,11 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
         if (parameters[0].find("#") != std::string::npos)
             channelName = parameters[0].substr(1);
         else
-            channelName = parameters[0];
+        {
+            std::string response = ERR_UNKNOWNCOMMAND(user->getNickname(), commandName);
+            send(user->getSocket(), response.c_str(), response.length(), 0);
+            return;
+        }
     }
     else
         return;
@@ -392,6 +396,7 @@ void	Command::processWhoIs(User *user, std::vector<Channel*> &channels, std::vec
 
 void	Command::processQuit(User *user)
 {
+    user->quitAllChannels();
 	std::string	response = RPL_QUIT(":" + user->getNickname(), " disconnected");
 	send(user->getSocket(), response.c_str(), response.size(), 0);
 }

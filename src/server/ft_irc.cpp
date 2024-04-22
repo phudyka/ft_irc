@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/16 11:37:25 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/22 08:35:16 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void ft_irc::start()
 	std::cout << YELLOW << "[Welcome to ft_irc]" << RESET << std::endl << std::endl;
 	std::cout << PURPLE << "Waiting for connection..." << RESET << std::endl << std::endl;
     _isRunning = true;
-	displayClients();
+	//displayClients();
     handleConnection();
 }
 
@@ -98,7 +98,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                displayClients();
+                //displayClients();
             }
             else if (_pollfds[i].revents & (POLLHUP | POLLERR))
             {
@@ -121,10 +121,17 @@ bool    ft_irc::connectClient(int socket, User *user)
         user->_buffer += client;
         return true;
     }
+    else if (buf.find("CAP") != std::string::npos && buf.find("PASS") == std::string::npos)
+    {
+        Command commandHandler;
+        commandHandler.masterCommand(user, buf, _channels, _pass, _clients);
+        connectClient(socket, user);
+    }
     std::vector<std::string> infoClient = split(client, "\r\n");
     std::vector<std::string>::iterator it = infoClient.begin();
     for (; it != infoClient.end(); it++)
     {
+            std::cout << *it << std::endl;
             Command commandHandler;
             commandHandler.masterCommand(user, *it, _channels, _pass, _clients);
             if (it->find("PASS") != std::string::npos && user->getAuthPass() == false)
@@ -178,7 +185,7 @@ void ft_irc::newConnection(void)
         std::cerr << RED << "Error: [Fail to get username]" << RESET << std::endl;
         close(UserSocket);
     }
-	displayClients();
+	//displayClients();
 }
 
 void ft_irc::clientData(size_t index)
@@ -227,5 +234,5 @@ void ft_irc::removeClient(size_t index)
     _clients.erase(_clients.begin() + index);
 	std::cout << CYAN << "[User [" << index << "] has been succesfully removed]" << RESET << std::endl;
     std::cout << GREEN << "Connection closed." << RESET << std::endl;
-	displayClients();
+	//displayClients();
 }

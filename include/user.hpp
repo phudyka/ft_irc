@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/11 11:31:23 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/22 08:57:15 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ public:
     void    setMode(const std::string &mode);
     void	setJoinedChannels(Channel *channel);
     void    removeListChannels(Channel *channel);
+    void    quitAllChannels();
     void    setPassword();
     void    setAuthentified();
 	void	setOperator();

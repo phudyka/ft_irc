@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/16 11:31:41 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/22 09:06:55 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ User::User(const User&) {}
 User::~User()
 {
     delete _umode;
+
 }
 
 User& User::operator=(const User& other)
@@ -161,7 +162,17 @@ void    User::removeListChannels(Channel *channel)
             break;
         }
     }
-    
+}
+
+void    User::quitAllChannels()
+{
+    std::vector<Channel*>::iterator it = this->_listChannel.begin();
+    for (; it != _listChannel.end(); it++)
+    {
+        (*it)->removeUser(this->getNickname());
+    }
+    this->_listChannel.clear();
+    this->_joinedChannels = 0;
 }
 
 void User::sendMessage(const std::string& message) const
