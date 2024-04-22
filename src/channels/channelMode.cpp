@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channelMode.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/18 10:35:08 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:26:16 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,12 @@ void	Command::processTopic(User *user, std::vector<Channel*> &channels)
     if (chanExist == false)
     {
         user->sendMessage(ERR_NOSUCHCHANNEL(user->getNickname(), channelName));
+        return ;
+    }
+    if (trailing.empty())
+    {
+        std::string    response = RPL_TOPIC(user->getNickname(), channelName, (*it)->getTopic());
+        send(user->getSocket(), response.c_str(), response.length(), 0);
         return ;
     }
     std::string operatorName = (*it)->getOperator(user->getNickname());
