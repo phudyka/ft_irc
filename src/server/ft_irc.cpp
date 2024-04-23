@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/22 09:57:56 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/23 13:27:32 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,42 +109,42 @@ void ft_irc::handleConnection(void)
 }
 
 
-bool    ft_irc::connectClient(int socket, User *user)
-{
-    size_t len;
-    char client[256];
-    len = recv(socket, client, sizeof(client), 0);
-    client[len] = '\0';
-    std::string buf = client;
-    if (buf.find("\r\n") == std::string::npos)
-    {
-        user->_buffer += client;
-        return true;
-    }
-    else if (buf.find("CAP") != std::string::npos && buf.find("PASS") == std::string::npos)
-    {
-        Command commandHandler;
-        commandHandler.masterCommand(user, buf, _channels, _pass, _clients);
-        connectClient(socket, user);
-    }
-    std::vector<std::string> infoClient = split(client, "\r\n");
-    std::vector<std::string>::iterator it = infoClient.begin();
-    for (; it != infoClient.end(); it++)
-    {
-            std::cout << *it << std::endl;
-            Command commandHandler;
-            commandHandler.masterCommand(user, *it, _channels, _pass, _clients);
-            if (it->find("PASS") != std::string::npos && user->getAuthPass() == false)
-                return false;
-    }
-    if (user->getAuthPass() == false)
-    {
-        std::string	wrongPass = ERR_PASSWDMISMATCH(user->getNickname());
-        send(socket, wrongPass.c_str(), wrongPass.size(), 0);
-        return false;
-    }
-    return true;
-}
+// bool    ft_irc::connectClient(int socket, User *user)
+// {
+//     size_t len;
+//     char client[256];
+//     len = recv(socket, client, sizeof(client), 0);
+//     client[len] = '\0';
+//     std::string buf = client;
+//     if (buf.find("\r\n") == std::string::npos)
+//     {
+//         user->_buffer += client;
+//         return true;
+//     }
+//     else if (buf.find("CAP") != std::string::npos && buf.find("PASS") == std::string::npos)
+//     {
+//         Command commandHandler;
+//         commandHandler.masterCommand(user, buf, _channels, _pass, _clients);
+//         connectClient(socket, user);
+//     }
+//     std::vector<std::string> infoClient = split(client, "\r\n");
+//     std::vector<std::string>::iterator it = infoClient.begin();
+//     for (; it != infoClient.end(); it++)
+//     {
+//             std::cout << *it << std::endl;
+//             Command commandHandler;
+//             commandHandler.masterCommand(user, *it, _channels, _pass, _clients);
+//             if (it->find("PASS") != std::string::npos && user->getAuthPass() == false)
+//                 return false;
+//     }
+//     if (user->getAuthPass() == false)
+//     {
+//         std::string	wrongPass = ERR_PASSWDMISMATCH(user->getNickname());
+//         send(socket, wrongPass.c_str(), wrongPass.size(), 0);
+//         return false;
+//     }
+//     return true;
+// }
 
 void ft_irc::newConnection(void)
 {
@@ -173,12 +173,6 @@ void ft_irc::newConnection(void)
         newUser->setHostname(UserInfo->h_name);
         newUser->setIP(UserIP);
         _clients.push_back(newUser);
-        if (connectClient(UserSocket, newUser) == false)
-        {
-            close(UserSocket);
-            _pollfds.pop_back();
-            _clients.pop_back();
-        }
     }
     else
     {
@@ -192,7 +186,6 @@ void ft_irc::clientData(size_t index)
 {
     char buff[4096];
     int len = recv(_pollfds[index].fd, buff, sizeof(buff), 0);
-    Command commandHandler;
 
     if (len <= 0)
         removeClient(index);
@@ -200,6 +193,7 @@ void ft_irc::clientData(size_t index)
     {
         buff[len] = '\0';
         std::string receivedData(buff);
+        std::cout << "receiv :" << receivedData << "/" << std::endl;
         User* client = NULL;
         for (size_t i = 0; i < _clients.size(); ++i)
         {
@@ -212,11 +206,11 @@ void ft_irc::clientData(size_t index)
         if (client)
         {
             client->_buffer += receivedData;
-            size_t pos;
+            size_t pos = 0;
             while ((pos = client->_buffer.find("\r\n")) != std::string::npos)
             {
-                std::string fullCommand = client->_buffer.substr(0, pos + 2);
-
+                std::string fullCommand = client->_buffer.substr(0, pos);
+                Command commandHandler;
                 commandHandler.masterCommand(client, fullCommand, _channels, _pass, _clients);
 
                 client->_buffer.erase(0, pos + 2);
