@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/23 09:20:59 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/23 11:05:17 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,14 @@ void Command::parseIRCMessage(const std::string& command)
             if (paramsStart != std::string::npos)
             {
                 trailing = command.substr(paramsStart + 1);
-                if (!trailing.empty() && trailing[0] == ':')
+				if (!trailing.empty() && trailing[0] == ':')
                 {
                     trailing = trailing.substr(1);
-                }
+					if (trailing.find("\r\n") != std::string::npos)
+						trailing.erase(trailing.find("\r\n"));
+					if (trailing.find("\n") != std::string::npos)
+						trailing.erase(trailing.find("\n"));
+				}
             }
         }
     }
@@ -67,10 +71,13 @@ void Command::parseIRCMessage(const std::string& command)
     {
         for (size_t i = 0; i < parameters.size(); ++i)
         {
-            if (parameters[i].find("\r\n") != std::string::npos)
+            if (parameters[i].find("\r\n") != std::string::npos || parameters[i].find("\n") != std::string::npos)
             {
-                parameters[i].erase(parameters[i].find("\r\n"));
-                break;
+				if (parameters[i].find("\r\n") != std::string::npos)
+                	parameters[i].erase(parameters[i].find("\r\n"));
+				if (parameters[i].find("\n") != std::string::npos)
+                	parameters[i].erase(parameters[i].find("\n"));
+                break ;
             }
         }
     }
@@ -87,6 +94,7 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
     {
         std::cout << "Parametre : " << (*it) << std::endl;
     }
+	std::cout << "TRAILING :" << trailing << "/" << std::endl;
     if (commandName.find("CAP") != std::string::npos)
     {
         std::string response = CAP_LS_NONE();

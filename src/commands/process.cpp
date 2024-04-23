@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/23 09:51:37 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/23 10:56:47 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,14 +268,14 @@ void	Command::processJoinChannel(User *user, std::vector<Channel*> &channels)
 void	Command::processSendMess(User *user, std::vector<Channel*> &channels, std::vector<User*> &_users)
 {
     std::string	message;
-    std::string	target = parameters[0].substr(0);
 
-    if (target.empty())
-    {
-        std::string	response = ERR_NORECIPIENT(user->getNickname());
+	if (parameters[0].empty())
+	{
+		std::string	response = ERR_NOSUCHNICK(user->getNickname(), parameters[0]);
         user->sendMessage(response);
-        return ;
-    }
+		return ;
+	}
+    std::string	target = parameters[0];
     if (trailing.empty())
     {
         std::string response = ERR_NOTEXTTOSEND(user->getNickname());
