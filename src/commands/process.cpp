@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 11:33:21 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/23 09:51:37 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,21 +125,21 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
         {
             if ((*it)->getName() == channelName)
             {
-                (*it)->removeUser(user->getNickname());
                 user->removeListChannels(*it);
+                (*it)->removeUser(user->getNickname());
                 std::string reason = "Ciao";
                 std::string response = RPL_PART(user_id(user->getNickname(), user->getUsername()), channelName, reason);
 				response += RPL_ENDOFNAMES(user->getNickname(), channelName);
                 send(user->getSocket(), response.c_str(), response.length(), 0);
 
                 // Envoyer le message a tous les utilisateurs encore present
-                std::vector<User*> users = (*it)->getUsers();
-                std::vector<User*>::iterator itu = users.begin();
-                for (; itu != users.end(); itu++)
-                {
-                    if ((*itu)->getNickname() != user->getNickname())
-                        send((*itu)->getSocket(), response.c_str(), response.length(), 0);
-                }
+                // std::vector<User*> users = (*it)->getUsers();
+                // std::vector<User*>::iterator itu = users.begin();
+                // for (; itu != users.end(); itu++)
+                // {
+                //     if ((*itu)->getNickname() != user->getNickname())
+                //         send((*itu)->getSocket(), response.c_str(), response.length(), 0);
+                // }
             }
         }
     }
@@ -311,10 +311,9 @@ void	Command::processSendMess(User *user, std::vector<Channel*> &channels, std::
         std::vector<User*>::iterator	it = _users.begin();
         for (; it != _users.end(); it++)
         {
-            if ((*it)->getNickname() == target)
+            if ((*it)->getNickname() == target && user->getNickname() != target)
             {
-                std::string	senderPrefix = ":" + user->getNickname() + "!" + user->getUsername() + "@" + user->getHostname();
-                message = senderPrefix + " PRIVMSG " + target + " :" + trailing + "\r\n";
+                message = RPL_PRIVMSG(user->getNickname(), user->getUsername(), (*it)->getNickname(), trailing);
                 (*it)->sendMessage(message);
                 return ;
             }

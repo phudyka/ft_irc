@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 10:41:28 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/23 10:08:37 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,21 +119,22 @@ void	Channel::kickUser(User *user, const std::string& targetNickname, const std:
     }
 }
 
-void	Channel::removeUser(const std::string& username)
+void Channel::removeUser(const std::string& username)
 {
     for (std::vector<User*>::iterator it = _users.begin(); it != _users.end(); ++it)
     {
         if ((*it)->getNickname() == username)
         {
-            _users.erase(it);
             std::string reason = "";
             std::string response = RPL_PART(user_id((*it)->getNickname(), (*it)->getUsername()), this->getName(), reason);
-			response += RPL_ENDOFNAMES((*it)->getNickname(), this->getName());
+            response += RPL_ENDOFNAMES((*it)->getNickname(), this->getName());
             sendToAll(response);
+            _users.erase(it);
             break;
         }
     }
 }
+
 
 void Channel::sendToAll(const std::string& message)
 {
