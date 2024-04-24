@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:31:27 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 11:26:16 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/24 10:58:40 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,14 @@ void Command::processInvite(User *user, std::vector<Channel*> &channels, std::ve
         user->sendMessage(ERR_NEEDMOREPARAMS(user->getNickname(), "INVITE"));
         return;
     }
+    if (parameters[1].find("#") == std::string::npos)
+    {
+        user->sendMessage(ERR_NOSUCHCHANNEL(user->getNickname(), parameters[1]));
+        return ;
+    }
+
     bool    chanExist = false;
-    std::string channelName = parameters[1].substr(0);
+    std::string channelName = parameters[1].substr(1);
     std::vector<Channel*>::iterator it = channels.begin();
     for (; it < channels.end(); it++)
     {

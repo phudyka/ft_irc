@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/23 13:33:43 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/24 09:11:37 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,18 +289,27 @@ void	Command::processSendMess(User *user, std::vector<Channel*> &channels, std::
         {
             if ((*it)->getName() == target)
             {
-                std::vector<User*>	users = (*it)->getUsers();
-                for (std::vector<User*>::iterator user_it = users.begin(); user_it != users.end(); ++user_it)
+                if ((*it)->isInChannel(user->getNickname(), (*it)))
                 {
-                    if (*user_it != user)
+                    std::vector<User*>	users = (*it)->getUsers();
+                    for (std::vector<User*>::iterator user_it = users.begin(); user_it != users.end(); ++user_it)
                     {
-                        std::cout << "Envoi du message au client" << std::endl;
-                        message = ":" + user->getNickname() + "!" + user->getUsername();
-                        message += "@" + user->getHostname() + " " + commandName + " #" + target + " :" + trailing + "\r\n";
-                        (*user_it)->sendMessage(message);
+                        if (*user_it != user)
+                        {
+                            std::cout << "Envoi du message au client" << std::endl;
+                            message = ":" + user->getNickname() + "!" + user->getUsername();
+                            message += "@" + user->getHostname() + " " + commandName + " #" + target + " :" + trailing + "\r\n";
+                            (*user_it)->sendMessage(message);
+                        }
                     }
+                    return ;
                 }
-                return ;
+                else
+                {
+                    std::string response = ERR_NOTONCHANNEL(user->getNickname(), target);
+                    user->sendMessage(response);
+                    return;
+                }
             }
         }
         std::string	response = ERR_NOSUCHNICK(user->getNickname(), target);
