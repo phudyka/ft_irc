@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/24 09:11:37 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/24 11:47:19 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,15 +131,6 @@ void    Command::processPart(User *user, std::vector<Channel *> &channel)
                 std::string response = RPL_PART(user_id(user->getNickname(), user->getUsername()), channelName, reason);
 				response += RPL_ENDOFNAMES(user->getNickname(), channelName);
                 send(user->getSocket(), response.c_str(), response.length(), 0);
-
-                // Envoyer le message a tous les utilisateurs encore present
-                // std::vector<User*> users = (*it)->getUsers();
-                // std::vector<User*>::iterator itu = users.begin();
-                // for (; itu != users.end(); itu++)
-                // {
-                //     if ((*itu)->getNickname() != user->getNickname())
-                //         send((*itu)->getSocket(), response.c_str(), response.length(), 0);
-                // }
             }
         }
     }
@@ -269,9 +260,9 @@ void	Command::processSendMess(User *user, std::vector<Channel*> &channels, std::
 {
     std::string	message;
 
-	if (parameters[0].empty())
+	if (parameters.empty())
 	{
-		std::string	response = ERR_NOSUCHNICK(user->getNickname(), parameters[0]);
+		std::string	response = ERR_NOSUCHNICK(user->getNickname(), "");
         user->sendMessage(response);
 		return ;
 	}

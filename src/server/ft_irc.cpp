@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/24 10:45:03 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/24 11:46:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void ft_irc::clientData(size_t index)
     char buff[4096];
     int len = recv(_pollfds[index].fd, buff, sizeof(buff), 0);
 
-    if (len == 0)
+	if (len <= 0)
         removeClient(index);
     else
     {
