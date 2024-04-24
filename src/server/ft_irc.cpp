@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/24 11:46:26 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/24 15:44:28 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,19 @@ ft_irc::ft_irc(int port, std::string pass)
     _pollfds.back().revents = 0;
 }
 
-ft_irc::~ft_irc() {}
+ft_irc::~ft_irc()
+{
+    for (size_t i = 0; i < _clients.size(); i++)
+    {
+        close(_clients[i]->getSocket());
+        delete _clients[i];
+    }
+    for (size_t i = 0; i < _channels.size(); i++)
+    {
+        delete _channels[i];
+    }
+    _pollfds.clear();
+}
 
 void ft_irc::start()
 {
@@ -100,7 +112,7 @@ void ft_irc::handleConnection(void)
                 clientData(i);
                 displayClients();
             }
-            else if (_pollfds[i].revents & (POLLHUP | POLLERR))
+            else if (_pollfds[i].revents & POLLHUP)
             {
                 removeClient(i);
             }
@@ -172,10 +184,10 @@ void ft_irc::clientData(size_t index)
             while ((pos = client->_buffer.find("\r\n")) != std::string::npos)
             {
                 std::string fullCommand = client->_buffer.substr(0, pos);
-                Command commandHandler;
-                commandHandler.masterCommand(client, fullCommand, _channels, _pass, _clients);
-
                 client->_buffer.erase(0, pos + 2);
+                Command commandHandler;
+                if (commandHandler.masterCommand(client, fullCommand, _channels, _pass, _clients) == 1)
+                    removeClient(index);
             }
         }
     }
@@ -183,6 +195,7 @@ void ft_irc::clientData(size_t index)
 
 void ft_irc::removeClient(size_t index)
 {
+    std::cout << "dans remove" << std::endl;
     close(_pollfds[index].fd);
     _pollfds.erase(_pollfds.begin() + index);
     index--;

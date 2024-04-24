@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/24 11:07:56 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/24 14:30:29 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void Command::parseIRCMessage(const std::string& command)
 }
 
 
-void Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass, std::vector<User*> &_users)
+int Command::masterCommand(User *user, const std::string& command, std::vector<Channel*> &channel, const std::string& serverPass, std::vector<User*> &_users)
 {
     
     parseIRCMessage(command);
@@ -110,7 +110,9 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 	else if (commandName.find("PASS") != std::string::npos)
     {
 		if (processPass(user, serverPass) == false)
-            close(user->getSocket());
+        {
+            return 1;
+        }
     }
     else if (commandName.find("NICK") != std::string::npos && user->getAuthPass() == true)
         processNick(user, _users, channel);
@@ -144,12 +146,16 @@ void Command::masterCommand(User *user, const std::string& command, std::vector<
 	else if (commandName.find("MODE") != std::string::npos && user->isAuthentified())
 		processChannelMode(user, channel, _users);
 	else if (commandName.find("QUIT") != std::string::npos)
+    {
 		processQuit(user);
+        return 1;
+    }
     else
         {
             std::string response = ERR_UNKNOWNCOMMAND(user->getNickname(), commandName);
             send(user->getSocket(), response.c_str(), response.length(), 0);
         }
+    return 0;
 }
 
 
