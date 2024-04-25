@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/25 10:27:47 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 10:57:25 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ User::User(const User&) {}
 
 User::~User()
 {
-
+    this->quitAllChannels();
 }
 
 User& User::operator=(const User& other)
