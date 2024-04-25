@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/25 09:21:45 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 11:22:56 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 bool	Command::processPass(User *user, const std::string& serverPass)
 {
 	int			socket = user->getSocket();
-	std::string	clientPass = parameters[0];
 	std::string	wrongPass = ERR_PASSWDMISMATCH(user->getNickname());
 	
+	if (parameters.size() < 1)
+	{
+		user->sendMessage(wrongPass);
+		return false;
+	}
+	std::string	clientPass = parameters[0];
 	if (clientPass != serverPass)
 	{
 		send(socket, wrongPass.c_str(), wrongPass.size(), 0);
@@ -53,8 +58,14 @@ bool    Command::isAlreadyUse(const std::string &nick, std::vector<User*> &users
 
 void	Command::processNick(User *user, std::vector<User*> &users, std::vector<Channel*> &channels)
 {
-    std::string newNickname = parameters[0];
     std::string response;
+	if (parameters.size() < 1)
+	{
+		response = ERR_NEEDMOREPARAMS(user->getNickname(), "");
+		user->sendMessage(response);
+		return ;
+	}
+    std::string newNickname = parameters[0];
     if (!isValidNick(newNickname))
         response = ERR_ERRONEUSNICKNAME(user->getNickname(), newNickname);
 	else if (newNickname.empty())
@@ -115,7 +126,7 @@ void	Command::processUser(User *user)
 
 void    Command::processPart(User *user, std::vector<Channel *> &channel)
 {
-    if (parameters[0].empty() == false)
+    if (parameters.size() > 0)
     {
         std::string channelName;
         channelName = parameters[0].substr(1);

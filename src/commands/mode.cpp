@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 11:52:12 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 11:08:52 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,10 +221,11 @@ void	Command::processMode(User *user, std::vector<Channel*> &channel, std::vecto
 {
     bool    isSet = false;
 
-    if (parameters[0].empty())
+    if (parameters.size() < 1)
     {
         std::string response = ERR_UMODEUNKNOWNFLAG(user->getNickname());
         send(user->getSocket(), response.c_str(), response.length(), 0);
+		return ;
     }
     std::vector<User*>::iterator it = users.begin();
     std::string name = parameters[0];

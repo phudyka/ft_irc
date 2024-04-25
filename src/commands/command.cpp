@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
+/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/25 08:24:59 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 11:17:26 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,6 @@ int Command::masterCommand(User *user, const std::string& command, std::vector<C
 {
     
     parseIRCMessage(command);
-    // std::cout << commandName << std::endl;
-    // std::vector<std::string>::iterator it = parameters.begin();
-    // for (; it != parameters.end(); it++)
-    // {
-    //     std::cout << "Parametre : " << (*it) << std::endl;
-    // }
-    // std::cout << "Trailing :" << trailing << "/0" << std::endl;
     if (commandName.find("CAP") != std::string::npos)
     {
         std::string response = CAP_LS_NONE();
@@ -108,9 +101,7 @@ int Command::masterCommand(User *user, const std::string& command, std::vector<C
 	else if (commandName.find("PASS") != std::string::npos)
     {
 		if (processPass(user, serverPass) == false)
-        {
             return 1;
-        }
     }
     else if (commandName.find("NICK") != std::string::npos && user->getAuthPass() == true)
         processNick(user, _users, channel);
