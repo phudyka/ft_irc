@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:05 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/22 10:41:40 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 09:20:52 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ public:
     bool    getStTopic();
     void    enablePass(bool value);
     bool    getStPass();
+    void    majNickInChannel(const std::string &oldNickname, const std::string &newNickname);
     std::string getTopic();
     std::string getOperator(const std::string &nick);
     std::string getListInstring();

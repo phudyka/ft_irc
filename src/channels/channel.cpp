@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:10:02 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/24 11:03:27 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/25 09:20:40 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,6 @@ bool	Channel::addUser(User* user, const std::string &mode)
         }
     }
     return false;
-}
-
-void	Channel::addMask(MaskSetType type, const std::string& mask)
-{
-    _masks[type].insert(mask);
 }
 
 void	Channel::invite(const User* user)
@@ -307,4 +302,15 @@ void	Channel::setUserLimit(int limit)
 int	Channel::getUserLimit()
 {
 	return _userLimit;
+}
+
+void Channel::majNickInChannel(const std::string& oldNickname, const std::string& newNickname)
+{
+    std::map<std::string, std::string>::iterator it = _modeUser.find(oldNickname);
+    
+    if (it != _modeUser.end())
+    {
+        _modeUser.insert(std::make_pair(newNickname, it->second));
+        _modeUser.erase(it);
+    }
 }

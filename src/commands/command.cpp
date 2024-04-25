@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/24 14:30:29 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 08:24:59 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void Command::parseIRCMessage(const std::string& command)
                     parameters[i].erase(parameters[i].find("\r\n"));
                 if (parameters[i].find('\n') != std::string::npos)
                     parameters[i].erase(parameters[i].find('\n'));
-                //break;
             }
         }
     }
@@ -85,7 +84,6 @@ void Command::parseIRCMessage(const std::string& command)
                     trailing.erase(trailing.find("\r\n"));
                 if (trailing.find('\n') != std::string::npos)
                     trailing.erase(trailing.find('\n'));
-                //break;
             }
     }
 }
@@ -95,13 +93,13 @@ int Command::masterCommand(User *user, const std::string& command, std::vector<C
 {
     
     parseIRCMessage(command);
-    std::cout << commandName << std::endl;
-    std::vector<std::string>::iterator it = parameters.begin();
-    for (; it != parameters.end(); it++)
-    {
-        std::cout << "Parametre : " << (*it) << std::endl;
-    }
-    std::cout << "Trailing :" << trailing << "/0" << std::endl;
+    // std::cout << commandName << std::endl;
+    // std::vector<std::string>::iterator it = parameters.begin();
+    // for (; it != parameters.end(); it++)
+    // {
+    //     std::cout << "Parametre : " << (*it) << std::endl;
+    // }
+    // std::cout << "Trailing :" << trailing << "/0" << std::endl;
     if (commandName.find("CAP") != std::string::npos)
     {
         std::string response = CAP_LS_NONE();
@@ -156,17 +154,4 @@ int Command::masterCommand(User *user, const std::string& command, std::vector<C
             send(user->getSocket(), response.c_str(), response.length(), 0);
         }
     return 0;
-}
-
-
-std::string	Command::extractParameter(const std::string& command, const std::string& prefix)
-{
-    size_t begin = command.find(prefix) + prefix.length();
-    size_t end = command.find("\r\n");
-    if (begin == std::string::npos || end == std::string::npos)
-        return ("");
-    std::string parameter = command.substr(begin, end - begin);
-    parameter.erase(std::remove(parameter.begin(), parameter.end(), '\r'), parameter.end());
-    parameter.erase(std::remove(parameter.begin(), parameter.end(), '\n'), parameter.end());
-    return (parameter);
 }

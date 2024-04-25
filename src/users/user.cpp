@@ -6,21 +6,20 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/24 14:24:01 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 08:29:04 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/user.hpp"
 
 User::User(int socket, const std::string &nick, const std::string &user, const std::string &ip)
-    : _socket(socket), _marked(false), _isAuthentified(false), _isOperator(false), _passOk(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _umode(new UserMode()), _mode("+") {}
+    : _socket(socket), _marked(false), _isAuthentified(false), _isOperator(false), _passOk(false), _ip(ip), _user(user), _prefix(), _nickname(nick), _joinedChannels(0), _mode("+") {}
 
 
 User::User(const User&) {}
 
 User::~User()
 {
-    delete _umode;
 
 }
 
@@ -132,11 +131,6 @@ void User::mark()
 bool User::isMarked() const
 {
     return (_marked);
-}
-
-UserMode& User::umode()
-{
-    return (*_umode);
 }
 
 void    User::setNickname(const std::string &nickname)

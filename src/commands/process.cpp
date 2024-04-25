@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:58:24 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/24 11:47:19 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/25 09:21:45 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	Command::processNick(User *user, std::vector<User*> &users, std::vector<Cha
             {
                 if ((*it)->isInChannel(user->getNickname(), (*it)) == true)
                 {
+                    (*it)->majNickInChannel(oldNickname, newNickname);
                     (*it)->sendToAll(response);
                 }
             }
@@ -367,7 +368,13 @@ void	Command::processKill(User *user, std::vector<User*> &_users)
 
 void	Command::processWhoIs(User *user, std::vector<Channel*> &channels, std::vector<User*> &users)
 {
-    std::string target = parameters[0].substr(0);
+    if (parameters.size() < 1)
+    {
+        std::string response = ERR_NEEDMOREPARAMS(user->getNickname(), commandName);
+        user->sendMessage(response);
+        return;
+    }
+    std::string target = parameters[0];
     if (target[0] == '#')
     {
         std::string channelName = target.substr(1);

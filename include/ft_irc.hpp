@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 10:30:50 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/09 13:58:38 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 08:28:02 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@
 #include <algorithm>
 #include "user.hpp"
 #include "channel.hpp"
-#include "userMode.hpp"
 #include "command.hpp"
 #include "response.hpp"
 
@@ -56,16 +55,6 @@
 class   User;
 class   Channel;
 class 	Command;
-
-struct	ServerConfig
-{
-    int							port;
-    size_t						maxBodySize;
-    std::string					host;
-    std::vector<std::string>	serverNames;
-    std::string					defaultErrorPage;
-
-};
 
 class	ft_irc	
 {

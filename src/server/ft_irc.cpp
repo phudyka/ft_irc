@@ -6,30 +6,11 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/24 15:44:28 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 08:21:47 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_irc.hpp"
-
-std::vector<std::string> split(std::string s, std::string delimiter)
-{
-    size_t pos_start = 0, pos_end;
-    std::vector<std::string> res;
-
-    while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos)
-    {
-        std::string token = s.substr(pos_start, pos_end - pos_start);
-        res.push_back(token + delimiter);
-        pos_start = pos_end + delimiter.length();
-    }
-    if (pos_start < s.length())
-    {
-        std::string lastToken = s.substr(pos_start);
-        res.push_back(lastToken);
-    }
-    return (res);
-}
 
 ft_irc::ft_irc(int port, std::string pass)
 {
@@ -195,7 +176,6 @@ void ft_irc::clientData(size_t index)
 
 void ft_irc::removeClient(size_t index)
 {
-    std::cout << "dans remove" << std::endl;
     close(_pollfds[index].fd);
     _pollfds.erase(_pollfds.begin() + index);
     index--;

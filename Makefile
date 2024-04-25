@@ -6,7 +6,7 @@
 #    By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/05 15:51:03 by phudyka           #+#    #+#              #
-#    Updated: 2024/04/15 11:17:04 by dtassel          ###   ########.fr        #
+#    Updated: 2024/04/25 08:29:57 by dtassel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ SRCS =	src/main.cpp 					\
 		src/channels/channel.cpp 		\
 		src/channels/channelMode.cpp 	\
 		src/users/user.cpp 				\
-		src/users/userMode.cpp 			\
 		src/server/utils.cpp 			\
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.cpp=.o)))
