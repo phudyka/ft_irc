@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:23:57 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/25 08:29:04 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 10:27:47 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,4 +185,21 @@ void    User::setPassword()
 bool    User::getAuthPass()
 {
     return _passOk;
+}
+
+void    User::majBuffer(const std::string &data)
+{
+    size_t i = 0;
+    std::string temp;
+    std::string buf;
+    while (_buffer[i])
+    {
+        if (_buffer[i] != data[i])
+            break;
+    }
+    temp = data;
+    buf = _buffer + temp;
+    _buffer.clear();
+    _buffer = buf;
+    std::cout << buf << "/0" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 10:20:13 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/25 08:27:18 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 10:05:58 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ public:
     size_t	getJoinedChannels() const;
     void	setIP(const std::string& ip);
     void    sendMessage(const std::string& message) const;
+    void    majBuffer(const std::string &data);
     std::string temp_USER;
     std::string _buffer;
 };

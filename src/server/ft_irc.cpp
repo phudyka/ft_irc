@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/25 08:21:47 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/25 10:24:10 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void ft_irc::start()
 	std::cout << YELLOW << "[Welcome to ft_irc]" << RESET << std::endl << std::endl;
 	std::cout << PURPLE << "Waiting for connection..." << RESET << std::endl << std::endl;
     _isRunning = true;
-	displayClients();
+	//displayClients();
     handleConnection();
 }
 
@@ -91,7 +91,7 @@ void ft_irc::handleConnection(void)
             if (_pollfds[i].revents & POLLIN)
             {
                 clientData(i);
-                displayClients();
+                // displayClients();
             }
             else if (_pollfds[i].revents & POLLHUP)
             {
@@ -134,7 +134,7 @@ void ft_irc::newConnection(void)
         std::cerr << RED << "Error: [Fail to get username]" << RESET << std::endl;
         close(UserSocket);
     }
-	displayClients();
+	// displayClients();
 }
 
 void ft_irc::clientData(size_t index)
@@ -160,7 +160,7 @@ void ft_irc::clientData(size_t index)
         }
         if (client)
         {
-            client->_buffer += receivedData;
+            client->majBuffer(receivedData);
             size_t pos = 0;
             while ((pos = client->_buffer.find("\r\n")) != std::string::npos)
             {
