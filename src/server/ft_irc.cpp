@@ -6,7 +6,7 @@
 /*   By: dtassel <dtassel@42.nice.fr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 08:59:08 by dtassel           #+#    #+#             */
-/*   Updated: 2024/04/26 11:00:57 by dtassel          ###   ########.fr       */
+/*   Updated: 2024/04/26 11:43:11 by dtassel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ void ft_irc::clientData(size_t index)
                 {
                     close(client->getSocket()); 
                     removeClient(index);
+                    return;
                 }
             }
         }
@@ -179,7 +180,6 @@ void ft_irc::clientData(size_t index)
 
 void ft_irc::removeClient(size_t index)
 {
-    //_clients[index]->quitAllChannels();
     close(_pollfds[index].fd);
     _pollfds.erase(_pollfds.begin() + index);
     index--;
