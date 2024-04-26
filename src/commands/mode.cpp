@@ -6,7 +6,7 @@
 /*   By: phudyka <phudyka@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 11:37:59 by phudyka           #+#    #+#             */
-/*   Updated: 2024/04/25 11:08:52 by phudyka          ###   ########.fr       */
+/*   Updated: 2024/04/26 12:12:35 by phudyka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ void	Command::addMode(User *user, std::vector<Channel*> &channel, std::string ch
                                 if ((*itu)->getNickname() == parameters[2])
                                     break;
                             }
-                            send((*itu)->getSocket(), response.c_str(), response.length(), 0);
-                            send(user->getSocket(), response.c_str(), response.length(), 0);
+                            (*it)->sendToAll(response);
                             return;
                         }
                         break ;
@@ -134,8 +133,7 @@ void	Command::removeMode(User *user, std::vector<Channel*> &channel, std::string
 								if ((*itu)->getNickname() == parameters[2])
 									break;
 							}
-							send((*itu)->getSocket(), response.c_str(), response.length(), 0);
-                            send(user->getSocket(), response.c_str(), response.length(), 0);
+							(*it)->sendToAll(response);
 							return;
 						}
                     	break;
